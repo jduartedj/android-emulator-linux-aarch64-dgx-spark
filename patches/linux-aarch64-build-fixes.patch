@@ -1,0 +1,61 @@
+diff --git a/android/android-emu/android/snapshot/Snapshotter.cpp b/android/android-emu/android/snapshot/Snapshotter.cpp
+index 2b607f59..f1de978b 100644
+--- a/android/android-emu/android/snapshot/Snapshotter.cpp
++++ b/android/android-emu/android/snapshot/Snapshotter.cpp
+@@ -53,6 +53,7 @@
+ #include <cassert>
+ #include <fstream>
+ #include <string_view>
++#include <thread>
+ #include <utility>
+ 
+ #ifdef __x86_64__
+diff --git a/android/scripts/unix/gen-android-sdk-toolchain.sh b/android/scripts/unix/gen-android-sdk-toolchain.sh
+index 0c753d5a..47243570 100755
+--- a/android/scripts/unix/gen-android-sdk-toolchain.sh
++++ b/android/scripts/unix/gen-android-sdk-toolchain.sh
+@@ -1025,7 +1025,7 @@ print_info () {
+             ;;
+         libcplusplus)
+             if [ "$BUILD_HOST" = "linux" -a "$BUILD_ARCH" = "aarch64" ]; then
+-                printf "%s\n" "/usr/aarch64-linux-gnu/lib/libstdc++.so.6"
++                printf "%s\n" "/usr/lib/aarch64-linux-gnu/libstdc++.so.6"
+             else
+                 printf "%s\n" "$CLANG_DIR/lib/libc++.so"
+             fi
+diff --git a/android/third_party/chromium/depot_tools/ninja b/android/third_party/chromium/depot_tools/ninja
+index 898ba9a5..e94a19ce 100755
+--- a/android/third_party/chromium/depot_tools/ninja
++++ b/android/third_party/chromium/depot_tools/ninja
+@@ -28,6 +28,8 @@ case "$OS" in
+         # bittage of the userspace install (e.g. when running 32-bit userspace
+         # on x86_64 kernel)
+         exec "${THIS_DIR}/ninja-linux${LONG_BIT}" "$@";;
++      aarch64)
++        exec /usr/bin/ninja "$@";;
+       *)
+         echo Unknown architecture \($MACHINE\) -- unable to run ninja.
+         print_help
+diff --git a/hw/virtio/virtio.c b/hw/virtio/virtio.c
+index 31e9b99b..420edead 100644
+--- a/hw/virtio/virtio.c
++++ b/hw/virtio/virtio.c
+@@ -1201,6 +1201,10 @@ void virtio_reset(void *opaque)
+     int i;
+ 
+     virtio_set_status(vdev, 0);
++#if defined(__aarch64__)
++    /* linux_aarch64 minbuild supports little-endian ARM64 guests only. */
++    vdev->device_endian = VIRTIO_DEVICE_ENDIAN_LITTLE;
++#else
+     if (current_cpu) {
+         /* Guest initiated reset */
+         vdev->device_endian = virtio_current_cpu_endian();
+@@ -1208,6 +1212,7 @@ void virtio_reset(void *opaque)
+         /* System reset */
+         vdev->device_endian = virtio_default_endian();
+     }
++#endif
+ 
+     if (k->reset) {
+         k->reset(vdev);

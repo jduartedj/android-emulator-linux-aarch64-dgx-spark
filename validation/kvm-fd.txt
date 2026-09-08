@@ -1,0 +1,1 @@
+lrwx------ 1 jduartedj kvm 64 Sep  8 23:47 23 -> /dev/kvm

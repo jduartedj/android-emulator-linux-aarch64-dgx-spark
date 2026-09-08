@@ -1,0 +1,5 @@
+Loading trace: 0.00 MBLoading trace: 4.47 MB[495.007]     common_flags.cc:525 Trace loaded: 4.47 MB in 0.06s (69.7 MB/s)
+[495.007]            query.cc:191 Query execution time: 0 ms
+"table_name","rows"
+"actual_frame_timeline_slice",268
+"expected_frame_timeline_slice",244

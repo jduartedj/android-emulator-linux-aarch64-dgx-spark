@@ -1,0 +1,2 @@
+PID=3763181
+$HOME/android-sdk/emulator/qemu/linux-aarch64/qemu-system-aarch64-headless

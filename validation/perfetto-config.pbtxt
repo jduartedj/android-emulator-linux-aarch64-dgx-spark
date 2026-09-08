@@ -1,0 +1,9 @@
+buffers: { size_kb: 32768 fill_policy: RING_BUFFER }
+data_sources: { config { name: "track_event" track_event_config { enabled_categories: "gfx" enabled_categories: "view" enabled_categories: "wm" enabled_categories: "input" } } }
+data_sources: { config { name: "android.surfaceflinger.frame" } }
+data_sources: { config { name: "android.surfaceflinger.frametimeline" } }
+data_sources: { config { name: "linux.ftrace" ftrace_config { ftrace_events: "sched/sched_switch" atrace_categories: "gfx" atrace_categories: "view" atrace_categories: "wm" } } }
+duration_ms: 10000
+write_into_file: true
+file_write_period_ms: 1000
+flush_period_ms: 1000

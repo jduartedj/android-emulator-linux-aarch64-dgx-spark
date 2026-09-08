@@ -1,0 +1,4 @@
+# Official Perfetto Trace Processor v58.2 (native Linux ARM64)
+URL: https://commondatastorage.googleapis.com/perfetto-luci-artifacts/v58.2/linux-arm64/trace_processor_shell
+SHA-256: 0e6e0c5452c505c8d46fe472fd196a0d17d963460727e2ce2013b02aa1309555
+Version: Perfetto v58.2-add693d8b (add693d8b338ba9599dbcbc3e300b1ab8c000897)

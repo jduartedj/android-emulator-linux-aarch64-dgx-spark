@@ -1,0 +1,3 @@
+/system/bin/perfetto
+Perfetto v49.0 (N/A)
+-rwxr-xr-x 1 root shell 647408 2025-08-06 23:11 /system/bin/perfetto

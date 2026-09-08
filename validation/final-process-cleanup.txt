@@ -1,0 +1,7 @@
+emulator/qemu/crashpad processes:
+listening emulator ports:
+adb emulator transport:
+127.0.0.1:5555         offline product:sdk_gphone64_arm64 model:sdk_gphone64_arm64 device:emu64a transport_id:10
+AVD definition:
+drwxrwxr-x 5 jduartedj jduartedj 4096 Sep  8 23:46 $HOME/.android/avd/DrinkingModeApi36Arm64Judith.avd
+-rw-rw-r-- 1 jduartedj jduartedj  154 Sep  8 23:37 $HOME/.android/avd/DrinkingModeApi36Arm64Judith.ini
