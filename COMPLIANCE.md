@@ -16,6 +16,10 @@ The distribution contains components under multiple licenses, including GPLv2 QE
 
 Release source parts reconstruct a deterministic `tar.zst` containing the checked-out source/build inputs, exact manifest and revisions, and applied patch. They are supplied with the binary rather than relying only on upstream URLs. Follow `SOURCE-REASSEMBLY.md` and verify `SHA256SUMS`. Public upstream test-only private-key fixtures and an unused prebuilt test SDK system-image fixture were excluded after scanning; they are not inputs to the shipped emulator binaries or the recorded no-tests build.
 
+## Build-log evidence
+
+The release includes `build-logs-redacted-35.6.3.tar.zst`, containing retained configure/build/GDB logs with personal absolute paths replaced by `${HOME}` and the local ADB key comment generalized. The archive is scanned for personal paths, common token forms, and private-key PEM blocks before upload. Raw unredacted logs remain local and are not public.
+
 ## Deliberately excluded proprietary payloads
 
 The Git repository and release must not contain Google API or Play system images, Play services, SDK credentials, AVD userdata, firmware, caches, or other proprietary Google SDK tools without explicit redistribution permission. Users obtain system images separately with Google's `sdkmanager` under Google's terms.

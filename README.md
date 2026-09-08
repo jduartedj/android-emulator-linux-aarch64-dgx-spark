@@ -4,6 +4,31 @@
 
 The first release builds Android Emulator 35.6.3 from Google's official `emu-master-dev` manifest and runs an Android 16 / API 36 ARM64 Google APIs image with KVM on the NVIDIA DGX Spark host named Judith.
 
+**Build it yourself:** [DIY-COMPILATION.md](DIY-COMPILATION.md) is the canonical clean-room Ubuntu 24.04 ARM64 guide, including exact dependencies, commands, patches, every verified failure, packaging, compliance, and validation.
+
+## Quick-copy tested build recipe
+
+```bash
+export WORK="$HOME/android-emulator-arm64"
+mkdir -p "$WORK/src" && cd "$WORK/src"
+repo init -u https://android.googlesource.com/platform/manifest \
+  -b emu-master-dev --depth=1 --partial-clone \
+  --clone-filter=blob:limit=10M --no-clone-bundle
+repo sync -c -j8 --no-clone-bundle --no-tags --optimized-fetch --prune
+cd external/qemu
+git apply /path/to/android-emulator-linux-aarch64-dgx-spark/patches/linux-aarch64-build-fixes.patch
+./android/rebuild.sh --target linux_aarch64 --config release \
+  --ccache /usr/bin/ccache --feature minbuild --feature no-qtwebengine \
+  --cmake_option CMAKE_MAKE_PROGRAM=/usr/bin/ninja \
+  --out "$WORK/build/objs" --dist "$WORK/build/dist" \
+  --task-disable CTest --task-disable AccelerationCheck \
+  --task-disable EmugenTest --task-disable GenEntriesTest \
+  --task-disable CoverageReport --task-disable PackageSamples \
+  --task-disable ZipIntegrationTests --task-disable IntegrationTest
+```
+
+Install the prerequisites and review capacity, KVM, manifest pinning, SDK registration, image installation, and verification steps in the [full DIY guide](DIY-COMPILATION.md) before running this excerpt.
+
 ## Why this matters
 
 Official Linux SDK emulator packages are ordinarily distributed for x86-64 hosts. On an ARM64 DGX Spark, an ARM64 emulator host executable plus an ARM64 system image allows ARM64-on-ARM64 virtualization through KVM rather than host CPU translation. The validated process holds `/dev/kvm` through membership in the existing `kvm` group; this project does not recommend weakening `/dev/kvm` permissions.
@@ -92,7 +117,26 @@ The Vulkan, BluetoothEmulation, and Uwb feature overrides reflect the validated 
 
 ## Reproduce the build
 
-Run `scripts/build.sh`. It initializes Google's official manifest, checks out the recorded revisions, applies `patches/linux-aarch64-build-fixes.patch`, and invokes the release `linux_aarch64` build. The same-release complete corresponding-source archive is supplied as split release assets; see `SOURCE-REASSEMBLY.md`.
+Follow [DIY-COMPILATION.md](DIY-COMPILATION.md), or run `scripts/build.sh` for its automated equivalent. It initializes Google's official manifest, checks out the recorded revisions, applies `patches/linux-aarch64-build-fixes.patch`, and invokes the release `linux_aarch64` build. The same-release complete corresponding-source archive is supplied as split release assets; see `SOURCE-REASSEMBLY.md`.
+
+## Compilation issues we encountered
+
+This was not a warning-free upstream build. The full symptoms, log excerpts, diagnosis, exact patches, verification, and troubleshooting table are in [DIY-COMPILATION.md §9](DIY-COMPILATION.md#9-compilation-issues-we-encountered). In order, the verified issues were:
+
+1. SDK Manager exposed ARM64 system images but no native Linux ARM64 host emulator package.
+2. The bundled Chromium/depot-tools Ninja launcher rejected `aarch64`; system Ninja and `CMAKE_MAKE_PROGRAM=/usr/bin/ninja` were required, plus a nested-build launcher dispatch.
+3. The official helper expected `/usr/aarch64-linux-gnu/lib/libstdc++.so.6`, while Ubuntu 24.04 used `/usr/lib/aarch64-linux-gnu/libstdc++.so.6`.
+4. The shallow/tagless checkout produced nonfatal `git describe` warnings; immutable commits and emitted version metadata were recorded instead.
+5. `minbuild` disabled Rust with a reduced-functionality warning; only the independently validated bounded feature set is claimed.
+6. Native GCC found a missing direct `<thread>` include in `Snapshotter.cpp`.
+7. The first ARM64 runtime segfaulted during virtio reset; GDB isolated a stale `current_cpu` path and the patch explicitly selects little-endian virtio for this ARM64-only minbuild.
+8. Install emitted `aarch64-linux-gnu-strip ... lib.so: No such file` warnings despite exit 0; package, dependency, boot, KVM, ADB, Perfetto, and stability checks bounded the nonfatal conclusion.
+9. Headless mode logs a missing optional `libStubXlib.so`; Vulkan and local Netsim Bluetooth/UWB were disabled, and SwiftShader OpenGL ES 3.0 was validated.
+10. ADB transport naming differed between `127.0.0.1:5555` and `emulator-5554`; cleanup explicitly removes stale TCP transports.
+11. Source, build, system image, ccache, and corresponding-source packaging required careful disk budgeting.
+12. KVM group changes required `sg kvm` or a new login; `/dev/kvm` was never opened globally.
+
+The retained result was a native AArch64 emulator that booted API 36 with KVM, produced real FrameTimeline tables, and passed 60/60 ADB probes over 611 seconds. Failed experimental commands are not presented as the tested recipe.
 
 ## Limitations
 
@@ -104,7 +148,7 @@ Run `scripts/build.sh`. It initializes Google's official manifest, checks out th
 
 ## Licensing and compliance
 
-Android Emulator/QEMU is distributed under GPLv2, with bundled components under their respective licenses. The binary archive includes upstream `NOTICE.txt`, `NOTICE.csv`, and license material. This repository includes the exact patch, revision manifest, component/notice inventory, and complete corresponding source release assets. See `LICENSES/`, `NOTICE/`, and `COMPLIANCE.md`.
+Android Emulator/QEMU is distributed under GPLv2, with bundled components under their respective licenses. The binary archive includes upstream `NOTICE.txt`, `NOTICE.csv`, and license material. This repository includes the exact patch, revision manifest, component/notice inventory, complete corresponding source release assets, and a redacted build/GDB log archive. See `LICENSES/`, `NOTICE/`, and `COMPLIANCE.md`.
 
 These are source-backed license facts and operational compliance materials, not legal advice.
 
