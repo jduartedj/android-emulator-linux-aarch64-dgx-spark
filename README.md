@@ -29,6 +29,10 @@ git apply /path/to/android-emulator-linux-aarch64-dgx-spark/patches/linux-aarch6
 
 Install the prerequisites and review capacity, KVM, manifest pinning, SDK registration, image installation, and verification steps in the [full DIY guide](DIY-COMPILATION.md) before running this excerpt.
 
+## DIY compilation
+
+You can build this emulator yourself on Ubuntu Linux ARM64, including NVIDIA DGX Spark. **Follow [`DIY-COMPILATION.md`](DIY-COMPILATION.md)** for the complete verified steps, capacity planning, KVM setup, encountered errors and fixes, caveats, validation, and reproducible release packaging.
+
 ## Why this matters
 
 Official Linux SDK emulator packages are ordinarily distributed for x86-64 hosts. On an ARM64 DGX Spark, an ARM64 emulator host executable plus an ARM64 system image allows ARM64-on-ARM64 virtualization through KVM rather than host CPU translation. The validated process holds `/dev/kvm` through membership in the existing `kvm` group; this project does not recommend weakening `/dev/kvm` permissions.
