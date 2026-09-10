@@ -9,7 +9,7 @@ The first release builds Android Emulator 35.6.3 from Google's official `emu-mas
 ## Quick-copy tested build recipe
 
 ```bash
-export WORK="$HOME/android-emulator-arm64"
+export WORK="$HOME/emulator-build"
 mkdir -p "$WORK/src" && cd "$WORK/src"
 repo init -u https://android.googlesource.com/platform/manifest \
   -b emu-master-dev --depth=1 --partial-clone \

@@ -6,10 +6,10 @@ Source:
 - kvm-all.c SHA-256 5cfbacf91792cff4d84e10bf1097a2407ac12b1efb778f5e87f3ddd9e219613b
 - static regression SHA-256 9ceb07e360489d1281a923bcfbc9209b16526c3cec3f5af899ea9fca9c3f52ed
 
-Binaries:
-- qemu-system-aarch64 SHA-256 e97cf42b32aa834264d7e5bc42ab5299b6ba89f586b97e245ecd656d6cc9f7b0
+Packaged binaries (after diagnostic source-prefix normalization):
+- qemu-system-aarch64 SHA-256 3c90e0313ec5808a38b5d54cb50c6f0928af0080206adf1d711b33a2440855e5
 - qemu-system-aarch64 Build ID 4ba673c1cad8fd4186238eec3389fcf6ef953474
-- qemu-system-aarch64-headless SHA-256 a840768428b0a7d28fa306146baacbfd7a50ec5543320a57cc6bd6b2cfc0792a
+- qemu-system-aarch64-headless SHA-256 42d52307362822cd1cfdf59b3f872660a4bc86b6a743cfc1000cf4ec69d3ff81
 - qemu-system-aarch64-headless Build ID c6ddc077fb89c18abf58023b2c33232f97e83009
 - Android Emulator 35.6.3.0 (build_id standalone-0)
 

@@ -124,7 +124,7 @@ Group changes do not alter an already-running shell. Use `sg kvm -c ...`, log ou
 ## 5. Initialize and sync official source
 
 ```bash
-export WORK="$HOME/android-emulator-arm64"
+export WORK="$HOME/emulator-build"
 mkdir -p "$WORK/src" "$WORK/provenance" "$WORK/logs"
 cd "$WORK/src"
 
@@ -256,13 +256,18 @@ ELF 64-bit ... ARM aarch64
 Android emulator version 35.6.3.0 (build_id standalone-0)
 ```
 
-Validated hashes after the shutdown-safe ARM64 KVM fix:
+Packaged hashes for the validated shutdown-safe ARM64 KVM build:
 
 ```text
-emulator: 2baee124da343882d48c24024c03ce32e04f338e91a4f1564b9fb1b34046d83e
-qemu-system-aarch64: e97cf42b32aa834264d7e5bc42ab5299b6ba89f586b97e245ecd656d6cc9f7b0
-qemu-system-aarch64-headless: a840768428b0a7d28fa306146baacbfd7a50ec5543320a57cc6bd6b2cfc0792a
+emulator: 615f87a5c524acfe6209d462e71e4c9423b3c7375fe15196163c4dac5a049be3
+qemu-system-aarch64: 3c90e0313ec5808a38b5d54cb50c6f0928af0080206adf1d711b33a2440855e5
+qemu-system-aarch64-headless: 42d52307362822cd1cfdf59b3f872660a4bc86b6a743cfc1000cf4ec69d3ff81
 ```
+
+These packaged hashes include deterministic fixed-width normalization of
+compiler-recorded source prefixes to `/build/emulator/release/source-root___`.
+The normalization changes only embedded diagnostic path strings; ELF layout,
+build IDs, and runtime code remain otherwise unchanged.
 
 The QEMU binary relies on sibling `lib64` libraries. A bare `ldd qemu/.../qemu-system-aarch64-headless` reports them as not found because it bypasses the launcher environment. Verify with the package library path:
 
@@ -286,7 +291,7 @@ sha256sum "$WORK/artifacts/"*.tar.zst
 Binary archive SHA-256:
 
 ```text
-0307a48c58a2a48bb1e8bbf16b01df097582f40302190540e8e211ed8b26f128
+aaa426635e9b760567931e98f2de260f6323d46855f54067eb1401061f80c265
 ```
 
 ## 9. Compilation issues we encountered
@@ -504,8 +509,8 @@ The exact source base was
 
 **Build and validation:** the incremental release build exited 0; the patch's
 static regression passed. The stripped GUI and headless QEMU SHA-256 values are
-`e97cf42b32aa834264d7e5bc42ab5299b6ba89f586b97e245ecd656d6cc9f7b0`
-and `a840768428b0a7d28fa306146baacbfd7a50ec5543320a57cc6bd6b2cfc0792a`.
+`3c90e0313ec5808a38b5d54cb50c6f0928af0080206adf1d711b33a2440855e5`
+and `42d52307362822cd1cfdf59b3f872660a4bc86b6a743cfc1000cf4ec69d3ff81`.
 API 36/ARM64 with 8 vCPUs, 8192 MiB, and KVM active passed 20/20 lifecycle
 cycles, 10/10 one-minute ADB/QEMU probes, four accepted FrameTimeline captures
 with zero nonzero error/data-loss stats, clean `adb emu kill`, and guest
@@ -670,7 +675,7 @@ Retained result: 60/60 probes passed over 611 seconds.
 ## 13. Troubleshooting table
 
 | Error or observation | Cause | Fix | Verification |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `Dependant package with key emulator not found` | local source build lacks SDK package metadata | install the source build and create local `emulator/package.xml` | `sdkmanager --list_installed`; `file emulator` |
 | `Unknown architecture (aarch64)` from depot-tools Ninja | x86-only launcher dispatch | system Ninja plus recorded AArch64 launcher patch | nested FlatBuffers configure succeeds |
 | `/usr/aarch64-linux-gnu/lib/libstdc++.so.6 ... does not exist` | Ubuntu multiarch path mismatch | recorded one-line `/usr/lib/aarch64-linux-gnu` patch | configure and copied `libstdc++` succeed |

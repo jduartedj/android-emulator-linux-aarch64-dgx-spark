@@ -12,6 +12,6 @@ if grep -q 'not found' <<<"$LDD_OUTPUT"; then
   exit 1
 fi
 printf '%s  %s\n' \
-  '2baee124da343882d48c24024c03ce32e04f338e91a4f1564b9fb1b34046d83e' "$EMU/emulator" \
-  'e97cf42b32aa834264d7e5bc42ab5299b6ba89f586b97e245ecd656d6cc9f7b0' "$GUI" \
-  'a840768428b0a7d28fa306146baacbfd7a50ec5543320a57cc6bd6b2cfc0792a' "$HEADLESS" | sha256sum -c -
+  '615f87a5c524acfe6209d462e71e4c9423b3c7375fe15196163c4dac5a049be3' "$EMU/emulator" \
+  '3c90e0313ec5808a38b5d54cb50c6f0928af0080206adf1d711b33a2440855e5' "$GUI" \
+  '42d52307362822cd1cfdf59b3f872660a4bc86b6a743cfc1000cf4ec69d3ff81' "$HEADLESS" | sha256sum -c -
