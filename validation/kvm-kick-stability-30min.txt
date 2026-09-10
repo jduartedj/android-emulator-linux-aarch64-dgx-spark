@@ -1,0 +1,13 @@
+ARM64 KVM immediate-exit null-guard validation — superseded failure
+
+The runtime portion passed 20/20 lifecycle cycles and a 30-minute hold, but clean
+`adb emu kill` produced a new SIGSEGV minidump after 2,028 seconds:
+
+- dump: 1b73dcbd-8ccf-406e-ae6c-e3b6d8c7d6bd.dmp
+- SHA-256: 39da848d7a24aee2d10b73566599b2e314e6b45260c80073b56d6fec5c4c55d8
+- Thread 0: qemu-system-aarch64-headless+0x31a1d8
+
+Conclusion: checking only for null `cpu->kvm_run` was insufficient because the
+mapping can be stale but non-null during teardown. This result is retained as
+negative evidence and must not be presented as a successful validation. See
+`kvm-kick-legacy-sigipi-validation.txt` for the replacement test.

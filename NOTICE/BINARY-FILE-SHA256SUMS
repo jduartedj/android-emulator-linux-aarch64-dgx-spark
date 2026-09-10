@@ -174,7 +174,7 @@ cdf057a71b07e3b52b19cbe210bdefa59250d01a9810b960f7fe1f98eed95a27  ./lib/pc-bios/
 e890de8e603b518cc3f2e4f094d33eda44915638b2cb33fdd914093b46812cb1  ./lib/pc-bios/vgabios-cirrus.bin
 6f939e75651ce4fe99ee9326bd9e5561d92e17ade1e75c8f7e8cfa47a4ec197b  ./lib/pc-bios/vgabios-stdvga.bin
 58506fd17a02f7a70fc64f225bb842c9ca53f7262874159f4a58121b8e101569  ./lib/pc-bios/vgabios-virtio.bin
-6f6e266c948b73067f9287a985886ac7cc784015ec123d325a9829907c767f40  ./lib/pkgconfig/flatbuffers.pc
+15cbb38c9ba6b819ce4b22b83447dccd36425c985fe01de026bcf96f9fed01c3  ./lib/pkgconfig/flatbuffers.pc
 b1c0d54e696ab7e8a25c1fc1cfe930821c2cd79a0ba02feb9c93949246e59819  ./lib/snapshot.proto
 0aacf854e1e774f6a054e0112a9210ab71bca29906f8db06255b29d6af11b531  ./lib/snapshot_service.proto
 cfc3a635cbb5fdfa55090aaab8c6dc0bf61c31938ed3ed2bf0fd9b9853d0945a  ./lib/ui_controller_service.proto
@@ -187,8 +187,8 @@ c2ea628fc2c0d1287ba5186ca302126c8656503e40ee4228daba117293c2f18b  ./NOTICE.csv
 ada5ed26893e4fb95c36232d65af9e62705a3622f3861f15cada957505f98f8d  ./NOTICE.txt
 d6ce38f071e856549bf5d926a041a47e4058cf97d54dcc8a7fc6f48829c613b8  ./patchelf.tgz
 305711fe0bcfa9a9e873ea5592606c344bd569c6136271845f80377c3bd867e8  ./qemu-img
-503cf123a6157b276a255996b2a36f921902a82ccb8405eaf45622afae740596  ./qemu/linux-aarch64/qemu-system-aarch64
-e4f5097409788a43f321c59f37a4c5263f22c31cc8a289f05a22d16721c250f3  ./qemu/linux-aarch64/qemu-system-aarch64-headless
+e97cf42b32aa834264d7e5bc42ab5299b6ba89f586b97e245ecd656d6cc9f7b0  ./qemu/linux-aarch64/qemu-system-aarch64
+a840768428b0a7d28fa306146baacbfd7a50ec5543320a57cc6bd6b2cfc0792a  ./qemu/linux-aarch64/qemu-system-aarch64-headless
 d9449f13f971bb5968ce7f63f058610a825fc6bdfd72b671d72a2e4fea74b25b  ./qsn
 8bdc6c977cd38168281b6751ee4ead48e6a4fa937de91eec0dd6036d39e5925c  ./resources/macroPreviews/Reset_position.mp4
 d8bd23d3ac6bbd7a9932da20bc6e6cb3b1de3cc3a6ec722acdd440edfdcab063  ./resources/macroPreviews/Track_horizontal_plane.mp4

@@ -2,7 +2,7 @@
 
 > **Built natively and validated on NVIDIA DGX Spark.** This is an unofficial, source-built Android Emulator distribution for Linux `aarch64`. It is not an official Google, Android, or NVIDIA product and no endorsement is implied.
 
-The first release builds Android Emulator 35.6.3 from Google's official `emu-master-dev` manifest and runs an Android 16 / API 36 ARM64 Google APIs image with KVM on the NVIDIA DGX Spark host named Judith.
+The first release builds Android Emulator 35.6.3 from Google's official `emu-master-dev` manifest and runs an Android 16 / API 36 ARM64 Google APIs image with KVM on NVIDIA DGX Spark.
 
 **Build it yourself:** [DIY-COMPILATION.md](DIY-COMPILATION.md) is the canonical clean-room Ubuntu 24.04 ARM64 guide, including exact dependencies, commands, patches, every verified failure, packaging, compliance, and validation.
 
@@ -17,6 +17,8 @@ repo init -u https://android.googlesource.com/platform/manifest \
 repo sync -c -j8 --no-clone-bundle --no-tags --optimized-fetch --prune
 cd external/qemu
 git apply /path/to/android-emulator-linux-aarch64-dgx-spark/patches/linux-aarch64-build-fixes.patch
+git apply /path/to/android-emulator-linux-aarch64-dgx-spark/patches/kvm-kick-arm64-shutdown-safe-sigipi.patch
+python3 tests/test-kvm-kick-guard.py
 ./android/rebuild.sh --target linux_aarch64 --config release \
   --ccache /usr/bin/ccache --feature minbuild --feature no-qtwebengine \
   --cmake_option CMAKE_MAKE_PROGRAM=/usr/bin/ninja \
@@ -48,7 +50,7 @@ Official Linux SDK emulator packages are ordinarily distributed for x86-64 hosts
 
 ## Validation evidence
 
-The isolated AVD `DrinkingModeApi36Arm64Judith` booted with the native AArch64 headless QEMU executable and KVM (`/dev/kvm` open by the QEMU process), with:
+An isolated API 36 AVD booted with the native AArch64 headless QEMU executable and KVM (`/dev/kvm` open by the QEMU process), with:
 
 - ADB online and `sys.boot_completed=1`
 - Android 16, API 36, ABI `arm64-v8a`
@@ -61,7 +63,7 @@ The isolated AVD `DrinkingModeApi36Arm64Judith` booted with the native AArch64 h
 - native official Perfetto Trace Processor v58.2: 268 actual and 244 expected FrameTimeline rows, with no nonzero error or data-loss stats
 - a 10-minute ADB stability probe (see `validation/`)
 
-No Drinking Mode APK or benchmark APK is included or installed.
+No application or benchmark APK is included or installed.
 
 ## Install the emulator
 
@@ -94,7 +96,7 @@ Create an isolated phone AVD:
 
 ```bash
 printf 'no\n' | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/avdmanager" create avd \
-  --name DrinkingModeApi36Arm64Judith \
+  --name DgxSparkApi36Arm64 \
   --package 'system-images;android-36;google_apis;arm64-v8a' \
   --device pixel_5
 ```
@@ -111,7 +113,7 @@ sg kvm -c 'test -r /dev/kvm -a -w /dev/kvm'
 Boot in a fresh group context:
 
 ```bash
-sg kvm -c '"$ANDROID_SDK_ROOT/emulator/emulator" @DrinkingModeApi36Arm64Judith \
+sg kvm -c '"$ANDROID_SDK_ROOT/emulator/emulator" @DgxSparkApi36Arm64 \
   -no-window -no-audio -no-snapshot -no-boot-anim \
   -gpu swiftshader_indirect -feature -Vulkan \
   -feature -BluetoothEmulation -feature -Uwb -accel on -no-metrics'
@@ -121,7 +123,7 @@ The Vulkan, BluetoothEmulation, and Uwb feature overrides reflect the validated 
 
 ## Reproduce the build
 
-Follow [DIY-COMPILATION.md](DIY-COMPILATION.md), or run `scripts/build.sh` for its automated equivalent. It initializes Google's official manifest, checks out the recorded revisions, applies `patches/linux-aarch64-build-fixes.patch`, and invokes the release `linux_aarch64` build. The same-release complete corresponding-source archive is supplied as split release assets; see `SOURCE-REASSEMBLY.md`.
+Follow [DIY-COMPILATION.md](DIY-COMPILATION.md), or run `scripts/build.sh` for its automated equivalent. It initializes Google's official manifest, checks out the recorded revisions, applies the portability/build patch and canonical shutdown-safe KVM patch, runs the static KVM regression, and invokes the release `linux_aarch64` build. The same-release corresponding source is the split base archive plus the small final-patch supplement; see `SOURCE-REASSEMBLY.md`.
 
 ## Compilation issues we encountered
 
@@ -139,8 +141,9 @@ This was not a warning-free upstream build. The full symptoms, log excerpts, dia
 10. ADB transport naming differed between `127.0.0.1:5555` and `emulator-5554`; cleanup explicitly removes stale TCP transports.
 11. Source, build, system image, ccache, and corresponding-source packaging required careful disk budgeting.
 12. KVM group changes required `sg kvm` or a new login; `/dev/kvm` was never opened globally.
+13. Clean shutdown could crash in `kvm_cpu_kick()` after a successful run. Minidump symbolization showed a stale `cpu->kvm_run` access: a null guard failed after a 30-minute hold, and forcing legacy SIGIPI alone failed because the release build removed the assertion while `kvm_ipi_signal()` still called `kvm_cpu_kick()`. The canonical patch forces AArch64 to the existing `KVM_SET_SIGNAL_MASK`/SIGIPI path and guards the handler with `current_cpu && kvm_immediate_exit`. It rebuilt successfully, passed the static regression, 20/20 lifecycle cycles, 10/10 one-minute probes, clean FrameTimeline/error statistics, `adb emu kill`, guest `reboot -p`, and zero new minidumps. The rejected patch is explicitly historical and must not be applied; rollback is an atomic directory swap to the retained pre-fix package.
 
-The retained result was a native AArch64 emulator that booted API 36 with KVM, produced real FrameTimeline tables, and passed 60/60 ADB probes over 611 seconds. Failed experimental commands are not presented as the tested recipe.
+The retained result was a native AArch64 emulator that booted API 36 with KVM, produced real FrameTimeline tables, passed the shutdown-safe KVM regression, completed 20/20 lifecycle cycles and a 10-minute ADB/KVM hold, then exited cleanly under both `adb emu kill` and guest `reboot -p` with no new minidump. Failed experimental commands are not presented as the tested recipe.
 
 ## Limitations
 
@@ -148,7 +151,7 @@ The retained result was a native AArch64 emulator that booted API 36 with KVM, p
 - Vulkan was disabled for the validated run because the minbuild distribution does not bundle the Vulkan loader; SwiftShader OpenGL ES 3.0 was used.
 - Bluetooth and UWB emulation were disabled because the minbuild configuration has no local Netsim service.
 - The official Google Linux platform-tools package in the test SDK was x86-64 and ran through the host compatibility layer; the emulator and QEMU themselves were verified native AArch64.
-- P3-2 app benchmarking is not represented here because no authorized benchmark APK was supplied during emulator validation.
+- Application benchmarking is not represented here because no benchmark APK was supplied during emulator validation.
 
 ## Licensing and compliance
 

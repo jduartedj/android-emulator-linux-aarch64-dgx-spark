@@ -1,0 +1,67 @@
+diff --git a/accel/kvm/kvm-all.c b/accel/kvm/kvm-all.c
+index 214e7b80..cb58b51a 100644
+--- a/accel/kvm/kvm-all.c
++++ b/accel/kvm/kvm-all.c
+@@ -1625,6 +1625,14 @@ static int kvm_init(MachineState *ms)
+     }
+ 
+     kvm_immediate_exit = kvm_check_extension(s, KVM_CAP_IMMEDIATE_EXIT);
++#if defined(__aarch64__)
++    /*
++     * Android Emulator teardown can race vCPU KVM_RUN unmapping on ARM64,
++     * leaving cpu->kvm_run stale while an immediate-exit kick is delivered.
++     * Keep KVM acceleration, but use QEMU's established SIG_IPI fallback.
++     */
++    kvm_immediate_exit = false;
++#endif
+     s->nr_slots = kvm_check_extension(s, KVM_CAP_NR_MEMSLOTS);
+ 
+     /* If unspecified, use the default value */
+@@ -1928,7 +1936,12 @@ static __thread bool have_sigbus_pending;
+ 
+ static void kvm_cpu_kick(CPUState *cpu)
+ {
+-    atomic_set(&cpu->kvm_run->immediate_exit, 1);
++    /* A vCPU can be kicked while its KVM_RUN mapping is being torn down. */
++    if (cpu && cpu->kvm_run) {
++        atomic_set(&cpu->kvm_run->immediate_exit, 1);
++    } else if (cpu) {
++        qemu_cpu_kick(cpu);
++    }
+ }
+ 
+ static void kvm_cpu_kick_self(void)
+diff --git a/tests/test-kvm-kick-guard.py b/tests/test-kvm-kick-guard.py
+new file mode 100755
+index 00000000..f43670c7
+--- /dev/null
++++ b/tests/test-kvm-kick-guard.py
+@@ -0,0 +1,28 @@
++#!/usr/bin/env python3
++"""Static regression for the ARM64 KVM legacy kick selection."""
++
++from pathlib import Path
++import re
++
++source = (Path(__file__).parents[1] / "accel/kvm/kvm-all.c").read_text()
++probe = re.search(
++    r"kvm_immediate_exit = kvm_check_extension\(s, KVM_CAP_IMMEDIATE_EXIT\);"
++    r"(?P<body>.*?)s->nr_slots =",
++    source,
++    re.DOTALL,
++)
++assert probe, "KVM capability probe not found"
++body = probe.group("body")
++assert "#if defined(__aarch64__)" in body, "ARM64 scope missing"
++assert "kvm_immediate_exit = false;" in body, "immediate-exit disable missing"
++
++kick_self = re.search(
++    r"static void kvm_cpu_kick_self\(void\)\n\{(?P<body>.*?)\n\}",
++    source,
++    re.DOTALL,
++)
++assert kick_self, "kvm_cpu_kick_self() not found"
++body = kick_self.group("body")
++assert "if (kvm_immediate_exit)" in body, "capability selection missing"
++assert "qemu_cpu_kick_self();" in body, "legacy SIG_IPI fallback missing"
++print("PASS: ARM64 disables KVM immediate-exit and retains legacy SIG_IPI kicks")

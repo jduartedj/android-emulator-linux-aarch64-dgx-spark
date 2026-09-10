@@ -1,0 +1,35 @@
+ARM64 KVM legacy SIG_IPI experiment — rejected on shutdown
+
+Runtime configuration:
+- API 36 / arm64-v8a
+- 8 vCPUs / 8192 MB
+- KVM active with /dev/kvm, kvm-vm, and kvm-vcpu:0..7 fds
+- SwiftShader
+- affinity 5-9,15-19
+- wiped isolated API 36 ARM64 validation AVD
+
+Runtime results:
+- 20/20 install, force-stop, start, restart, and uninstall cycles passed
+- 10/10 one-minute ADB/QEMU probes passed
+- QEMU uptime before shutdown: 719 seconds
+- local fixture absent before shutdown
+- Perfetto actual/expected FrameTimeline rows:
+  - cycle 5: 472/376
+  - cycle 10: 542/389
+  - cycle 15: 566/412
+  - cycle 20: 581/418
+- zero nonzero error/data_loss stats in all four traces
+
+Shutdown result: FAILED
+- command: adb -s emulator-5554 emu kill
+- new dump: d9480f7e-df0c-4548-9ba9-6bbb9848fdfa.dmp
+- dump SHA-256: ebc4939d7cb68f70fcc5fbce2722cd9f78b43d955ce6a2a6aaf104d8db2088c8
+- uptime: 720 seconds
+- reason: SIGSEGV / SEGV_MAPERR
+- Thread 0: qemu-system-aarch64-headless+0x31a1d8
+- symbol: kvm_cpu_kick, accel/kvm/kvm-all.c:1940
+- disassembly labels the containing signal entry kvm_ipi_signal
+
+Conclusion: forcing kvm_immediate_exit=false was insufficient in this release build.
+The original pre-fix emulator distribution was restored. This is negative evidence,
+not a validated release.

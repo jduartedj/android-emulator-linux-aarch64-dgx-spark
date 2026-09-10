@@ -1,6 +1,6 @@
 # Build environment
 
-- Built: 2026-09-08 on NVIDIA DGX Spark host Judith
+- Built: 2026-09-08 and incrementally rebuilt 2026-09-09 on NVIDIA DGX Spark
 - OS: Ubuntu 24.04.4 LTS
 - Kernel: Linux 6.17.0-1032-nvidia aarch64
 - CPU: 20 ARM64 cores (10 Cortex-X925 + 10 Cortex-A725), 121 GiB RAM

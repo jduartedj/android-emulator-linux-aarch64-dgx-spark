@@ -11,6 +11,8 @@ repo init -m pinned.xml --depth=1 --partial-clone --clone-filter=blob:limit=10M 
 repo sync -c -j"$JOBS" --no-clone-bundle --no-tags --optimized-fetch --prune
 cd external/qemu
 git apply "$PROJECT_ROOT/patches/linux-aarch64-build-fixes.patch"
+git apply "$PROJECT_ROOT/patches/kvm-kick-arm64-shutdown-safe-sigipi.patch"
+python3 tests/test-kvm-kick-guard.py
 ./android/rebuild.sh --target linux_aarch64 --config release --ccache /usr/bin/ccache \
   --feature minbuild --feature no-qtwebengine \
   --cmake_option CMAKE_MAKE_PROGRAM=/usr/bin/ninja \

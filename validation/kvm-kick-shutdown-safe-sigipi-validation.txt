@@ -1,0 +1,43 @@
+ARM64 KVM shutdown-safe SIG_IPI fix — accepted 2026-09-09
+
+Source:
+- AOSP external/qemu base ae9d18d2b6261179fbd57fffec720a04f7bfb053
+- patch SHA-256 809f1a88c275382fdbdecfd980efc03826641615531e4b2f79e4e36c60be4bee
+- kvm-all.c SHA-256 5cfbacf91792cff4d84e10bf1097a2407ac12b1efb778f5e87f3ddd9e219613b
+- static regression SHA-256 9ceb07e360489d1281a923bcfbc9209b16526c3cec3f5af899ea9fca9c3f52ed
+
+Binaries:
+- qemu-system-aarch64 SHA-256 e97cf42b32aa834264d7e5bc42ab5299b6ba89f586b97e245ecd656d6cc9f7b0
+- qemu-system-aarch64 Build ID 4ba673c1cad8fd4186238eec3389fcf6ef953474
+- qemu-system-aarch64-headless SHA-256 a840768428b0a7d28fa306146baacbfd7a50ec5543320a57cc6bd6b2cfc0792a
+- qemu-system-aarch64-headless Build ID c6ddc077fb89c18abf58023b2c33232f97e83009
+- Android Emulator 35.6.3.0 (build_id standalone-0)
+
+Runtime:
+- API 36, arm64-v8a, 8 vCPUs, 8192 MiB
+- KVM 12 active; /dev/kvm, kvm-vm, and kvm-vcpu:0..7 open
+- SwiftShader indirect; CPU affinity 5-9,15-19
+- 20/20 lifecycle/install/uninstall cycles passed
+- 10/10 one-minute ADB/boot-complete/QEMU probes passed
+- QEMU uptime before console shutdown: 722 seconds
+
+Accepted Perfetto FrameTimeline rows (actual/expected):
+- cycle 5: 450/372
+- cycle 10 clean 64 MiB recapture: 64/53
+- cycle 15: 611/433
+- cycle 20: 542/386
+- zero nonzero error or data_loss stats in every accepted trace
+- initial cycle-10 32 MiB capture was rejected for ring-buffer packet loss and is not in the accepted set
+
+Shutdown:
+- adb -s emulator-5554 emu kill: PASS
+- guest reboot -p: PASS
+- new minidumps: 0
+- crash signatures: 0
+- final emulator/QEMU processes: 0
+- final emulator-5554 transport: absent
+
+Installation:
+- installed full-manifest SHA-256 3418f0a184b7276637ade68a1a5d5782b1d24065d571591879935578d1bc452d
+- candidate remains installed
+- rollback: retained pre-fix emulator directory; use an atomic same-filesystem directory swap

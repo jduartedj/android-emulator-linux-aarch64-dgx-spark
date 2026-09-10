@@ -168,18 +168,23 @@ Record this deviation. Do not exclude arbitrary projects.
 ```bash
 cd "$WORK/src/external/qemu"
 git apply /path/to/this/repository/patches/linux-aarch64-build-fixes.patch
+git apply /path/to/this/repository/patches/kvm-kick-arm64-shutdown-safe-sigipi.patch
+python3 tests/test-kvm-kick-guard.py
 git diff --check
 git diff > "$WORK/provenance/source-patch.diff"
-sha256sum "$WORK/provenance/source-patch.diff"
+sha256sum \
+  /path/to/this/repository/patches/linux-aarch64-build-fixes.patch \
+  /path/to/this/repository/patches/kvm-kick-arm64-shutdown-safe-sigipi.patch
 ```
 
-Expected patch SHA-256:
+Expected individual patch SHA-256 values:
 
 ```text
-6439982c72030dd28247b60bd3ce7b0d85f04242d1b511ebc46ce58ed9c47cfc
+6439982c72030dd28247b60bd3ce7b0d85f04242d1b511ebc46ce58ed9c47cfc  linux-aarch64-build-fixes.patch
+809f1a88c275382fdbdecfd980efc03826641615531e4b2f79e4e36c60be4bee  kvm-kick-arm64-shutdown-safe-sigipi.patch
 ```
 
-The four changes are intentionally small and documented in §9. Re-check the upstream branch before carrying them into a newer revision.
+The build changes are documented in §9 and the KVM shutdown fix near the end of this guide. Re-check the upstream branch before carrying either patch into a newer revision.
 
 ## 7. Configure and build
 
@@ -251,11 +256,12 @@ ELF 64-bit ... ARM aarch64
 Android emulator version 35.6.3.0 (build_id standalone-0)
 ```
 
-Validated hashes:
+Validated hashes after the shutdown-safe ARM64 KVM fix:
 
 ```text
 emulator: 2baee124da343882d48c24024c03ce32e04f338e91a4f1564b9fb1b34046d83e
-qemu-system-aarch64-headless: e4f5097409788a43f321c59f37a4c5263f22c31cc8a289f05a22d16721c250f3
+qemu-system-aarch64: e97cf42b32aa834264d7e5bc42ab5299b6ba89f586b97e245ecd656d6cc9f7b0
+qemu-system-aarch64-headless: a840768428b0a7d28fa306146baacbfd7a50ec5543320a57cc6bd6b2cfc0792a
 ```
 
 The QEMU binary relies on sibling `lib64` libraries. A bare `ldd qemu/.../qemu-system-aarch64-headless` reports them as not found because it bypasses the launcher environment. Verify with the package library path:
@@ -271,16 +277,16 @@ Package deterministically with the clearly unofficial name:
 ```bash
 mkdir -p "$WORK/artifacts"
 cd "$WORK/build/objs/distribution"
-TZ=UTC tar --sort=name --mtime='2026-09-08 22:00:00Z' \
+tar --sort=name --format=gnu --mtime='@1788951600' \
   --owner=0 --group=0 --numeric-owner -cf - emulator |
-  zstd -T0 -19 -o "$WORK/artifacts/android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3.tar.zst"
+  zstd -T1 -19 -o "$WORK/artifacts/android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3.tar.zst"
 sha256sum "$WORK/artifacts/"*.tar.zst
 ```
 
 Binary archive SHA-256:
 
 ```text
-c76aa27dc55c0ab4d1fc1c4527d56943eeb146a6dafcb60f3d9e2c42417fe509
+0307a48c58a2a48bb1e8bbf16b01df097582f40302190540e8e211ed8b26f128
 ```
 
 ## 9. Compilation issues we encountered
@@ -464,6 +470,55 @@ adb disconnect 127.0.0.1:5555 || true
 
 **Verify:** no emulator/QEMU process, listener on 5554/5555/8554, or emulator ADB transport remains.
 
+### 9.11 ARM64 KVM shutdown crash in `kvm_cpu_kick()`
+
+**Symptom:** an 8-vCPU ARM64 KVM session could complete its workload and then
+crash during clean shutdown. Breakpad minidump symbolization resolved thread 0
+to `kvm_cpu_kick()` in `accel/kvm/kvm-all.c`, writing
+`cpu->kvm_run->immediate_exit` after teardown had begun.
+
+**Rejected attempts:** checking `cpu` and `cpu->kvm_run` for null passed 20
+lifecycle cycles and a 30-minute hold, but `adb emu kill` still produced a
+SIGSEGV because the mapping was stale and non-null. Forcing
+`kvm_immediate_exit=false` selected the legacy signal path and passed 20 cycles
+plus 10 one-minute probes, but shutdown still crashed. In this release build the
+`assert(kvm_immediate_exit)` check was compiled out, so `kvm_ipi_signal()` still
+called `kvm_cpu_kick(current_cpu)`. The file
+[`patches/FAILED-kvm-kick-arm64-legacy-sigipi.patch`](patches/FAILED-kvm-kick-arm64-legacy-sigipi.patch)
+is retained only as historical negative evidence. **Do not apply it.**
+
+**Accepted fix:** apply
+[`patches/kvm-kick-arm64-shutdown-safe-sigipi.patch`](patches/kvm-kick-arm64-shutdown-safe-sigipi.patch),
+SHA-256 `809f1a88c275382fdbdecfd980efc03826641615531e4b2f79e4e36c60be4bee`.
+It keeps KVM enabled, forces AArch64 onto QEMU's existing
+`KVM_SET_SIGNAL_MASK`/SIGIPI path, retains `qemu_cpu_kick_self()`, and makes
+`kvm_ipi_signal()` call `kvm_cpu_kick()` only when
+`current_cpu && kvm_immediate_exit`. In legacy mode SIGIPI itself interrupts
+`KVM_RUN`, so the handler must not access `kvm_run`.
+
+The change matches the semantics documented by upstream QEMU commit
+[`cf0f7cf903073f9dd9979dd33d52618b384ac2cb`](https://github.com/qemu/qemu/commit/cf0f7cf903073f9dd9979dd33d52618b384ac2cb)
+and its [mailing-list rationale](https://lists.gnu.org/archive/html/qemu-devel/2017-02/msg02201.html).
+The exact source base was
+`ae9d18d2b6261179fbd57fffec720a04f7bfb053`.
+
+**Build and validation:** the incremental release build exited 0; the patch's
+static regression passed. The stripped GUI and headless QEMU SHA-256 values are
+`e97cf42b32aa834264d7e5bc42ab5299b6ba89f586b97e245ecd656d6cc9f7b0`
+and `a840768428b0a7d28fa306146baacbfd7a50ec5543320a57cc6bd6b2cfc0792a`.
+API 36/ARM64 with 8 vCPUs, 8192 MiB, and KVM active passed 20/20 lifecycle
+cycles, 10/10 one-minute ADB/QEMU probes, four accepted FrameTimeline captures
+with zero nonzero error/data-loss stats, clean `adb emu kill`, and guest
+`reboot -p`; no new minidump or crash signature appeared. See
+[`validation/kvm-kick-shutdown-safe-sigipi-validation.txt`](validation/kvm-kick-shutdown-safe-sigipi-validation.txt).
+
+**Rollback:** install through a same-filesystem staging directory and retain the
+previous emulator directory. If post-shutdown dump inspection fails, rename the
+candidate aside and atomically rename the retained pre-fix directory back to
+`$ANDROID_SDK_ROOT/emulator`. Runtime-only stability is not sufficient for this
+race: always inspect dumps after shutdown, and never disable KVM as a substitute
+for the fix.
+
 ## 10. Install API 36 and create the AVD
 
 Copy the built distribution to a dedicated SDK root without overwriting an existing emulator:
@@ -498,12 +553,12 @@ Create the AVD:
 ```bash
 printf 'no\n' | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/avdmanager" create avd \
   --force \
-  --name DrinkingModeApi36Arm64Judith \
+  --name DgxSparkApi36Arm64 \
   --package 'system-images;android-36;google_apis;arm64-v8a' \
   --device pixel_5
 ```
 
-Set one value per key in `$HOME/.android/avd/DrinkingModeApi36Arm64Judith.avd/config.ini`:
+Set one value per key in `$HOME/.android/avd/DgxSparkApi36Arm64.avd/config.ini`:
 
 ```ini
 hw.keyboard=yes
@@ -522,7 +577,7 @@ The current `avdmanager` also logged a missing optional image `devices.xml` whil
 
 ```bash
 export EMULATOR="$ANDROID_SDK_ROOT/emulator/emulator"
-export AVD=DrinkingModeApi36Arm64Judith
+export AVD=DgxSparkApi36Arm64
 
 sg kvm -c 'env ANDROID_SDK_ROOT="$ANDROID_SDK_ROOT" \
   "$EMULATOR" @"$AVD" \
@@ -663,4 +718,4 @@ This section records source-backed license facts and the packaging performed for
 - Graphics validation used SwiftShader OpenGL ES 3.0, not the NVIDIA GPU.
 - The headless stub-Xlib and install/strip warnings remain documented.
 - Google platform-tools on the validation SDK was x86-64 under the host compatibility layer; emulator/QEMU were native AArch64.
-- No application benchmark APK was installed; the result is emulator/P3-2 suitability validation, not app performance data.
+- No application benchmark APK was installed; the result is emulator suitability validation, not app performance data.
