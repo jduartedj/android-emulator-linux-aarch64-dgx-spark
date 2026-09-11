@@ -2,7 +2,7 @@
 
 This is a source-backed inventory, not legal advice.
 
-**Open publication-audit finding (2026-09-11):** the source archive contains 22 upstream APK fixtures, including `external/adt-infra/emu_test/utils/apks/BestFiends.apk`. Their presence was missed by the earlier source exclusion scan. This audit did not establish redistribution authorization for every fixture. The binary archive contains no APKs. Do not treat the source package as publication-cleared until these unnecessary fixtures are removed or their inclusion is explicitly justified; see [AUDIT-STATUS.md](AUDIT-STATUS.md).
+**Publication repair (2026-09-11):** source r2 removes 22 direct upstream APKs, one unused test wheel containing an APK, one unused test ZIP containing Android system images, and one APK member from each of two Qt source archives. Exclusion/normalization records identify exact paths, upstream revisions and before/after hashes in `manifests/`. This is a conservative omission of unnecessary fixtures whose redistribution permission was not established, not an allegation of unlawful upstream distribution. All other Qt member contents and required host-build source/prebuilts/notices are retained. See [AUDIT-STATUS.md](AUDIT-STATUS.md).
 
 ## Emulator/QEMU
 
@@ -22,7 +22,7 @@ The distribution contains components under multiple licenses, including GPLv2 QE
 
 ## Corresponding source
 
-Release source parts reconstruct a deterministic `tar.zst` containing the checked-out source/build inputs, exact manifest and revisions, and portability/build patch. A same-release corresponding-source supplement supplies the final canonical shutdown-safe SIGIPI patch and regression test; the rejected predecessor is labeled historical troubleshooting only. The base archive and supplement together correspond to the final binary and are supplied with it rather than relying only on upstream URLs. Follow `SOURCE-REASSEMBLY.md` and verify `SHA256SUMS`. Public upstream test-only private-key fixtures and an unused prebuilt test SDK system-image fixture were excluded after scanning; they are not inputs to the shipped emulator binaries or the recorded no-tests build.
+Source r2 parts reconstruct a deterministic `tar.zst` containing the checked-out no-tests source/build inputs, exact revisions, portability/build patch and precise fixture-exclusion record. Same-release supplement 2 supplies the complete 66-project build manifest, corrected build/reassembly and host-tool instructions, and final canonical shutdown-safe SIGIPI patch and regression test; the rejected predecessor is labeled historical troubleshooting only. The base archive and supplement together correspond to the final binary and are supplied with it rather than relying only on upstream URLs. Follow `SOURCE-REASSEMBLY.md` and verify `SHA256SUMS-r2`. Public upstream test-only private-key fixtures and an unused prebuilt test SDK system-image fixture were excluded after scanning; they are not inputs to the shipped emulator binaries or the recorded no-tests build.
 
 ## Build-log evidence
 
@@ -30,8 +30,12 @@ The release includes `build-logs-redacted-35.6.3.tar.zst`, containing retained c
 
 ## Deliberately excluded proprietary payloads
 
-The Git repository and release must not contain Google API or Play system images, Play services, SDK credentials, AVD userdata, firmware, caches, or other proprietary Google SDK tools without explicit redistribution permission. Users obtain system images separately with Google's `sdkmanager` under Google's terms.
+The Git repository and release must not contain Google API or Play system images, Play services, SDK credentials, AVD userdata, or other proprietary Google SDK payloads without explicit redistribution permission. Users obtain system images separately with Google's `sdkmanager` under Google's terms.
 
 ## Naming
 
 Use names containing `unofficial`, such as `android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3.tar.zst`. Never use Google release branding or imply Google/NVIDIA endorsement.
+
+## Source revision and historical assets
+
+The binary, its component SBOM/notices and runtime evidence are unchanged by source revision r2. Superseded source parts, supplement, compliance and checksum assets are retired only after their replacements are verified. The release tag/history are preserved. Current instructions and r2 compliance supersede older snapshots; do not treat archived documentation as a newly validated recipe. QEMU open firmware material is retained with its upstream source/notices; it is not a proprietary Android system image.

@@ -1,0 +1,86 @@
+cmake.py --target linux_aarch64 --config release --ccache /usr/bin/ccache --feature minbuild --feature no-qtwebengine --cmake_option CMAKE_MAKE_PROGRAM=/usr/bin/ninja --out /tmp/emulator-out --dist /tmp/emulator-dist --task-disable CTest --task-disable AccelerationCheck --task-disable EmugenTest --task-disable GenEntriesTest --task-disable CoverageReport --task-disable PackageSamples --task-disable ZipIntegrationTests --task-disable IntegrationTest
+Run: /src/prebuilts/cmake/linux-x86/bin/cmake --version in None
+cmake version 3.23.1
+{
+  "tasks": [
+    {
+      "task": "Clean",
+      "enabled": true
+    },
+    {
+      "task": "Configure",
+      "enabled": true,
+      "command": [
+        "/src/prebuilts/cmake/linux-x86/bin/cmake",
+        "-B/tmp/emulator-out",
+        "-G Ninja",
+        "-DOPTION_CRASHUPLOAD=NONE",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_TOOLCHAIN_FILE=/src/external/qemu/android/build/cmake/toolchain-linux-aarch64.cmake",
+        "-DOPTION_SDK_TOOLS_BUILD_NUMBER=standalone-0",
+        "-DPython_EXECUTABLE=/src/prebuilts/python/linux-x86/bin/python3",
+        "-DGFXSTREAM=True",
+        "-DOPTION_CCACHE=/usr/bin/ccache",
+        "/src/external/qemu",
+        "-DOPTION_SDK_TOOLS_REVISION=35.6.3",
+        "-DOPTION_TEST_LOGS=/tmp/emulator-dist/testlogs",
+        "-DOPTION_MINBUILD=True",
+        "-DQTWEBENGINE=False",
+        "-DCMAKE_MAKE_PROGRAM=/usr/bin/ninja"
+      ]
+    },
+    {
+      "task": "Compile",
+      "enabled": true,
+      "command": [
+        "/src/prebuilts/cmake/linux-x86/bin/cmake",
+        "--build",
+        "/tmp/emulator-out",
+        "--target",
+        "install/strip"
+      ]
+    },
+    {
+      "task": "CTest",
+      "enabled": false
+    },
+    {
+      "task": "AccelerationCheck",
+      "enabled": false
+    },
+    {
+      "task": "EmugenTest",
+      "enabled": false
+    },
+    {
+      "task": "GenEntriesTest",
+      "enabled": false
+    },
+    {
+      "task": "CoverageReport",
+      "enabled": false
+    },
+    {
+      "task": "PackageSamples",
+      "enabled": false
+    },
+    {
+      "task": "ZipIntegrationTests",
+      "enabled": false
+    },
+    {
+      "task": "Distribution",
+      "enabled": true
+    },
+    {
+      "task": "IntegrationTest",
+      "enabled": false
+    }
+  ],
+  "task_execution_intercepted": true,
+  "actual_emulator_build_or_configure_run": false,
+  "qemu_ld_prefix_preserved": true
+}
+BUILD_DRIVER_CONFIGURATION_PROBE=PASS
+
+CMake suite maintained and supported by Kitware (kitware.com/cmake).

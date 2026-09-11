@@ -1,75 +1,114 @@
-# Final publication audit — 2026-09-11
+# Publication repair and verification — 2026-09-11
 
-**Outcome: blocked for announcement by source-package contents and an unverified clean-host build prerequisite.**
+**Use source r2 + supplement 2 and `SHA256SUMS-r2`.** The initial publication
+findings are resolved for this corrected offering, with the explicit scope and
+limits below. The emulator binary and historical runtime evidence are unchanged.
 
-The release binary and checksums pass the fresh packaging checks, but the current
-split corresponding-source archive contains **22 APK containers** under
-`external/adt-infra/`. All contain an Android manifest; 21 contain JAR signing
-blocks. These are upstream test fixtures, not applications added by this project.
-Upstream presence alone is not proof of redistribution permission.
+## Resolved: unnecessary application/system-image test fixtures
 
-One concrete example is `external/adt-infra/emu_test/utils/apks/BestFiends.apk`:
+The first audit identified 22 APK payloads under upstream `external/adt-infra`.
+Recursive inspection then found an APK inside a test Python wheel, an APK in
+each of two Qt source bundles, and Android system-image fixtures inside an
+upstream test ZIP. These were real containers/payloads, not just filenames in
+documentation. Source r2:
 
-- size: 94,101,433 bytes
-- SHA-256: `a690e8dfeffd625562cd0e62ce225378541cf3e530bd28d13742aaa221bcc7b3`
-- real APK container: Android manifest, DEX bytecode, 5,886 ZIP entries, and
-  `META-INF/CERT.RSA`; Java's verifier flags its legacy signature algorithm as
-  disabled, rather than establishing a currently valid signature.
+- removes all **22 direct APK payloads**;
+- removes the unused test wheel containing one additional APK;
+- removes the unused test ZIP containing Android system-image fixtures;
+- removes the one APK member from each Qt bundle, retaining all other member
+  contents, source licenses and notices;
+- records exact excluded paths/digests, upstream revisions and transformed
+  archive hashes in `manifests/source-r2-*.json` and source provenance.
 
-The affected source stream is 9,439,929,305 bytes, SHA-256
-`d5a383db5b38ade07dcdc5aedaad7cf3456addb5d414ab13ae5e56e4de1de614`.
-The fixtures are not needed for the recorded no-tests emulator build. Remove
-unnecessary application fixtures from a corrected source offering, preserve the
-required build inputs/licenses/notices, and recheck the source inventory and
-checksums before clearing the announcement. This is an operational publication
-finding, not a legal determination.
+This totals **25 direct/nested APK payloads**, plus the separate system-image
+fixture container. The removed test payloads are absent from the retained
+no-tests Ninja build graph; the build driver explicitly disables its eight
+recorded test/sample tasks. Required host-tool prebuilts, emulator source,
+portability changes, canonical KVM patch and notices remain available.
 
-## Clean-host build prerequisite
+Omission is conservative because these test payloads are unnecessary and this
+publication did not establish redistribution permission for each fixture. It is
+not an allegation that upstream hosting was unlawful, and this audit is not a
+legal compliance certification. The source offering is deliberately **no-tests**,
+not an identical upstream tree or a guarantee that the entire upstream test suite
+can run from the pruned archive.
 
-The recorded emulator binaries are native AArch64, but the upstream build
-entry point explicitly runs a bundled x86-64 Python executable and the driver
-uses bundled x86-64 CMake. The validation host already had an x86-64 execution
-compatibility layer. The earlier Ubuntu package recipe did not install or
-explain that prerequisite, so it was not a complete untouched-ARM64 build guide.
-No clean-host compatibility setup or native-tool alternative was validated in
-this packaging-only audit; that remains a reproducibility blocker.
+See [COMPLIANCE.md](COMPLIANCE.md) and [source reassembly](SOURCE-REASSEMBLY.md).
+The prior source stream SHA-256 was
+`d5a383db5b38ade07dcdc5aedaad7cf3456addb5d414ab13ae5e56e4de1de614`;
+current source r2 is `a23b34f58d401434c387e15ddab2081043b0b4cd75bd56751225d3deae5c69fc` (**10,186,159,362 bytes**).
 
-The old exported manifest also omitted nine Linux-only grouped projects,
-including Python and CMake. The new `manifests/manifest-build-pinned.xml` combines
-all 66 recorded revisions, preserving the historical manifest unchanged. The
-build script and copyable commands now use that complete pinned manifest, and
-the guide explicitly calls out the remaining host-tool prerequisite.
+## Resolved: explicit, verified host-tool prerequisite
 
-## Checks that passed
+The emulator/QEMU output is **native Linux AArch64**, while the pinned upstream
+Python 3.10.3 and CMake 3.23.1 build tools are **x86-64**. The existing host handler
+is Ubuntu QEMU user-mode. [HOST-TOOLS.md](HOST-TOOLS.md) now gives the exact
+verified handler, Ubuntu package versions/checksums, private library-root setup
+and smoke commands; it does not instruct readers to copy libraries into system
+locations or overwrite binfmt configuration.
 
-- Public repository and published, non-draft/non-prerelease
-  `v0.1.0-unofficial`; 25 assets.
-- All 25 GitHub SHA-256 digests and sizes verified against freshly downloaded
-  small assets/binary or independently rehashed retained source parts.
-- All 19 parts and the concatenated source checksum match `SHA256SUMS`.
-- Binary archive integrity, packaged-file checksums, native AArch64 launcher/GUI/
-  headless executables, package-aware shared-library resolution, and offline
-  launcher `-version` reporting 35.6.3.0.
-- Exact canonical KVM patch applies to the archived base; its static regression
-  and the expected patched-source/test hashes pass.
-- Compared with the retained validated build, ELF byte changes are exactly the
-  documented equal-length diagnostic-path replacement; executable `.text`
-  sections are unchanged. The FlatBuffers pkg-config metadata is relocatable.
+An isolated, network-disabled Ubuntu 24.04 ARM64 container successfully ran:
 
-No rebuild, emulator boot, Android device use, application test, or performance
-benchmark was performed during this publication audit. Historical runtime
-validation must not be described as a new runtime test of the repackaged bytes.
+- the pinned Python and CMake through an explicitly supplied QEMU interpreter
+  and Ubuntu package-derived x86-64 runtime root;
+- selected build-related Python standard-library imports;
+- a minimal CMake configure and its nested pinned-Python subprocess;
+- the real emulator build driver's help, feature-list and task-list paths;
+- instrumented construction of the recorded ARM64/minbuild/no-Qt-WebEngine
+  configuration and eight disabled test/sample tasks, with task execution
+  intercepted and `QEMU_LD_PREFIX` preserved by the real subprocess wrapper.
 
-## Documentation corrections
+Evidence: `validation/host-tools-r2-validation.txt`,
+`validation/host-tools-r2-smoke.txt`, and
+`validation/host-tools-r2-driver-probe.txt`.
 
-Use the current [source-reassembly instructions](SOURCE-REASSEMBLY.md) and
-[pinned build guide](DIY-COMPILATION.md). Earlier archived instructions used a
-shortened aggregate filename that does not match `SHA256SUMS`, and their quick
-build examples followed a moving manifest branch. The current instructions
-verify only the required source inputs before checking the exact aggregate
-filename and explicitly pin the recorded source revisions.
+The complete pinned build manifest includes all **66** exact project revisions.
+The older exported 57-project manifest omitted nine Linux host-tool projects;
+it is preserved for historical provenance, while current build commands use
+`manifests/manifest-build-pinned.xml`.
 
-The existing release tag, source/binary assets, and historical validation have
-not been rewritten. The compliance bundle and generated tag snapshot preserve
-the older documentation; this current audit notice and corrected main-branch
-guides supersede those instructions, not the recorded build identities.
+**Remaining limit, not an unfulfilled clean-room claim:** this repair did not
+repeat a full emulator configure/compile/link on an untouched machine. It
+verifies the compatibility prerequisite and argument/import paths, supplementing
+the retained successful full-build evidence. No bit-identical clean-room rebuild,
+universal ARM64-host support or all-native build-tool stack is claimed.
+
+## Integrity and source correspondence
+
+The current checksum file covers every current release payload and the complete
+source aggregate. Public API digests/sizes are matched to fresh small-asset
+downloads and independently hashed exact source parts; source streams and nested
+Qt transformations are parsed and compared to their retained content manifests.
+The source base plus canonical supplement patch passes the exact static KVM
+regression and expected patched-source/test hashes.
+
+The binary remains SHA-256
+`aaa426635e9b760567931e98f2de260f6323d46855f54067eb1401061f80c265`
+(94,213,418 bytes). Prior checks verified 207 packaged checksums, native
+AArch64 launcher/GUI/headless binaries, bundled dependency resolution, and
+offline version 35.6.3.0. The prior path-normalization comparison proved changed
+ELF bytes are only the documented fixed-width diagnostic prefix replacement,
+with unchanged executable `.text` sections. Historical runtime validation is
+not relabeled as a fresh test of the repackaged bytes.
+
+Source/member inventories and bounded recursive archive inspection identified no
+remaining APK or Android-system-image payloads in the corrected offering. Known encrypted,
+corrupt and decompression-stress fixtures in upstream compression-library tests
+are documented scan limits, not executable build inputs or a claim that every
+upstream byte was recursively decrypted. Required source notices remain intact.
+
+## Publication history and claim boundaries
+
+The stable release URL and `v0.1.0-unofficial` tag are unchanged. Corrected r2
+assets supersede the old source/supplement/compliance/checksum assets only after
+replacement verification. The binary, redacted runtime/build logs and component
+SBOM are unchanged. Old private archives/reports and Git history are preserved;
+current documentation supersedes older tagged/generated snapshots.
+
+Appropriate claims: unofficial native AArch64 emulator output built on DGX Spark,
+recorded API 36/KVM and clean-shutdown validation, published source/patches,
+verified artifact checksums, and explicit host-tool compatibility. Do not claim
+Google/NVIDIA endorsement, legal certification, new application benchmarks,
+NVIDIA GPU rendering (validation used SwiftShader), or a new full clean-room
+build. No Android device, emulator boot, application-project change or public
+announcement was performed as part of this publication repair.

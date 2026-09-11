@@ -1,6 +1,6 @@
 # DIY compilation on Ubuntu 24.04 ARM64
 
-This is the canonical, end-to-end build guide for the unofficial Linux AArch64 Android Emulator in this repository. The recipe is based on retained build/provenance from the NVIDIA DGX Spark validation host. It is not proof of reproduction on an untouched Ubuntu installation: that host already ran x86-64 build tools through a compatibility layer. See [AUDIT-STATUS.md](AUDIT-STATUS.md) for the open clean-host setup limitation. Read [COMPLIANCE.md](COMPLIANCE.md) before redistributing anything.
+This is the canonical, end-to-end build guide for the unofficial Linux AArch64 Android Emulator in this repository. The recipe is based on retained full-build provenance from NVIDIA DGX Spark and a separate isolated Ubuntu ARM64 host-tool smoke. Native AArch64 emulator output is built with native GCC/Ninja plus upstream x86-64 Python/CMake through QEMU user-mode. See [HOST-TOOLS.md](HOST-TOOLS.md) for the verified prerequisite and explicit limits; no new full clean-room build is claimed. Read [COMPLIANCE.md](COMPLIANCE.md) before redistributing anything.
 
 ## 1. Capacity and prerequisites
 
@@ -60,14 +60,14 @@ Android SDK Manager did **not** offer a native Linux ARM64 emulator package. It 
 
 ## 3. Install build dependencies
 
-**Architecture prerequisite:** although the emulator output is native AArch64,
-`android/rebuild.sh` invokes `prebuilts/python/linux-x86/bin/python3`, and the
-build driver invokes `prebuilts/cmake/linux-x86/bin/cmake`. Both retained files
-are x86-64 ELFs. The successful host had an existing x86-64 compatibility layer;
-the package list below does not configure one. A fresh ARM64 installation cannot
-run this exact recipe until that capability is independently supplied and
-verified. A native-tool substitution has not been validated by this audit.
-Installing system Python/CMake alone does not replace these hardcoded tools.
+**Architecture prerequisite:** the upstream entry point uses bundled x86-64
+Python/CMake despite producing native AArch64 emulator executables. Follow
+[HOST-TOOLS.md](HOST-TOOLS.md) to supply the verified QEMU user-mode handler and
+private Ubuntu x86-64 library root, and keep `QEMU_LD_PREFIX` exported. The
+package list below is for native build dependencies; it does not alone enable
+foreign host-tool execution. A network-disabled Ubuntu ARM64 smoke verified the
+pinned Python/CMake, nested subprocesses and build-driver argument/import paths,
+not a new complete emulator build.
 
 ```bash
 export DEBIAN_FRONTEND=noninteractive
@@ -740,7 +740,7 @@ Retained result: 60/60 probes passed over 611 seconds.
 ## 14. Reproduction checklist and clean-host limitation
 
 1. Start on Ubuntu 24.04 AArch64 with at least 80 GiB free.
-2. Install the listed packages and independently provide the x86-64 host-tool execution prerequisite; untouched Ubuntu reproduction remains unvalidated.
+2. Install the listed native packages and follow `HOST-TOOLS.md` for the verified x86-64 host-tool execution prerequisite; a full clean-room emulator rebuild remains unclaimed.
 3. Verify scoped KVM access in a fresh group process.
 4. Initialize Google's official `emu-master-dev` manifest with the proven shallow/partial flags.
 5. Use the recorded pinned manifest; a newer branch is a different build, not reproduction of this release.
@@ -757,7 +757,7 @@ Retained result: 60/60 probes passed over 611 seconds.
 
 The emulator/QEMU aggregate is GPLv2 and contains components under additional licenses. Preserve the exact `NOTICE.txt`, `NOTICE.csv`, GPL text, copyrights, warranty disclaimers, modification record, build scripts, and complete corresponding source. Do not rely only on an upstream link. If source exceeds GitHub's per-file limit, split deterministically, publish part and reassembled-stream SHA-256 values, and include reassembly instructions.
 
-Google API/Play system images, Play services, SDK credentials, firmware, AVD userdata, and proprietary SDK tools are separate from the emulator corresponding source and are excluded from this project's repository/release. Users download the selected system image themselves under Google's terms.
+Google API/Play system images, Play services, SDK credentials, AVD userdata, and proprietary SDK payloads are separate from the emulator corresponding source. Source revision r2 removes the discovered upstream test APK/system-image fixtures; open QEMU firmware sources/notices remain where they belong. Users download the selected system image themselves under Google's terms.
 
 This section records source-backed license facts and the packaging performed for this release; it is not legal advice.
 
@@ -768,4 +768,5 @@ This section records source-backed license facts and the packaging performed for
 - Graphics validation used SwiftShader OpenGL ES 3.0, not the NVIDIA GPU.
 - The headless stub-Xlib and install/strip warnings remain documented.
 - Google platform-tools on the validation SDK was x86-64 under the host compatibility layer; emulator/QEMU were native AArch64.
-- No application benchmark APK was installed; the result is emulator suitability validation, not app performance data.
+- No application performance results are claimed. Historical emulator suitability validation is distinct from application benchmarking.
+- Source revision r2 is a documented no-tests source offering, not an identical upstream tree: exact excluded fixtures and modified nested archives are recorded in `manifests/`.

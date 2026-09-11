@@ -1,0 +1,182 @@
+{
+  "source_revision": "r2",
+  "exclusions": [
+    {
+      "path": "external/adt-infra/emu_test/prebuilts/AndroidOffworld.apk",
+      "bytes": 2837962,
+      "sha256": "439fb62eddf6112ce323ec18a405767f2a6e50bcaf1b075824240f02b1790cff",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/emu_test/prebuilts/AndroidOffworld_unittests.apk",
+      "bytes": 688535,
+      "sha256": "59956c03b88628b4fce69cc9398e5c674e86bc344081ab9be7a3a2d022271c61",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/emu_test/prebuilts/icebox/app-debug-androidTest.apk",
+      "bytes": 565369,
+      "sha256": "3b47e79d82ecc3256dade0e5ee59b434ebeded320e2ab25c2ab5f3929f099578",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/emu_test/prebuilts/icebox/app-debug.apk",
+      "bytes": 2310828,
+      "sha256": "4e6399fbf15e8366c48bccca2653acd1166660203c660b57fd459c18e6f4db5e",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/emu_test/test_console/utils/apks/ConsoleTest.apk",
+      "bytes": 1911512,
+      "sha256": "430d096eb4c52573e4e9cbe6ebf4d8bbd3e8af557b5f6a69ba83d2440e462acf",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/emu_test/test_console/utils/apks/SmsTestHelper.apk",
+      "bytes": 1639605,
+      "sha256": "12f85ecf3fdb1c3c2520562061ae139a7f51f61391719749dd80153c9e75b6a8",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/emu_test/test_console/utils/apks/app-debug-Darwin.apk",
+      "bytes": 3034291,
+      "sha256": "0b323a4840a948ead1c994f26bfad82d42420181e5b844f151ae7d95227dceef",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/emu_test/test_console/utils/apks/app-debug-Linux.apk",
+      "bytes": 3034397,
+      "sha256": "91798ce815509fe387dc902927f263ea4bf9d6eb4b2cf7c4cd908a1389d0c051",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/emu_test/test_console/utils/apks/app-debug-Windows.apk",
+      "bytes": 3070130,
+      "sha256": "3815832f4ad0e16f8a49e8ab431e47adb425540a83114d148dd8715c740f2d8a",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/emu_test/test_console/utils/apks/app-debug-androidTest-Darwin.apk",
+      "bytes": 5772,
+      "sha256": "a74d962b1f4169554abb640afac692c56aa77a88aaeb0a1bb65d899dc902facd",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/emu_test/test_console/utils/apks/app-debug-androidTest-Linux.apk",
+      "bytes": 5774,
+      "sha256": "a26c0765d1814c4b692cd69d1d1d56d17a09d2c3553b27effc35b946d2930079",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/emu_test/test_console/utils/apks/app-debug-androidTest-Windows.apk",
+      "bytes": 10101,
+      "sha256": "22082b1ad4a764b3492d59ce17b8c871af4315fc182340e20c1809428a7442fd",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/emu_test/utils/apks/BestFiends.apk",
+      "bytes": 94101433,
+      "sha256": "a690e8dfeffd625562cd0e62ce225378541cf3e530bd28d13742aaa221bcc7b3",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/emu_test/utils/apks/gpu-emulation-stress-test.apk",
+      "bytes": 9366922,
+      "sha256": "92ae8ec5beb4051bef223a5a66542faa5a4c34ed649c5dcf831ba21873c7c451",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/pytest/test_embedded/src/emu/apk/app-release.apk",
+      "bytes": 9401857,
+      "sha256": "cc833f68e571444be82b75347e22193bafb369e9497c4834a91ec87e69fa5207",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/system_image_uitests/app/src/main/assets/ApiDemos_x86.apk",
+      "bytes": 5283894,
+      "sha256": "e865fc5f7195d6a12a169e4ae7c8d4ebe6d6f9bb7ddd09d96d3f30306bec9676",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/system_image_uitests/app/src/main/assets/ApiDemos_x86_64.apk",
+      "bytes": 5283894,
+      "sha256": "e865fc5f7195d6a12a169e4ae7c8d4ebe6d6f9bb7ddd09d96d3f30306bec9676",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/system_image_uitests/app/src/main/assets/Application-debug.apk",
+      "bytes": 4148269,
+      "sha256": "43b8da093df3b03d068d132e53fa2c0da9de151f66f1b76f05ec2e698022c18d",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/system_image_uitests/app/src/main/assets/CrashExample.apk",
+      "bytes": 731639,
+      "sha256": "a0970fa67efd4491729282b13cc2c1d0334c6f93250a960ae528466dc3fb5055",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/system_image_uitests/app/src/main/assets/FredVPN.apk",
+      "bytes": 15441,
+      "sha256": "20ca8f4eaffed593967706415d1e9d9059f5e30fd78bd01630366845e16ed5da",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/system_image_uitests/app/src/main/assets/HelloAr_C.apk",
+      "bytes": 3540197,
+      "sha256": "32acf8307ca0af56cdf7102462f55eeed9e5e51f8744b0141f4b6f1d7c241fbf",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    },
+    {
+      "path": "external/adt-infra/system_image_uitests/app/src/main/assets/HelloCompute.apk",
+      "bytes": 84376,
+      "sha256": "151c25af40b6eb6e1ed01b6218c2eeac3005679fdb39e7bb4d1d3ecded06e03b",
+      "upstream_project": "platform/external/adt-infra",
+      "upstream_revision": "4d4c781c14174c76012870e557a4355603b7cd94",
+      "reason": "Upstream test application fixture; not referenced by the retained no-tests emulator build graph; redistribution permission not established by this publication. Conservatively omitted, not alleged unlawful."
+    }
+  ],
+  "policy": "This list records the exact 22 direct APK removals. Additional unused test-container exclusions and the two nested Qt APK removals are recorded in source-r2-additional-exclusions.json and source-r2-qt-normalization.json. Required build inputs and notices are preserved."
+}

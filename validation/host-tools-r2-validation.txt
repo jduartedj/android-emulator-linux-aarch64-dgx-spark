@@ -1,0 +1,25 @@
+Host-tool prerequisite validation — 2026-09-11
+
+Native output: Linux ARM64/AArch64 emulator and QEMU (unchanged release binary).
+Foreign host tools: source-pinned Python 3.10.3 and CMake 3.23.1, x86-64 ELFs.
+Interpreter: Ubuntu qemu-user-static 1:8.2.2+ds-0ubuntu1.18 (native AArch64).
+Handler: qemu-x86_64, enabled, flags POF.
+Library root: separate extracted Ubuntu amd64 cross runtime packages + zlib1g.
+Recipe and exact package versions/hashes: HOST-TOOLS.md.
+
+Bounded isolated validation:
+- Ubuntu 24.04 ARM64 container; network disabled; empty inherited environment
+- source/runtime roots read-only; native interpreter/Ninja mounted read-only
+- no host package install, binfmt write, emulator boot, or full rebuild
+- selected Python stdlib imports: PASS
+- explicit interpreter Python/CMake versions: PASS
+- minimal CMake NONE-language configure and Python subprocess: PASS
+- real build-driver help / feature-list / task-list: PASS
+- instrumented task construction with task execution intercepted: PASS
+- all eight recorded test/sample tasks disabled: PASS
+- linux_aarch64 toolchain, minbuild and no-qtwebengine options: PASS
+- QEMU_LD_PREFIX preserved through the real Command environment merger: PASS
+
+Limit: not a full emulator configure/link/build repetition or a guarantee of
+bit-identical clean-room builds. Optional prebuilt Python _ssl is absent;
+network/PyPI functionality is not part of the recorded no-tests build smoke.

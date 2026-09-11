@@ -1,8 +1,8 @@
 # Android Emulator for Linux ARM64 on NVIDIA DGX Spark (unofficial)
 
-> **Built natively and validated on NVIDIA DGX Spark.** This is an unofficial, source-built Android Emulator distribution for Linux `aarch64`. It is not an official Google, Android, or NVIDIA product and no endorsement is implied.
+> **Native AArch64 emulator built and validated on NVIDIA DGX Spark.** This is an unofficial, source-built Android Emulator distribution for Linux `aarch64`. It is not an official Google, Android, or NVIDIA product and no endorsement is implied.
 
-**Publication audit (2026-09-11): source-package blocker open.** The binary archive contains no APKs, but the split source archive includes 22 upstream APK fixtures, including a third-party game APK. Source redistribution review/cleanup and clean-host toolchain setup remain open; this release has not passed the final publication audit. See [AUDIT-STATUS.md](AUDIT-STATUS.md).
+**Publication repair (2026-09-11):** use the corrected **source r2 + supplement 2** offering and `SHA256SUMS-r2`. The unnecessary upstream APK/system-image fixtures were removed; native emulator output versus x86-64 host-tool compatibility is now explicit. See [AUDIT-STATUS.md](AUDIT-STATUS.md) for verification and limits.
 
 The first release builds Android Emulator 35.6.3 from Google's official `emu-master-dev` manifest and runs an Android 16 / API 36 ARM64 Google APIs image with KVM on NVIDIA DGX Spark.
 
@@ -70,7 +70,7 @@ An isolated API 36 AVD booted with the native AArch64 headless QEMU executable a
 - native official Perfetto Trace Processor v58.2: 268 actual and 244 expected FrameTimeline rows, with no nonzero error or data-loss stats
 - a 10-minute ADB stability probe (see `validation/`)
 
-No application or benchmark APK is included in the **binary archive**. The clean-AVD validation did not install third-party packages; the source-archive fixture exception is documented in [AUDIT-STATUS.md](AUDIT-STATUS.md).
+No application or benchmark APK is included in the **binary archive**. The clean-AVD validation did not install third-party packages. Source revision r2 removes the previously overlooked upstream application fixtures; exact exclusions are documented in [AUDIT-STATUS.md](AUDIT-STATUS.md).
 
 ## Install the emulator
 
@@ -90,7 +90,7 @@ Verify it:
 
 ## Install Android 16 separately
 
-Google system images, Google APIs, Play services, SDK tools, firmware, AVD userdata, and credentials are deliberately excluded. Obtain them separately from Google under Google's terms. Before these runtime
+Google system images, Google APIs, Play services, proprietary SDK payloads, AVD userdata, and credentials are deliberately excluded. Open QEMU firmware sources/notices are retained in the corresponding source. Obtain them separately from Google under Google's terms. Before these runtime
 steps, supply command-line tools, Java, and host-compatible ADB as described in
 [DIY guide §10](DIY-COMPILATION.md#10-install-api-36-and-create-the-avd):
 
@@ -132,7 +132,7 @@ The Vulkan, BluetoothEmulation, and Uwb feature overrides reflect the validated 
 
 ## Reproduce the build
 
-Follow [DIY-COMPILATION.md](DIY-COMPILATION.md), or run `scripts/build.sh` for its automated equivalent. It initializes Google's official manifest, checks out the recorded revisions, applies the portability/build patch and canonical shutdown-safe KVM patch, runs the static KVM regression, and invokes the release `linux_aarch64` build. The same-release corresponding source is the split base archive plus the small final-patch supplement; see `SOURCE-REASSEMBLY.md`.
+Follow [DIY-COMPILATION.md](DIY-COMPILATION.md), or run `scripts/build.sh` for its automated equivalent. It initializes Google's official manifest, checks out the recorded revisions, applies the portability/build patch and canonical shutdown-safe KVM patch, runs the static KVM regression, and invokes the release `linux_aarch64` build. The current same-release corresponding source is source r2 plus supplement 2; see [SOURCE-REASSEMBLY.md](SOURCE-REASSEMBLY.md). Host-tool compatibility setup is in [HOST-TOOLS.md](HOST-TOOLS.md).
 
 ## Compilation issues we encountered
 

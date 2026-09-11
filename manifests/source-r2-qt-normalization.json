@@ -1,0 +1,45 @@
+{
+  "normalized_source_archives": [
+    {
+      "source_member": "prebuilts/android-emulator-build/archive/qt-everywhere-src-5.12.1.tar.xz",
+      "original_sha256": "be008be7d568c84f8e6afea1ead82a7d85e2ecd7566fbc2629640d6fd384bc97",
+      "replacement_sha256": "d3d78cf381e11e0705fe8f9f4730ce2b2aec83c23c0b248a6ece24d61b1445c6",
+      "original_bytes": 677512427,
+      "replacement_bytes": 554651080,
+      "removed_nested_members": [
+        {
+          "member": "qt-everywhere-src-5.12.1/qtwebengine/src/3rdparty/chromium/build/android/CheckInstallApk-debug.apk",
+          "sha256": "1dc3593b7aa000a695e7122ff1146408df62a1dc322487a331ecc6a27ebf6289",
+          "bytes": 37106,
+          "reason": "Unused Qt WebEngine Android APK fixture; retained host build disables Qt WebEngine."
+        }
+      ],
+      "preserved_regular_files": 227751,
+      "compression": "xz -T1 -3",
+      "policy": "All other member content and tar metadata preserved; archive bytes change, source is not advertised as an identical upstream archive.",
+      "upstream_project": "platform/prebuilts/android-emulator-build/archive",
+      "upstream_revision": "9b0bdade8b09267282fb901d21219ab6af013c60"
+    },
+    {
+      "source_member": "prebuilts/android-emulator-build/archive/qt-everywhere-src-6.2.1.tar.xz",
+      "original_sha256": "e03fffc5c3b5fea09dcc161444df7dfbbe24e8a8ce9377014ec21b66f48d43cd",
+      "replacement_sha256": "5a6e49a6c60f98f21e19e88cb8945515593b79ed0d1bdf49856020164a7b2a20",
+      "original_bytes": 667128584,
+      "replacement_bytes": 729119588,
+      "removed_nested_members": [
+        {
+          "member": "qt-everywhere-src-6.2.1/qtwebengine/src/3rdparty/chromium/build/android/CheckInstallApk-debug.apk",
+          "sha256": "1dc3593b7aa000a695e7122ff1146408df62a1dc322487a331ecc6a27ebf6289",
+          "bytes": 37106,
+          "reason": "Unused Qt WebEngine Android APK fixture; retained host build disables Qt WebEngine."
+        }
+      ],
+      "preserved_regular_files": 314468,
+      "compression": "xz -T1 -3",
+      "policy": "All other member content and tar metadata preserved; archive bytes change, source is not advertised as an identical upstream archive.",
+      "upstream_project": "platform/prebuilts/android-emulator-build/archive",
+      "upstream_revision": "9b0bdade8b09267282fb901d21219ab6af013c60"
+    }
+  ],
+  "policy": "Only the recorded APK member is removed from each Qt source bundle; every other member content and upstream license/notice is preserved. Qt 5 original is gzip despite its .xz filename; both replacements are xz."
+}

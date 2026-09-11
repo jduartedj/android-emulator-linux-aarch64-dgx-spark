@@ -1,0 +1,135 @@
+PRETTY_NAME="Ubuntu 24.04.3 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.3 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+aarch64
+3.10.3 (remotes/origin/master-dirty:0a056b8, Aug 30 2022, 07:29:05) [GCC 4.8.5 20150623 (Red Hat 4.8.5-44)]
+selected build stdlib imports PASS
+cmake version 3.23.1
+
+CMake suite maintained and supported by Kitware (kitware.com/cmake).
+3.10.3 (remotes/origin/master-dirty:0a056b8, Aug 30 2022, 07:29:05) [GCC 4.8.5 20150623 (Red Hat 4.8.5-44)]
+-- Pinned CMake + Python subprocess smoke passed; no emulator compilation
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /tmp/cmake-smoke
+usage: cmake.py [-h] [--sdk_build_number SDK_BUILD_NUMBER]
+                [--config {debug,release}] [--crash {none,prod,staging}]
+                [--out OUT] [--dist DIST] [--qtwebengine]
+                [--test_jobs TEST_JOBS] [--sanitizer SANITIZER]
+                [--enable-thread-safety-checks] [--target TARGET]
+                [--cmake_option CMAKE_OPTION] [--gfxstream] [--gfxstream_only]
+                [--prebuilts [PREBUILTS ...]] [--verbose] [--aosp AOSP]
+                [--ccache CCACHE] [--task TASK] [--task-enable TASK_ENABLE]
+                [--task-disable TASK_DISABLE] [--task-list]
+                [--feature FEATURE] [--feature-list]
+
+Configures the emulator build and runs the tests.The build works by executing
+a series of tasks. You can enable/disable tasks or execute a specific task.
+Task names are case insensitive.Note that tasks are very simple without any
+dependency resolution.
+
+options:
+  -h, --help            show this help message and exit
+  --sdk_build_number SDK_BUILD_NUMBER
+                        The emulator sdk build number.
+  --config {debug,release}
+                        Whether we are building a release or debug
+                        configuration.
+  --crash {none,prod,staging}
+                        Which crash server to use or none if you do not want
+                        crash uploads. Enabling this will result in symbol
+                        processing and uploading during install.
+  --out OUT             Use specific output directory, defaults to: objs
+  --dist DIST           The distribution directory, or empty if no
+                        distribution should be created.
+  --qtwebengine         Enable location ui, with QtWebegine.
+  --test_jobs TEST_JOBS
+                        Specifies the number of tests to run simultaneously
+  --sanitizer SANITIZER
+                        List of sanitizers ([address, thread]) to enable in
+                        the built binaries.
+  --enable-thread-safety-checks
+                        Enable clang thread-safety compile-time checks
+                        (-Wthread-safety)
+  --target TARGET       Which platform to target
+                        (windows|linux|darwin)([-_](aarch64|x86_64))?. The
+                        system will infer the architecture if possible
+  --cmake_option CMAKE_OPTION
+                        Options that should be passed on directly to cmake.
+                        These will be passed on directly to the underlying
+                        cmake project. For example: --cmake_option WEBRTC=TRUE
+  --gfxstream           Build gfxstream libs/tests
+  --gfxstream_only      Build only gfxstream libs/tests
+  --prebuilts [PREBUILTS ...]
+                        Builds the specified prebuilts (i.e. --prebuilts qt
+                        ffmpeg), or all prebuilts if no argument is provided
+  --verbose             Verbose logging
+  --aosp AOSP           AOSP directory: /src
+  --ccache CCACHE       Use a compiler cache, set to auto to infer on, or none
+                        if omitted.
+  --task TASK           Run the specified task. (Note no dependency analysis!)
+  --task-enable TASK_ENABLE
+                        Explicitly enable this task, for example --task-enable
+                        integrationtest
+  --task-disable TASK_DISABLE
+                        Explicitly disable this task, for example --task-
+                        disable clean
+  --task-list           Lists all the tasks.
+  --feature FEATURE     Explicitly enable/disable a feature, for example
+                        --feature no-rust
+  --feature-list        Lists all the available features that can be enabled
+                        or disabled.
+cmake.py --ccache auto --target linux_aarch64 --out /tmp/emulator-out --dist /tmp/emulator-dist --feature minbuild --feature no-qtwebengine --feature-list
+The following set of features are available:
+
+[32;20mbazel[0m: Enable bazel compilation (Linux only).
+[32;20mcoverage_in_debug[0m: Code coverage in debug builds.
+[32;20masan_in_debug[0m: Asan for debug builds.
+[32;20mtime_info[0m: Collect compile time statistics.
+[32;20mclang_tidy_fix[0m: Auto fix issues clang-tidy encounters.
+[32;20mclang_thread_safety_checks[0m: Compile-time thread safety checks (-Wthread-safety).
+[32;20mqtwebengine[0m: The webengine (chromium) that provides the location UI.
+[32;20mwebrtc[0m: Build with WEBRTC support.
+[32;20mandroidstudio[0m: Android Studio Java bridge (Deprecated).
+[32;20mminbuild[0m: Minimum set of components to support 64-bit guets only.
+[32;20mtcmalloc[0m: Use TCMalloc on supported platforms (currently, linux).
+[32;20mgfxstream_backend[0m: Build the gfxstream backend (plus everything else).
+[32;20mgfxstream[0m: Build gfxstream, crosvm, and its accompanying libraries/tests.
+[32;20moptions_build_packet_gen[0m: Generate the bluetooth packet generator .yy and .ll files (posix only).
+[32;20maemu_libs_only[0m: Build only AEMU libraries and their tests.
+[32;20mgfxstream_only[0m: Build only gfxstream.
+[32;20menable_system_rust[0m: Use the system rust compiler, only needed on Mac M1 or Windows.
+[32;20mrust[0m: Enable all rust dependencies.
+[32;20mnetsim_from_source[0m: Build the netsim network simulator from source. **DEPRECATED**
+
+Features can be explicitly turned on or off, by using [no-]feature.
+Providing the flag will override the default found in CMakeLists.txt.
+Look at CMakeLists.txt for the defaults, as they can vary by OS.
+
+For example add the parameter:
+   `--feature no-bazel` to explicitly disable the bazel feature, overriding the default.
+   `--feature bazel` to explicitly enable the bazel feature, overriding the default.
+cmake.py --ccache auto --target linux_aarch64 --out /tmp/emulator-out --dist /tmp/emulator-dist --feature minbuild --feature no-qtwebengine --task-list
+Clean :  Deletes the destination directory.
+Configure :  Runs the CMake Ninja generator.
+Compile :  Compiles the code base.
+CTest :  Runs all the unit tests with ctest
+AccelerationCheck :  Verify that we can determine the hypervisor.
+EmugenTest :  The gen entries unit tests.
+GenEntriesTest :  The gen entries unit tests.
+CoverageReport :  Generates the code coverage report. CTestTask needs to run prior to this.
+PackageSamples :  Package the python gRPC samples.
+ZipIntegrationTests :  Creates a zip file with the e2e integration tests.
+Distribution :  Create an emulator distribution.
+IntegrationTest :  Runs the e2e integration tests.
+ISOLATED_UBUNTU24_HOST_TOOL_SMOKE=PASS
