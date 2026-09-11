@@ -27,7 +27,8 @@ The split archive records the exact checked-out base source and the portability/
 mkdir source-supplement
 tar --zstd -xf android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3-corresponding-source-supplement-1.tar.zst   -C source-supplement
 cd source/external/qemu
-git apply ../../../source-supplement/patches/kvm-kick-arm64-shutdown-safe-sigipi.patch
+GIT_CEILING_DIRECTORIES="$(pwd)" git apply \
+  ../../../source-supplement/patches/kvm-kick-arm64-shutdown-safe-sigipi.patch
 python3 tests/test-kvm-kick-guard.py
 ```
 
@@ -36,3 +37,5 @@ The source archive excludes Git object caches and build outputs but contains all
 Run these Bash commands from the download directory. The base already includes the portability/build patch: do not apply it twice. The aggregate is 9,439,929,305 bytes with SHA-256 `d5a383db5b38ade07dcdc5aedaad7cf3456addb5d414ab13ae5e56e4de1de614`. Earlier archived instructions used the shortened filename `source.tar.zst`, which does not match the checksum manifest; use the commands above.
 
 The archived `SOURCE-PROVENANCE/reproduce-build.sh` is a historical helper with publication-repository-relative paths, not a standalone entry point inside the extracted source tree. Use the current [DIY guide](DIY-COMPILATION.md) for the direct build command and prerequisites, or the current publication repository's `scripts/build.sh` for a new pinned checkout.
+
+The Git ceiling keeps `git apply` from discovering an unrelated enclosing checkout if the download directory is inside another repository; otherwise Git may silently skip these paths.
