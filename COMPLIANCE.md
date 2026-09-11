@@ -2,6 +2,8 @@
 
 This is a source-backed inventory, not legal advice.
 
+**Open publication-audit finding (2026-09-11):** the source archive contains 22 upstream APK fixtures, including `external/adt-infra/emu_test/utils/apks/BestFiends.apk`. Their presence was missed by the earlier source exclusion scan. This audit did not establish redistribution authorization for every fixture. The binary archive contains no APKs. Do not treat the source package as publication-cleared until these unnecessary fixtures are removed or their inclusion is explicitly justified; see [AUDIT-STATUS.md](AUDIT-STATUS.md).
+
 ## Emulator/QEMU
 
 The Android Emulator executable is a derivative of QEMU and identifies itself as GPL version 2 software. Preserve GPLv2 copyright and warranty notices, provide the GPLv2 text, identify local modifications, and accompany binary distribution with complete corresponding source in the same release.

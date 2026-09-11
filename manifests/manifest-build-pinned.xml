@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<manifest>
+  <remote name="aosp" fetch=".." review="https://android-review.googlesource.com/" />
+  <default remote="aosp" revision="emu-master-dev" sync-j="4" />
+  <project name="device/generic/goldfish-opengl" revision="5cd042c8586a38b408f390fcef979d58ace3da23" upstream="main" dest-branch="main" />
+  <project name="device/generic/vulkan-cereal" revision="6c322e407dfdf34a73949ad36883caf7c8be61ac" upstream="main" dest-branch="main" />
+  <project name="device/google/cuttlefish" revision="a1162ca7a4e6297f1699b65052a8c2dd466fd518" upstream="main" dest-branch="main" />
+  <project name="platform/build" path="build/make" revision="0984226dbac1a947ad34490e0647cf7e5c5e6d14" upstream="emu-master-dev" dest-branch="emu-master-dev" />
+  <project name="platform/build/bazel" path="build/bazel" revision="63553bdf1972f043ea0b9e0f77b07964d7b33611" upstream="emu-master-dev" dest-branch="emu-master-dev">
+    <linkfile src="toplevel.WORKSPACE" dest="WORKSPACE" />
+    <linkfile src="toplevel.bazelrc" dest=".bazelrc" />
+    <linkfile src="toplevel.bazelversion" dest=".bazelversion" />
+  </project>
+  <project name="platform/external/abseil-cpp" path="external/abseil-cpp" revision="000dabbd0c985dae5c40eb3a9531d4c8ee3f9d18" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/external/adt-infra" path="external/adt-infra" revision="4d4c781c14174c76012870e557a4355603b7cd94" upstream="emu-master-dev" dest-branch="emu-master-dev" />
+  <project name="platform/external/angle" path="external/angle" revision="901e32aa9923b05c3a2af846f8a28fc79c93d0be" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/external/astc-codec" path="external/astc-codec" revision="17ae36822a8084f45ae51f9031e81f8318254f33" upstream="main" dest-branch="main" clone-depth="1" />
+  <project name="platform/external/bluetooth/glib" path="external/glib" revision="9f3ee561eee2bc195845201a4931d4709ff597e5" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/external/boringssl" path="external/boringssl" revision="ff82e866658b678df9ae4aac825828ce45b50209" upstream="main" dest-branch="main" clone-depth="1" />
+  <project name="platform/external/c-ares" path="external/cares" revision="42cf8dee534419f1826f474d2f5fd67ac94a1706" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/external/crashpad" path="external/crashpad" revision="c98229e191207d4c70d0754aa05f91a9de6ac690" upstream="emu-dev" dest-branch="emu-dev" clone-depth="1" />
+  <project name="platform/external/curl" path="external/curl" revision="1da4b04273638c8afe6f88bd7a7ccfb693640773" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/external/deqp" path="external/deqp" revision="ee13de8eed68c950e09f5c542af7d0ee03dbfd2b" upstream="main" dest-branch="main" clone-depth="1" />
+  <project name="platform/external/dtc" path="external/dtc" revision="2ec107c70426fb90c1ed0ac14877c4322e8ee12f" upstream="main" dest-branch="main" clone-depth="1" />
+  <project name="platform/external/flatbuffers" path="external/flatbuffers" revision="2023cbb0ba66b35be44da6d3ea3278d04cf52b25" upstream="main" dest-branch="main" />
+  <project name="platform/external/fmtlib" path="external/fmtlib" revision="97ceae9d27415d6444f3e24f491da8ed6902ecfa" upstream="main" dest-branch="main" clone-depth="1" />
+  <project name="platform/external/gfxstream-protocols" path="external/gfxstream-protocols" revision="0bebf63629eabe6837775243b1a157946b5fa22e" upstream="main" dest-branch="main" />
+  <project name="platform/external/google-benchmark" path="external/google-benchmark" revision="a24dba9a5e386602970cc5ccbae35f943c1ecaaa" upstream="main" dest-branch="main" clone-depth="1" />
+  <project name="platform/external/google-breakpad" path="external/google-breakpad" revision="61e453ee36f8fbb10286f98dc7e507f8134d114a" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/external/googletest" path="external/googletest" revision="cbeab5d01811d23ea488efc07f2c31f7c53024e2" upstream="main" dest-branch="main" clone-depth="1" />
+  <project name="platform/external/grpc-grpc" path="external/grpc" revision="6779bdfd9f30b99d839b4bf0204f1c3712032371" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/external/libpng" path="external/libpng" revision="8cc222cd3e79fa5190f3aa039a03a4cbea6cfbe7" upstream="main" dest-branch="main" clone-depth="1" />
+  <project name="platform/external/libusb" path="external/libusb" revision="23f123a3f531572d14a253db3451c950e21d2447" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/external/libxml2" path="external/libxml2" revision="27570c2a5b96dc5aea1a0085f610f37ab744f643" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/external/lz4" path="external/lz4" revision="f2a717445d3a8a1aaa5aeef1cb2e9a4bc739e9b1" upstream="main" dest-branch="main" clone-depth="1" />
+  <project name="platform/external/mesa3d" path="external/mesa3d" revision="224e91e39836d3ca31f80df2e0379e55c70574f8" upstream="main" dest-branch="main" />
+  <project name="platform/external/mobly-bundled-snippets" path="external/mobly-bundled-snippets" revision="45a50f7ae34fa384567a3f284b44d6cc95762c75" upstream="main" dest-branch="main" clone-depth="1" />
+  <project name="platform/external/nasm" path="external/nasm" revision="645e4f02c622ba67eb754000cc00c9db8be31f85" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/external/perfetto" path="external/perfetto" revision="37518c39e3db120322359090db3d54f6ac100078" clone-depth="1" />
+  <project name="platform/external/protobuf" path="external/protobuf" revision="623d88a75a0b17ad2cc4be8fa79c3b97e7384a40" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/external/qemu" path="external/qemu" revision="ae9d18d2b6261179fbd57fffec720a04f7bfb053" upstream="emu-master-dev" dest-branch="emu-master-dev">
+    <copyfile src="android/vscode/emu.code-workspace" dest="emu.code-workspace" />
+  </project>
+  <project name="platform/external/rapidjson" path="external/rapidjson" revision="9fa2a3d9e356a1f42a6184dcf1e0508ddfa9dbfb" upstream="main" dest-branch="main" clone-depth="1" />
+  <project name="platform/external/regex-re2" path="external/regex-re2" revision="7977ed5eb44b3204e279ce97205582b3e7ac8064" upstream="main" dest-branch="main" clone-depth="1" />
+  <project name="platform/external/tink" path="external/tink" revision="f416fdeb6d1ebafda566d4ecff80eace51a750f2" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/external/tinyobjloader" path="external/tinyobjloader" revision="d16a940067fbc191364fc1d3e2a2d907209c9320" upstream="main" dest-branch="main" clone-depth="1" />
+  <project name="platform/external/virglrenderer" path="external/virglrenderer" revision="f0c2fba5827abb3634b1992855264d7fe990b89d" upstream="crosvm-master" dest-branch="crosvm-master" clone-depth="1" />
+  <project name="platform/external/webrtc" path="external/webrtc" revision="833f6e49cebd53145bd3acbf881a96b74e400954" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/external/wpa_supplicant_8" path="external/wpa_supplicant_8" revision="eaebe14b829132386071e4bbf7951376830ae3c3" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/external/zlib" path="external/zlib" revision="5a4f1701693dff36e495d13dd14b70e15abe0d01" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/frameworks/native" path="frameworks/native" revision="9094ee238458bf1e8a9e8335fd824acc4963d7f4" upstream="lollipop-release" dest-branch="lollipop-release" clone-depth="1" />
+  <project name="platform/hardware/google/aemu" path="hardware/google/aemu" revision="3c1ced8a369417db591eb7cd083af5bb2c317975" upstream="main" dest-branch="main" groups="pdk" />
+  <project name="platform/hardware/google/gfxstream" path="hardware/google/gfxstream" revision="d047a57228332d995d36600792fa9ccc26cf8ae6" upstream="main" dest-branch="main" groups="pdk" />
+  <project name="platform/packages/modules/Bluetooth" path="packages/modules/Bluetooth" revision="745ee92b87ed62b5a8a1bac47d5df8cad623bf59" upstream="main" dest-branch="main" groups="pdk" clone-depth="1" />
+  <project name="platform/prebuilts/android-emulator" path="prebuilts/android-emulator" revision="fb26612eb84576adb974fe7f18a49d263072116f" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/prebuilts/android-emulator-build/archive" path="prebuilts/android-emulator-build/archive" revision="9b0bdade8b09267282fb901d21219ab6af013c60" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/prebuilts/android-emulator-build/common" path="prebuilts/android-emulator-build/common" revision="2b8b5b197d105198954d3a7c2625282dc34b87c1" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/prebuilts/android-emulator-build/mesa" path="prebuilts/android-emulator-build/mesa" revision="be7c00f399b415511d73308f0af0c0310512aced" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/prebuilts/android-emulator-build/mesa-deps" path="prebuilts/android-emulator-build/mesa-deps" revision="17837fdb1889014fa01cbbbda56afc9b6034815f" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/prebuilts/android-emulator-build/qemu-android-deps" path="prebuilts/android-emulator-build/qemu-android-deps" revision="b06aee625002d0738c5576bbf437b9378229bef0" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/prebuilts/android-emulator-build/qt" path="prebuilts/android-emulator-build/qt" revision="7d360214a0308888671cd5b672fe5d2747d8a228" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <project name="platform/prebuilts/studio/jdk" path="prebuilts/studio/jdk" revision="19bb0ce48675d57d347262320f70ffb47c4fe899" upstream="studio-main" dest-branch="studio-main" clone-depth="1" />
+  <project name="platform/tools/buildSrc" path="tools/buildSrc" revision="765d5ebcb7ee234589eed28e20419e39aadbe469" upstream="emu-master-dev" dest-branch="emu-master-dev" />
+  <project name="platform/tools/netsim" path="tools/netsim" revision="aaebb6787db0840a22d417fae5c97655946edbf4" upstream="main" dest-branch="main" />
+  <project name="platform/tools/repohooks" path="tools/repohooks" revision="cf560776c149c25bc473f2864d2a92a3255e7e70" upstream="main" dest-branch="main" groups="developers,tools" />
+  <project name="trusty/external/qemu-libslirp" path="external/libslirp" revision="029180560561de4b8938724abfdd1aaa5ee11217" upstream="emu-master-dev" dest-branch="emu-master-dev" clone-depth="1" />
+  <repo-hooks in-project="platform/tools/repohooks" enabled-list="pre-upload" />
+  <superproject name="platform/superproject" />
+  <contactinfo bugurl="go/repo-bug" />
+  <project path="prebuilts/bazel/linux-x86_64" name="platform/prebuilts/bazel/linux-x86_64" clone-depth="1" revision="acd99925b5880e97d2dee249d39a93a6e5794f9d" />
+  <project path="prebuilts/clang/host/linux-x86" name="platform/prebuilts/clang/host/linux-x86" clone-depth="1" revision="70a12c4fe88940ab2b0e6d763492dffa2f07e15a" />
+  <project path="prebuilts/cmake/linux-x86" name="platform/prebuilts/cmake/linux-x86" clone-depth="1" revision="31612ec58d4ad61d3e9b460551cfca9e05106cbe" />
+  <project path="prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.17-4.8" name="platform/prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.17-4.8" clone-depth="1" revision="c11702cc105d1eddfabf15f9da1b48d74815e875" />
+  <project path="prebuilts/ninja/linux-x86" name="platform/prebuilts/ninja/linux-x86" clone-depth="1" revision="7ef4cb95e1ed4305e99f03a8e8ad28d26134a45b" />
+  <project path="prebuilts/python/linux-x86" name="platform/prebuilts/python/linux-x86" clone-depth="1" revision="3665e3a3bd0cd0d93f6247eb596938cea48268be" />
+  <project path="external/bison" name="platform/external/bison" revision="9d6b3cea352fd68d9bfb4782794593b352e49829" clone-depth="1" />
+  <project path="external/flex" name="platform/external/flex" revision="90a4022e091f39d3534a30bbb9d02986f2f5ad9b" clone-depth="1" />
+  <project path="external/m4" name="toolchain/m4" revision="bc3bbb269796feaba3463f3ddff9bdb74a1e570d" clone-depth="1" />
+</manifest>

@@ -3,10 +3,12 @@ set -euo pipefail
 PROJECT_ROOT=$(cd "$(dirname "$0")/.." && pwd)
 ROOT=${1:-"$PWD/work"}
 JOBS=${JOBS:-$(nproc)}
+mkdir -p "$ROOT"
+ROOT=$(cd "$ROOT" && pwd)
 mkdir -p "$ROOT/src" "$ROOT/out" "$ROOT/dist"
 cd "$ROOT/src"
-repo init -u https://android.googlesource.com/platform/manifest -b emu-master-dev --depth=1 --partial-clone --clone-filter=blob:limit=10M --no-clone-bundle
-cp "$PROJECT_ROOT/manifests/manifest-synced.xml" .repo/manifests/pinned.xml
+repo init -u https://android.googlesource.com/platform/manifest -b 1a75ee5c54d3b3161516ae27b6769a70e0ffcfca --depth=1 --partial-clone --clone-filter=blob:limit=10M --no-clone-bundle
+cp "$PROJECT_ROOT/manifests/manifest-build-pinned.xml" .repo/manifests/pinned.xml
 repo init -m pinned.xml --depth=1 --partial-clone --clone-filter=blob:limit=10M --no-clone-bundle
 repo sync -c -j"$JOBS" --no-clone-bundle --no-tags --optimized-fetch --prune
 cd external/qemu

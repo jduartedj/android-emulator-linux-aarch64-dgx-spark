@@ -2,22 +2,29 @@
 
 > **Built natively and validated on NVIDIA DGX Spark.** This is an unofficial, source-built Android Emulator distribution for Linux `aarch64`. It is not an official Google, Android, or NVIDIA product and no endorsement is implied.
 
+**Publication audit (2026-09-11): source-package blocker open.** The binary archive contains no APKs, but the split source archive includes 22 upstream APK fixtures, including a third-party game APK. Source redistribution review/cleanup and clean-host toolchain setup remain open; this release has not passed the final publication audit. See [AUDIT-STATUS.md](AUDIT-STATUS.md).
+
 The first release builds Android Emulator 35.6.3 from Google's official `emu-master-dev` manifest and runs an Android 16 / API 36 ARM64 Google APIs image with KVM on NVIDIA DGX Spark.
 
-**Build it yourself:** [DIY-COMPILATION.md](DIY-COMPILATION.md) is the canonical clean-room Ubuntu 24.04 ARM64 guide, including exact dependencies, commands, patches, every verified failure, packaging, compliance, and validation.
+**Build it yourself:** [DIY-COMPILATION.md](DIY-COMPILATION.md) is the canonical Ubuntu 24.04 ARM64 host-build guide, including exact dependencies, commands, patches, every verified failure, packaging, compliance, and validation.
 
-## Quick-copy tested build recipe
+## Pinned build recipe (host prerequisites required)
 
 ```bash
 export WORK="$HOME/emulator-build"
+export PUBLICATION=/path/to/android-emulator-linux-aarch64-dgx-spark
+test -f "$PUBLICATION/manifests/manifest-build-pinned.xml"
 mkdir -p "$WORK/src" && cd "$WORK/src"
 repo init -u https://android.googlesource.com/platform/manifest \
-  -b emu-master-dev --depth=1 --partial-clone \
+  -b 1a75ee5c54d3b3161516ae27b6769a70e0ffcfca --depth=1 --partial-clone \
+  --clone-filter=blob:limit=10M --no-clone-bundle
+cp "$PUBLICATION/manifests/manifest-build-pinned.xml" .repo/manifests/pinned.xml
+repo init -m pinned.xml --depth=1 --partial-clone \
   --clone-filter=blob:limit=10M --no-clone-bundle
 repo sync -c -j8 --no-clone-bundle --no-tags --optimized-fetch --prune
 cd external/qemu
-git apply /path/to/android-emulator-linux-aarch64-dgx-spark/patches/linux-aarch64-build-fixes.patch
-git apply /path/to/android-emulator-linux-aarch64-dgx-spark/patches/kvm-kick-arm64-shutdown-safe-sigipi.patch
+git apply "$PUBLICATION/patches/linux-aarch64-build-fixes.patch"
+git apply "$PUBLICATION/patches/kvm-kick-arm64-shutdown-safe-sigipi.patch"
 python3 tests/test-kvm-kick-guard.py
 ./android/rebuild.sh --target linux_aarch64 --config release \
   --ccache /usr/bin/ccache --feature minbuild --feature no-qtwebengine \
@@ -63,7 +70,7 @@ An isolated API 36 AVD booted with the native AArch64 headless QEMU executable a
 - native official Perfetto Trace Processor v58.2: 268 actual and 244 expected FrameTimeline rows, with no nonzero error or data-loss stats
 - a 10-minute ADB stability probe (see `validation/`)
 
-No application or benchmark APK is included or installed.
+No application or benchmark APK is included in the **binary archive**. The clean-AVD validation did not install third-party packages; the source-archive fixture exception is documented in [AUDIT-STATUS.md](AUDIT-STATUS.md).
 
 ## Install the emulator
 
@@ -83,7 +90,9 @@ Verify it:
 
 ## Install Android 16 separately
 
-Google system images, Google APIs, Play services, SDK tools, firmware, AVD userdata, and credentials are deliberately excluded. Obtain them separately from Google under Google's terms:
+Google system images, Google APIs, Play services, SDK tools, firmware, AVD userdata, and credentials are deliberately excluded. Obtain them separately from Google under Google's terms. Before these runtime
+steps, supply command-line tools, Java, and host-compatible ADB as described in
+[DIY guide §10](DIY-COMPILATION.md#10-install-api-36-and-create-the-avd):
 
 ```bash
 "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" \

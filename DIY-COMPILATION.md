@@ -1,6 +1,6 @@
 # DIY compilation on Ubuntu 24.04 ARM64
 
-This is the canonical, end-to-end build guide for the unofficial Linux AArch64 Android Emulator in this repository. Every command below reflects the retained build/provenance from the NVIDIA DGX Spark validation host. Read [COMPLIANCE.md](COMPLIANCE.md) before redistributing anything.
+This is the canonical, end-to-end build guide for the unofficial Linux AArch64 Android Emulator in this repository. The recipe is based on retained build/provenance from the NVIDIA DGX Spark validation host. It is not proof of reproduction on an untouched Ubuntu installation: that host already ran x86-64 build tools through a compatibility layer. See [AUDIT-STATUS.md](AUDIT-STATUS.md) for the open clean-host setup limitation. Read [COMPLIANCE.md](COMPLIANCE.md) before redistributing anything.
 
 ## 1. Capacity and prerequisites
 
@@ -28,7 +28,7 @@ df -h "$HOME"
 nvidia-smi                     # informational on DGX Spark
 ```
 
-Twenty parallel compiler jobs worked with 121 GiB RAM. On smaller hosts use `JOBS=8` or lower. Avoid filling the filesystem: Repo's emulator test-image prebuilt alone transiently consumed about 16 GiB during our first sync.
+Twenty parallel compiler jobs worked with 121 GiB RAM. `JOBS` in `scripts/build.sh` controls Repo synchronization, not compiler parallelism. On smaller hosts inspect the build driver/Ninja resource settings before compiling. Avoid filling the filesystem: Repo's emulator test-image prebuilt alone transiently consumed about 16 GiB during our first sync.
 
 ## 2. Check Google Android CI first
 
@@ -60,12 +60,21 @@ Android SDK Manager did **not** offer a native Linux ARM64 emulator package. It 
 
 ## 3. Install build dependencies
 
+**Architecture prerequisite:** although the emulator output is native AArch64,
+`android/rebuild.sh` invokes `prebuilts/python/linux-x86/bin/python3`, and the
+build driver invokes `prebuilts/cmake/linux-x86/bin/cmake`. Both retained files
+are x86-64 ELFs. The successful host had an existing x86-64 compatibility layer;
+the package list below does not configure one. A fresh ARM64 installation cannot
+run this exact recipe until that capability is independently supplied and
+verified. A native-tool substitution has not been validated by this audit.
+Installing system Python/CMake alone does not replace these hardcoded tools.
+
 ```bash
 export DEBIAN_FRONTEND=noninteractive
 sudo apt-get update
 sudo apt-get install -y --no-install-recommends \
   git curl ca-certificates build-essential python3 python3-pip \
-  repo ccache ninja-build cmake qemu-kvm \
+  repo ccache ninja-build cmake qemu-kvm zstd file binutils unzip \
   libasound2-dev libgl1-mesa-dev libpulse-dev \
   libx11-dev libx11-xcb-dev libxcb-shm0-dev libxcb-xfixes0-dev \
   libxkbcommon-dev libxkbfile-dev
@@ -125,16 +134,23 @@ Group changes do not alter an already-running shell. Use `sg kvm -c ...`, log ou
 
 ```bash
 export WORK="$HOME/emulator-build"
+# First clone this publication repository; use its absolute path here.
+export PUBLICATION=/path/to/android-emulator-linux-aarch64-dgx-spark
+test -f "$PUBLICATION/manifests/manifest-build-pinned.xml"
 mkdir -p "$WORK/src" "$WORK/provenance" "$WORK/logs"
 cd "$WORK/src"
 
 repo init \
   -u https://android.googlesource.com/platform/manifest \
-  -b emu-master-dev \
+  -b 1a75ee5c54d3b3161516ae27b6769a70e0ffcfca \
   --depth=1 \
   --partial-clone \
   --clone-filter=blob:limit=10M \
   --no-clone-bundle
+
+cp "$PUBLICATION/manifests/manifest-build-pinned.xml" .repo/manifests/pinned.xml
+repo init -m pinned.xml --depth=1 --partial-clone \
+  --clone-filter=blob:limit=10M --no-clone-bundle
 
 repo sync -c -j8 \
   --no-clone-bundle --no-tags --optimized-fetch --prune
@@ -147,6 +163,15 @@ du -sh "$WORK/src"
 ```
 
 These shallow/partial flags completed successfully. The exact retained manifest is [manifests/manifest-synced.xml](manifests/manifest-synced.xml), SHA-256 `15003ebd2a045a255ca31f83a43c6743693c5219a210faa91cac5a68046dbb5a`. Its manifest repository revision is `1a75ee5c54d3b3161516ae27b6769a70e0ffcfca`; `external/qemu` is `ae9d18d2b6261179fbd57fffec720a04f7bfb053`.
+
+For a complete pinned checkout, the commands above use
+[manifests/manifest-build-pinned.xml](manifests/manifest-build-pinned.xml).
+It preserves those 57 historical manifest projects and adds the nine Linux
+host-tool projects from the exact original manifest, pinned to
+[project-revisions.txt](manifests/project-revisions.txt) (66 projects total).
+The older exported manifest omitted `notdefault,platform-linux` entries,
+including the Python and CMake executables needed by `android/rebuild.sh`.
+The historical manifest is retained unchanged for provenance.
 
 The first sync spent about 16 GiB on `platform/prebuilts/android-emulator-build/system-images`, which is test data rather than a host-emulator build input. If capacity is constrained, this exact local manifest exclusion was proven for the no-tests build:
 
@@ -167,14 +192,14 @@ Record this deviation. Do not exclude arbitrary projects.
 
 ```bash
 cd "$WORK/src/external/qemu"
-git apply /path/to/this/repository/patches/linux-aarch64-build-fixes.patch
-git apply /path/to/this/repository/patches/kvm-kick-arm64-shutdown-safe-sigipi.patch
+git apply "$PUBLICATION/patches/linux-aarch64-build-fixes.patch"
+git apply "$PUBLICATION/patches/kvm-kick-arm64-shutdown-safe-sigipi.patch"
 python3 tests/test-kvm-kick-guard.py
 git diff --check
 git diff > "$WORK/provenance/source-patch.diff"
 sha256sum \
-  /path/to/this/repository/patches/linux-aarch64-build-fixes.patch \
-  /path/to/this/repository/patches/kvm-kick-arm64-shutdown-safe-sigipi.patch
+  "$PUBLICATION/patches/linux-aarch64-build-fixes.patch" \
+  "$PUBLICATION/patches/kvm-kick-arm64-shutdown-safe-sigipi.patch"
 ```
 
 Expected individual patch SHA-256 values:
@@ -267,7 +292,15 @@ qemu-system-aarch64-headless: 42d52307362822cd1cfdf59b3f872660a4bc86b6a743cfc100
 These packaged hashes include deterministic fixed-width normalization of
 compiler-recorded source prefixes to `/build/emulator/release/source-root___`.
 The normalization changes only embedded diagnostic path strings; ELF layout,
-build IDs, and runtime code remain otherwise unchanged.
+build IDs, and runtime code remain otherwise unchanged. These are the published
+artifact identities, not expected hashes for a new build in a different directory
+or with a different toolchain. The packaging command below archives your local
+install tree; it does not itself normalize diagnostic paths or reproduce these
+release bytes. Before redistribution, stage a copy, normalize embedded local
+prefixes with an equal-length replacement and rewrite `lib/pkgconfig/flatbuffers.pc`
+to a relocatable prefix as described in [COMPLIANCE.md](COMPLIANCE.md), then
+regenerate the packaged-file checksum inventory. No bit-for-bit clean-room
+rebuild is claimed.
 
 The QEMU binary relies on sibling `lib64` libraries. A bare `ldd qemu/.../qemu-system-aarch64-headless` reports them as not found because it bypasses the launcher environment. Verify with the package library path:
 
@@ -526,10 +559,22 @@ for the fix.
 
 ## 10. Install API 36 and create the AVD
 
+This optional runtime-validation section requires separately installed Android
+command-line tools (`sdkmanager` and `avdmanager`), a compatible Java runtime, and
+a host-compatible `adb`. They are not included in this release or installed by
+the build prerequisites. Follow Google's [command-line tools setup](https://developer.android.com/tools)
+and [sdkmanager instructions](https://developer.android.com/tools/sdkmanager),
+verify the official downloads, and accept the applicable terms yourself. On the
+validation host Google's x86-64 platform-tools used a pre-existing compatibility
+layer; that layer is not provided here. A clean ARM64 host must supply compatible
+ADB tooling before attempting validation. Compilation and offline `-version`
+verification do not require a Google system image.
+
 Copy the built distribution to a dedicated SDK root without overwriting an existing emulator:
 
 ```bash
 export ANDROID_SDK_ROOT=${ANDROID_SDK_ROOT:-"$HOME/android-sdk"}
+mkdir -p "$ANDROID_SDK_ROOT"
 test ! -e "$ANDROID_SDK_ROOT/emulator"
 cp -a "$DIST" "$ANDROID_SDK_ROOT/emulator"
 ```
@@ -692,13 +737,13 @@ Retained result: 60/60 probes passed over 611 seconds.
 | no KVM access after `usermod` | old shell lacks new group | `sg kvm` or new login | readable/writable `/dev/kvm`, open QEMU FD |
 | disk exhausted during sync/archive | large prebuilts and source archives | reserve space; exclude only proven test-image project; monitor `df` | sync/build complete with headroom |
 
-## 14. Clean-room reproduction checklist
+## 14. Reproduction checklist and clean-host limitation
 
 1. Start on Ubuntu 24.04 AArch64 with at least 80 GiB free.
-2. Install only the listed packages.
+2. Install the listed packages and independently provide the x86-64 host-tool execution prerequisite; untouched Ubuntu reproduction remains unvalidated.
 3. Verify scoped KVM access in a fresh group process.
 4. Initialize Google's official `emu-master-dev` manifest with the proven shallow/partial flags.
-5. Pin to this repository's manifest or record a new immutable manifest before changing anything.
+5. Use the recorded pinned manifest; a newer branch is a different build, not reproduction of this release.
 6. Apply the exact patch; verify its SHA-256.
 7. Run the full release command; retain complete logs and exit status.
 8. Verify `file`, package-aware `ldd`, `-version`, and binary hashes.
