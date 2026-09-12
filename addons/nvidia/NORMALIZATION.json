@@ -1,0 +1,198 @@
+{
+  "input_sha256": "1750af7b5b0b02e01624cb286b9893f49ad80def8000a67b42a63c6054718bb2",
+  "output_sha256": "5d798f97574236634e9059430beb4352c65a8c3b4a75a581eb0c8d9d6bc3d995",
+  "bytes": 2988232,
+  "method": "three known NUL-terminated .rodata diagnostic source filenames replaced in-place with fixed-width public names; trailing ASCII spaces before original terminator; all offsets/section sizes unchanged",
+  "changes": [
+    {
+      "offset": 1426440,
+      "length": 162,
+      "source_basename": "aligned_memory.cpp",
+      "public_diagnostic": "/angle-source/src/common/aligned_memory.cpp"
+    },
+    {
+      "offset": 1426720,
+      "length": 160,
+      "source_basename": "android_util.cpp",
+      "public_diagnostic": "/angle-source/src/common/android_util.cpp"
+    },
+    {
+      "offset": 1427056,
+      "length": 158,
+      "source_basename": "angleutils.cpp",
+      "public_diagnostic": "/angle-source/src/common/angleutils.cpp"
+    }
+  ],
+  "all_other_bytes_identical": true,
+  "sections": {
+    "": {
+      "sha256_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256_after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "identical": true,
+      "executable": false
+    },
+    ".note.gnu.build-id": {
+      "sha256_before": "37803d8ad7359d6eed2d59834e6c6599327ef1a0a426274170b382a5c9613961",
+      "sha256_after": "37803d8ad7359d6eed2d59834e6c6599327ef1a0a426274170b382a5c9613961",
+      "identical": true,
+      "executable": false
+    },
+    ".gnu.hash": {
+      "sha256_before": "b391dc2796347f3221e408e4c998a18d5773d9b75951ea2e95909412c844c050",
+      "sha256_after": "b391dc2796347f3221e408e4c998a18d5773d9b75951ea2e95909412c844c050",
+      "identical": true,
+      "executable": false
+    },
+    ".dynsym": {
+      "sha256_before": "a9251dda2f00c0ffa53950fcd7f17c887d0c971dfefeaf48429002938f69c868",
+      "sha256_after": "a9251dda2f00c0ffa53950fcd7f17c887d0c971dfefeaf48429002938f69c868",
+      "identical": true,
+      "executable": false
+    },
+    ".dynstr": {
+      "sha256_before": "c3cf9900529ce379788cee04eba795df54ab0110dd6c1490317afc9ad9a83fc5",
+      "sha256_after": "c3cf9900529ce379788cee04eba795df54ab0110dd6c1490317afc9ad9a83fc5",
+      "identical": true,
+      "executable": false
+    },
+    ".gnu.version": {
+      "sha256_before": "56f38451be2a56425464e25b832413fb68dd5e4964df4974be7ec079604d7441",
+      "sha256_after": "56f38451be2a56425464e25b832413fb68dd5e4964df4974be7ec079604d7441",
+      "identical": true,
+      "executable": false
+    },
+    ".gnu.version_r": {
+      "sha256_before": "ff786719b2f7c8a4f43878de03381bb1655a397626c7d59285b2aea19a8176a1",
+      "sha256_after": "ff786719b2f7c8a4f43878de03381bb1655a397626c7d59285b2aea19a8176a1",
+      "identical": true,
+      "executable": false
+    },
+    ".rela.dyn": {
+      "sha256_before": "4c50c712464241d7b8807944877afaf171efc87dca214ebf1454befd7603fc8a",
+      "sha256_after": "4c50c712464241d7b8807944877afaf171efc87dca214ebf1454befd7603fc8a",
+      "identical": true,
+      "executable": false
+    },
+    ".rela.plt": {
+      "sha256_before": "1444422267cb21545b6387ac580658cf902b0fbb2e9b5350c3d0e0bc7fd5af8f",
+      "sha256_after": "1444422267cb21545b6387ac580658cf902b0fbb2e9b5350c3d0e0bc7fd5af8f",
+      "identical": true,
+      "executable": false
+    },
+    ".init": {
+      "sha256_before": "85540c029c0bc4f75c40e14691e0bd632ca55fff786c6b84faf4a4f264fee05c",
+      "sha256_after": "85540c029c0bc4f75c40e14691e0bd632ca55fff786c6b84faf4a4f264fee05c",
+      "identical": true,
+      "executable": true
+    },
+    ".plt": {
+      "sha256_before": "283be404ed3d2b965474ab768bb876a8789514e28e4073df47e38968b092b543",
+      "sha256_after": "283be404ed3d2b965474ab768bb876a8789514e28e4073df47e38968b092b543",
+      "identical": true,
+      "executable": true
+    },
+    ".text": {
+      "sha256_before": "10f3981f92d42a96b33bf4f790099b43a1f47c221910f55a07610d7052b0ef20",
+      "sha256_after": "10f3981f92d42a96b33bf4f790099b43a1f47c221910f55a07610d7052b0ef20",
+      "identical": true,
+      "executable": true
+    },
+    ".fini": {
+      "sha256_before": "7d39706b791b17f4e655c8b38aef56b5aede4b5bb0623dcb65a38d2f90ad64cf",
+      "sha256_after": "7d39706b791b17f4e655c8b38aef56b5aede4b5bb0623dcb65a38d2f90ad64cf",
+      "identical": true,
+      "executable": true
+    },
+    ".rodata": {
+      "sha256_before": "243e63577625e449b4b61e6a2da9f89f584331da3bd9b660bb3e99e53434688e",
+      "sha256_after": "10e5c0bd49768ede24193531ed625a0b1e2d3e09fd7ef1fb26bd7799c4bb3e96",
+      "identical": false,
+      "executable": false
+    },
+    ".eh_frame_hdr": {
+      "sha256_before": "4e66a2a3825dce857f9caa86c32d402b4d4ff85580540ab3f1f18d34a595c46b",
+      "sha256_after": "4e66a2a3825dce857f9caa86c32d402b4d4ff85580540ab3f1f18d34a595c46b",
+      "identical": true,
+      "executable": false
+    },
+    ".eh_frame": {
+      "sha256_before": "a000d20b9db48d7df235b834f226b4a2f187628e06c623fbe3e725efa376a37d",
+      "sha256_after": "a000d20b9db48d7df235b834f226b4a2f187628e06c623fbe3e725efa376a37d",
+      "identical": true,
+      "executable": false
+    },
+    ".gcc_except_table": {
+      "sha256_before": "8c6cdcd4f2236cdd1023b2fb10350cf192f4a2eb42149b7de1c5005a011a1e57",
+      "sha256_after": "8c6cdcd4f2236cdd1023b2fb10350cf192f4a2eb42149b7de1c5005a011a1e57",
+      "identical": true,
+      "executable": false
+    },
+    ".init_array": {
+      "sha256_before": "4a9d231a9ceefa45b74c88407add9d4265c5c817cbe00e73f64e0a483adf37bb",
+      "sha256_after": "4a9d231a9ceefa45b74c88407add9d4265c5c817cbe00e73f64e0a483adf37bb",
+      "identical": true,
+      "executable": false
+    },
+    ".fini_array": {
+      "sha256_before": "e9d96024eca4bf23d3e0df979ca8c0d45942ff4e93a30b075a3bb7da47f2cea6",
+      "sha256_after": "e9d96024eca4bf23d3e0df979ca8c0d45942ff4e93a30b075a3bb7da47f2cea6",
+      "identical": true,
+      "executable": false
+    },
+    ".data.rel.ro": {
+      "sha256_before": "b45369553b61a01614b876c0ff194357d67d9277f02f1e7c0f171c00333963c7",
+      "sha256_after": "b45369553b61a01614b876c0ff194357d67d9277f02f1e7c0f171c00333963c7",
+      "identical": true,
+      "executable": false
+    },
+    ".dynamic": {
+      "sha256_before": "fa48540f36a1d114f5dd4dca88eb15d41b65c92628eb22f3b08f6e71b7c00161",
+      "sha256_after": "fa48540f36a1d114f5dd4dca88eb15d41b65c92628eb22f3b08f6e71b7c00161",
+      "identical": true,
+      "executable": false
+    },
+    ".got": {
+      "sha256_before": "7f47c33908005d328c847e81c22ab2f84a6cd3d29d0fe9381a384d1926a71596",
+      "sha256_after": "7f47c33908005d328c847e81c22ab2f84a6cd3d29d0fe9381a384d1926a71596",
+      "identical": true,
+      "executable": false
+    },
+    ".got.plt": {
+      "sha256_before": "56e09a55e7a0a3a18e85ab7e4224db131e9f1b7b02a76d9b52bce437428373ec",
+      "sha256_after": "56e09a55e7a0a3a18e85ab7e4224db131e9f1b7b02a76d9b52bce437428373ec",
+      "identical": true,
+      "executable": false
+    },
+    ".data": {
+      "sha256_before": "0e143a3e1e7098f73555dbfec21ac9576e6adb917ce510334423b0810e4feab9",
+      "sha256_after": "0e143a3e1e7098f73555dbfec21ac9576e6adb917ce510334423b0810e4feab9",
+      "identical": true,
+      "executable": false
+    },
+    ".comment": {
+      "sha256_before": "509378ae5eca3c5167dea643f1b2a9031fc12d01dc4706f57320a9e3763d7cc0",
+      "sha256_after": "509378ae5eca3c5167dea643f1b2a9031fc12d01dc4706f57320a9e3763d7cc0",
+      "identical": true,
+      "executable": false
+    },
+    ".symtab": {
+      "sha256_before": "e56077a96a8c471673f008cd21dad270ebd11ca3a6066d993e5e2bf28693c268",
+      "sha256_after": "e56077a96a8c471673f008cd21dad270ebd11ca3a6066d993e5e2bf28693c268",
+      "identical": true,
+      "executable": false
+    },
+    ".strtab": {
+      "sha256_before": "5b2bd630f25e7013ca027a40e71ef74ac3d3df3b2e720fdd77ef10fdb15e689f",
+      "sha256_after": "5b2bd630f25e7013ca027a40e71ef74ac3d3df3b2e720fdd77ef10fdb15e689f",
+      "identical": true,
+      "executable": false
+    },
+    ".shstrtab": {
+      "sha256_before": "4fec72a60c80560bd225d3a59f3ac9ed7176e27516d0e9ad2689c914ac86063e",
+      "sha256_after": "4fec72a60c80560bd225d3a59f3ac9ed7176e27516d0e9ad2689c914ac86063e",
+      "identical": true,
+      "executable": false
+    }
+  },
+  "build_id": "unchanged original ELF build-id; file SHA256 identifies normalized publication variant, not a claim that it was rebuilt or fully benchmarked"
+}

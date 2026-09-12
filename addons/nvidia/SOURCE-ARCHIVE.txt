@@ -1,0 +1,1 @@
+Companion source: nvidia-opengl-support-source-candidate.tar.gz. Original source subset and library unchanged; wrapper revision adds published-base matched-pair support.

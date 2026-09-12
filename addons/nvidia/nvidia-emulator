@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Optional process-scoped NVIDIA OpenGL support for the frozen ARM64 35.6.3 base.
+set -euo pipefail
+HERE=$(cd -- "$(dirname -- "$0")" && pwd)
+SDK=${ANDROID_SDK_ROOT:-$HOME/android-sdk}
+EMU="$SDK/emulator/emulator"
+QEMU="$SDK/emulator/qemu/linux-aarch64/qemu-system-aarch64-headless"
+fail(){ printf 'NVIDIA addon preflight failed: %s\n' "$*" >&2; exit 1; }
+[[ $(uname -m) == aarch64 ]] || fail 'requires native Linux aarch64'
+[[ -r /dev/kvm && -w /dev/kvm ]] || fail 'normal authorized KVM access required; use existing kvm group context, never chmod'
+[[ -x "$EMU" && -f "$QEMU" ]] || fail 'existing emulator SDK missing'
+LAUNCHER_HASH=$(sha256sum "$EMU" | cut -d' ' -f1)
+HEADLESS_HASH=$(sha256sum "$QEMU" | cut -d' ' -f1)
+case "$LAUNCHER_HASH:$HEADLESS_HASH" in
+  615f87a5c524acfe6209d462e71e4c9423b3c7375fe15196163c4dac5a049be3:42d52307362822cd1cfdf59b3f872660a4bc86b6a743cfc1000cf4ec69d3ff81) BASE_PAIR=published-v0.2;;
+  2baee124da343882d48c24024c03ce32e04f338e91a4f1564b9fb1b34046d83e:a840768428b0a7d28fa306146baacbfd7a50ec5543320a57cc6bd6b2cfc0792a) BASE_PAIR=measured-development;;
+  *) fail 'unapproved launcher/headless pair; mixed pairs and loose version matches are rejected';;
+esac
+(cd "$HERE" && sha256sum --status -c LIBRARY-SHA256SUMS) || fail 'addon library integrity mismatch'
+command -v nvidia-smi >/dev/null || fail 'existing NVIDIA driver tools unavailable'
+nvidia-smi --query-gpu=name,driver_version --format=csv,noheader | grep -q 'NVIDIA' || fail 'no NVIDIA device reported'
+[[ -n ${DISPLAY:-} ]] || fail 'current tested path requires existing authorized X11 DISPLAY (no X permission changes)'
+python3 "$HERE/check-args.py" "$@" || fail "argument policy rejected invocation"
+if [[ ${1:-} == --check ]]; then printf 'Preflight passed; live guest NVIDIA renderer verification is still required.\n'; exit 0; fi
+# No system library copying, host driver install or base directory mutation.
+export LD_LIBRARY_PATH="$HERE/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+exec "$EMU" "$@" -gpu host -accel on -feature -Vulkan -feature -BluetoothEmulation -feature -Uwb -no-metrics

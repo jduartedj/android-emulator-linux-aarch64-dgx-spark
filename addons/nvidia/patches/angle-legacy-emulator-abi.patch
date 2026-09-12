@@ -1,0 +1,975 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,403 +1,158 @@
+-if (APPLE)
+-    set(angle-common-platform-sources
+-        src/common/system_utils_posix.cpp
+-        src/common/system_utils_mac.cpp)
+-elseif (WIN32)
+-    set(angle-common-platform-sources
+-        src/common/system_utils_win.cpp
+-        src/common/system_utils_win32.cpp
+-        src/common/system_utils_winuwp.cpp)
+-else()
+-    set(angle-common-platform-sources
+-        src/common/system_utils_posix.cpp
+-        src/common/system_utils_linux.cpp)
+-endif()
+-
+-add_library(
+-    angle_common
+-    src/common/Color.h
+-    src/common/Color.inc
+-    src/common/FastVector.h
+-    src/common/FixedVector.h
+-    src/common/Float16ToFloat32.cpp
+-    src/common/MemoryBuffer.cpp
+-    src/common/MemoryBuffer.h
+-    src/common/Optional.h
+-    src/common/PackedEGLEnums_autogen.cpp
+-    src/common/PackedEGLEnums_autogen.h
+-    src/common/PackedEnums.cpp
+-    src/common/PackedEnums.h
+-    src/common/PackedGLEnums_autogen.cpp
+-    src/common/PackedGLEnums_autogen.h
+-    src/common/PoolAlloc.cpp
+-    src/common/PoolAlloc.h
+-    src/common/aligned_memory.cpp
+-    src/common/aligned_memory.h
+-    src/common/android_util.cpp
+-    src/common/android_util.h
+-    src/common/angleutils.cpp
+-    src/common/angleutils.h
+-    src/common/apple_platform_utils.h
+-    src/common/bitset_utils.h
+-    src/common/debug.cpp
+-    src/common/debug.h
+-    src/common/event_tracer.cpp
+-    src/common/event_tracer.h
+-    src/common/hash_utils.h
+-    src/common/mathutil.cpp
+-    src/common/mathutil.h
+-    src/common/matrix_utils.cpp
+-    src/common/matrix_utils.h
+-    src/common/platform.h
+-    src/common/string_utils.cpp
+-    src/common/string_utils.h
+-    src/common/third_party/base/anglebase/base_export.h
+-    src/common/third_party/base/anglebase/containers/mru_cache.h
+-    src/common/third_party/base/anglebase/logging.h
+-    src/common/third_party/base/anglebase/macros.h
+-    src/common/third_party/base/anglebase/no_destructor.h
+-    src/common/third_party/base/anglebase/numerics/safe_conversions.h
+-    src/common/third_party/base/anglebase/numerics/safe_conversions_impl.h
+-    src/common/third_party/base/anglebase/numerics/safe_math.h
+-    src/common/third_party/base/anglebase/numerics/safe_math_impl.h
+-    src/common/third_party/base/anglebase/sha1.cc
+-    src/common/third_party/base/anglebase/sha1.h
+-    src/common/third_party/base/anglebase/sys_byteorder.h
+-    src/common/third_party/smhasher/src/PMurHash.cpp
+-    src/common/third_party/smhasher/src/PMurHash.h
+-    src/common/tls.cpp
+-    src/common/tls.h
+-    src/common/uniform_type_info_autogen.cpp
+-    src/common/utilities.cpp
+-    src/common/utilities.h
+-    src/common/vector_utils.h
+-    src/common/system_utils.h
+-    src/common/system_utils.cpp
+-    ${angle-common-platform-sources})
+-target_include_directories(
+-    angle_common
+-    PRIVATE
+-    include/
+-    src/
+-    src/common
+-    src/common/third_party/base
+-    src/common/third_party/base/anglebase
+-    PUBLIC
+-    src/common/third_party/base)
+-
+-add_library(
+-    angle_shader_translator
+-    include/GLSLANG/ShaderLang.h
+-    include/GLSLANG/ShaderVars.h
+-    src/compiler/translator/blocklayout.h
+-    include/EGL/egl.h
+-    include/EGL/eglext.h
+-    include/EGL/eglplatform.h
+-    include/GLES2/gl2.h
+-    include/GLES2/gl2ext.h
+-    include/GLES2/gl2platform.h
+-    include/GLES3/gl3.h
+-    include/GLES3/gl31.h
+-    include/GLES3/gl32.h
+-    include/GLES3/gl3platform.h
+-    include/KHR/khrplatform.h
+-    include/angle_gl.h
+-    src/compiler/translator/BaseTypes.h
+-    src/compiler/translator/BuiltInFunctionEmulator.cpp
+-    src/compiler/translator/BuiltInFunctionEmulator.h
+-    src/compiler/translator/CallDAG.cpp
+-    src/compiler/translator/CallDAG.h
+-    src/compiler/translator/CodeGen.cpp
+-    src/compiler/translator/CollectVariables.cpp
+-    src/compiler/translator/CollectVariables.h
+-    src/compiler/translator/Common.h
+-    src/compiler/translator/Compiler.cpp
+-    src/compiler/translator/Compiler.h
+-    src/compiler/translator/ConstantUnion.cpp
+-    src/compiler/translator/ConstantUnion.h
+-    src/compiler/translator/Declarator.cpp
+-    src/compiler/translator/Declarator.h
+-    src/compiler/translator/Diagnostics.cpp
+-    src/compiler/translator/Diagnostics.h
+-    src/compiler/translator/DirectiveHandler.cpp
+-    src/compiler/translator/DirectiveHandler.h
+-    src/compiler/translator/ExtensionBehavior.cpp
+-    src/compiler/translator/ExtensionBehavior.h
+-    src/compiler/translator/FlagStd140Structs.cpp
+-    src/compiler/translator/FlagStd140Structs.h
+-    src/compiler/translator/FunctionLookup.cpp
+-    src/compiler/translator/FunctionLookup.h
+-    src/compiler/translator/HashNames.cpp
+-    src/compiler/translator/HashNames.h
+-    src/compiler/translator/ImmutableString.h
+-    src/compiler/translator/ImmutableStringBuilder.cpp
+-    src/compiler/translator/ImmutableStringBuilder.h
+-    src/compiler/translator/InfoSink.cpp
+-    src/compiler/translator/InfoSink.h
+-    src/compiler/translator/Initialize.cpp
+-    src/compiler/translator/Initialize.h
+-    src/compiler/translator/InitializeDll.cpp
+-    src/compiler/translator/InitializeDll.h
+-    src/compiler/translator/InitializeGlobals.h
+-    src/compiler/translator/IntermNode.cpp
+-    src/compiler/translator/IntermNode.h
+-    src/compiler/translator/IsASTDepthBelowLimit.cpp
+-    src/compiler/translator/IsASTDepthBelowLimit.h
+-    src/compiler/translator/Operator.cpp
+-    src/compiler/translator/Operator.h
+-    src/compiler/translator/OutputTree.cpp
+-    src/compiler/translator/OutputTree.h
+-    src/compiler/translator/ParseContext.cpp
+-    src/compiler/translator/ParseContext.h
+-    src/compiler/translator/ParseContext_ESSL_autogen.h
+-    src/compiler/translator/ParseContext_complete_autogen.h
+-    src/compiler/translator/ParseContext_interm.h
+-    src/compiler/translator/PoolAlloc.cpp
+-    src/compiler/translator/PoolAlloc.h
+-    src/compiler/translator/Pragma.h
+-    src/compiler/translator/QualifierTypes.cpp
+-    src/compiler/translator/QualifierTypes.h
+-    src/compiler/translator/Severity.h
+-    src/compiler/translator/ShaderLang.cpp
+-    src/compiler/translator/ShaderVars.cpp
+-    src/compiler/translator/StaticType.h
+-    src/compiler/translator/Symbol.cpp
+-    src/compiler/translator/Symbol.h
+-    src/compiler/translator/SymbolTable.cpp
+-    src/compiler/translator/SymbolTable.h
+-    src/compiler/translator/SymbolTable_autogen.h
+-    src/compiler/translator/SymbolUniqueId.cpp
+-    src/compiler/translator/SymbolUniqueId.h
+-    src/compiler/translator/Types.cpp
+-    src/compiler/translator/Types.h
+-    src/compiler/translator/ValidateAST.cpp
+-    src/compiler/translator/ValidateAST.h
+-    src/compiler/translator/ValidateGlobalInitializer.cpp
+-    src/compiler/translator/ValidateGlobalInitializer.h
+-    src/compiler/translator/ValidateLimitations.cpp
+-    src/compiler/translator/ValidateLimitations.h
+-    src/compiler/translator/ValidateMaxParameters.cpp
+-    src/compiler/translator/ValidateMaxParameters.h
+-    src/compiler/translator/ValidateOutputs.cpp
+-    src/compiler/translator/ValidateOutputs.h
+-    src/compiler/translator/ValidateSwitch.cpp
+-    src/compiler/translator/ValidateSwitch.h
+-    src/compiler/translator/ValidateVaryingLocations.cpp
+-    src/compiler/translator/ValidateVaryingLocations.h
+-    src/compiler/translator/VariablePacker.cpp
+-    src/compiler/translator/VariablePacker.h
+-    src/compiler/translator/blocklayout.cpp
+-    src/compiler/translator/glslang.h
+-    src/compiler/translator/glslang_lex_autogen.cpp
+-    src/compiler/translator/glslang_tab_autogen.cpp
+-    src/compiler/translator/glslang_tab_autogen.h
+-    src/compiler/translator/length_limits.h
+-    src/compiler/translator/tree_ops/AddAndTrueToLoopCondition.cpp
+-    src/compiler/translator/tree_ops/AddAndTrueToLoopCondition.h
+-    src/compiler/translator/tree_ops/BreakVariableAliasingInInnerLoops.cpp
+-    src/compiler/translator/tree_ops/BreakVariableAliasingInInnerLoops.h
+-    src/compiler/translator/tree_ops/ClampFragDepth.cpp
+-    src/compiler/translator/tree_ops/ClampFragDepth.h
+-    src/compiler/translator/tree_ops/ClampPointSize.cpp
+-    src/compiler/translator/tree_ops/ClampPointSize.h
+-    src/compiler/translator/tree_ops/DeclareAndInitBuiltinsForInstancedMultiview.cpp
+-    src/compiler/translator/tree_ops/DeclareAndInitBuiltinsForInstancedMultiview.h
+-    src/compiler/translator/tree_ops/DeferGlobalInitializers.cpp
+-    src/compiler/translator/tree_ops/DeferGlobalInitializers.h
+-    src/compiler/translator/tree_ops/EarlyFragmentTestsOptimization.cpp
+-    src/compiler/translator/tree_ops/EarlyFragmentTestsOptimization.h
+-    src/compiler/translator/tree_ops/EmulateGLFragColorBroadcast.cpp
+-    src/compiler/translator/tree_ops/EmulateGLFragColorBroadcast.h
+-    src/compiler/translator/tree_ops/EmulateMultiDrawShaderBuiltins.cpp
+-    src/compiler/translator/tree_ops/EmulateMultiDrawShaderBuiltins.h
+-    src/compiler/translator/tree_ops/EmulatePrecision.cpp
+-    src/compiler/translator/tree_ops/EmulatePrecision.h
+-    src/compiler/translator/tree_ops/ExpandIntegerPowExpressions.cpp
+-    src/compiler/translator/tree_ops/ExpandIntegerPowExpressions.h
+-    src/compiler/translator/tree_ops/FoldExpressions.cpp
+-    src/compiler/translator/tree_ops/FoldExpressions.h
+-    src/compiler/translator/tree_ops/InitializeVariables.cpp
+-    src/compiler/translator/tree_ops/InitializeVariables.h
+-    src/compiler/translator/tree_ops/NameEmbeddedUniformStructs.cpp
+-    src/compiler/translator/tree_ops/NameEmbeddedUniformStructs.h
+-    src/compiler/translator/tree_ops/PruneEmptyCases.cpp
+-    src/compiler/translator/tree_ops/PruneEmptyCases.h
+-    src/compiler/translator/tree_ops/PruneNoOps.cpp
+-    src/compiler/translator/tree_ops/PruneNoOps.h
+-    src/compiler/translator/tree_ops/RecordConstantPrecision.cpp
+-    src/compiler/translator/tree_ops/RecordConstantPrecision.h
+-    src/compiler/translator/tree_ops/RegenerateStructNames.cpp
+-    src/compiler/translator/tree_ops/RegenerateStructNames.h
+-    src/compiler/translator/tree_ops/RemoveArrayLengthMethod.cpp
+-    src/compiler/translator/tree_ops/RemoveArrayLengthMethod.h
+-    src/compiler/translator/tree_ops/RemoveAtomicCounterBuiltins.cpp
+-    src/compiler/translator/tree_ops/RemoveAtomicCounterBuiltins.h
+-    src/compiler/translator/tree_ops/RemoveDynamicIndexing.cpp
+-    src/compiler/translator/tree_ops/RemoveDynamicIndexing.h
+-    src/compiler/translator/tree_ops/RemoveInactiveInterfaceVariables.cpp
+-    src/compiler/translator/tree_ops/RemoveInactiveInterfaceVariables.h
+-    src/compiler/translator/tree_ops/RemoveInvariantDeclaration.cpp
+-    src/compiler/translator/tree_ops/RemoveInvariantDeclaration.h
+-    src/compiler/translator/tree_ops/RemovePow.cpp
+-    src/compiler/translator/tree_ops/RemovePow.h
+-    src/compiler/translator/tree_ops/RemoveUnreferencedVariables.cpp
+-    src/compiler/translator/tree_ops/RemoveUnreferencedVariables.h
+-    src/compiler/translator/tree_ops/RewriteAtomicCounters.cpp
+-    src/compiler/translator/tree_ops/RewriteAtomicCounters.h
+-    src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.cpp
+-    src/compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.h
+-    src/compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.cpp
+-    src/compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.h
+-    src/compiler/translator/tree_ops/RewriteDfdy.cpp
+-    src/compiler/translator/tree_ops/RewriteDfdy.h
+-    src/compiler/translator/tree_ops/RewriteDoWhile.cpp
+-    src/compiler/translator/tree_ops/RewriteDoWhile.h
+-    src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.cpp
+-    src/compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.h
+-    src/compiler/translator/tree_ops/RewriteRepeatedAssignToSwizzled.cpp
+-    src/compiler/translator/tree_ops/RewriteRepeatedAssignToSwizzled.h
+-    src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp
+-    src/compiler/translator/tree_ops/RewriteRowMajorMatrices.h
+-    src/compiler/translator/tree_ops/RewriteStructSamplers.cpp
+-    src/compiler/translator/tree_ops/RewriteStructSamplers.h
+-    src/compiler/translator/tree_ops/RewriteStructSamplersOld.cpp
+-    src/compiler/translator/tree_ops/RewriteTexelFetchOffset.cpp
+-    src/compiler/translator/tree_ops/RewriteTexelFetchOffset.h
+-    src/compiler/translator/tree_ops/RewriteUnaryMinusOperatorFloat.cpp
+-    src/compiler/translator/tree_ops/RewriteUnaryMinusOperatorFloat.h
+-    src/compiler/translator/tree_ops/RewriteUnaryMinusOperatorInt.cpp
+-    src/compiler/translator/tree_ops/RewriteUnaryMinusOperatorInt.h
+-    src/compiler/translator/tree_ops/ScalarizeVecAndMatConstructorArgs.cpp
+-    src/compiler/translator/tree_ops/ScalarizeVecAndMatConstructorArgs.h
+-    src/compiler/translator/tree_ops/SeparateDeclarations.cpp
+-    src/compiler/translator/tree_ops/SeparateDeclarations.h
+-    src/compiler/translator/tree_ops/SimplifyLoopConditions.cpp
+-    src/compiler/translator/tree_ops/SimplifyLoopConditions.h
+-    src/compiler/translator/tree_ops/SplitSequenceOperator.cpp
+-    src/compiler/translator/tree_ops/SplitSequenceOperator.h
+-    src/compiler/translator/tree_ops/UnfoldShortCircuitAST.cpp
+-    src/compiler/translator/tree_ops/UnfoldShortCircuitAST.h
+-    src/compiler/translator/tree_ops/UseInterfaceBlockFields.cpp
+-    src/compiler/translator/tree_ops/UseInterfaceBlockFields.h
+-    src/compiler/translator/tree_ops/VectorizeVectorScalarArithmetic.cpp
+-    src/compiler/translator/tree_ops/VectorizeVectorScalarArithmetic.h
+-    src/compiler/translator/tree_util/BuiltIn.h
+-    src/compiler/translator/tree_util/BuiltIn_ESSL_autogen.h
+-    src/compiler/translator/tree_util/BuiltIn_complete_autogen.h
+-    src/compiler/translator/tree_util/FindFunction.cpp
+-    src/compiler/translator/tree_util/FindFunction.h
+-    src/compiler/translator/tree_util/FindMain.cpp
+-    src/compiler/translator/tree_util/FindMain.h
+-    src/compiler/translator/tree_util/FindSymbolNode.cpp
+-    src/compiler/translator/tree_util/FindSymbolNode.h
+-    src/compiler/translator/tree_util/IntermNodePatternMatcher.cpp
+-    src/compiler/translator/tree_util/IntermNodePatternMatcher.h
+-    src/compiler/translator/tree_util/IntermNode_util.cpp
+-    src/compiler/translator/tree_util/IntermNode_util.h
+-    src/compiler/translator/tree_util/IntermTraverse.cpp
+-    src/compiler/translator/tree_util/IntermTraverse.h
+-    src/compiler/translator/tree_util/NodeSearch.h
+-    src/compiler/translator/tree_util/ReplaceClipDistanceVariable.cpp
+-    src/compiler/translator/tree_util/ReplaceClipDistanceVariable.h
+-    src/compiler/translator/tree_util/ReplaceShadowingVariables.cpp
+-    src/compiler/translator/tree_util/ReplaceShadowingVariables.h
+-    src/compiler/translator/tree_util/ReplaceVariable.cpp
+-    src/compiler/translator/tree_util/ReplaceVariable.h
+-    src/compiler/translator/tree_util/RunAtTheEndOfShader.cpp
+-    src/compiler/translator/tree_util/RunAtTheEndOfShader.h
+-    src/compiler/translator/tree_util/Visit.h
+-    src/compiler/translator/util.cpp
+-    src/compiler/translator/util.h
+-    src/third_party/compiler/ArrayBoundsClamper.cpp
+-    src/third_party/compiler/ArrayBoundsClamper.h
+-    src/compiler/translator/OutputESSL.cpp
+-    src/compiler/translator/OutputESSL.h
+-    src/compiler/translator/TranslatorESSL.cpp
+-    src/compiler/translator/TranslatorESSL.h
+-    src/compiler/translator/BuiltInFunctionEmulatorGLSL.cpp
+-    src/compiler/translator/BuiltInFunctionEmulatorGLSL.h
+-    src/compiler/translator/BuiltinsWorkaroundGLSL.cpp
+-    src/compiler/translator/BuiltinsWorkaroundGLSL.h
+-    src/compiler/translator/ExtensionGLSL.cpp
+-    src/compiler/translator/ExtensionGLSL.h
+-    src/compiler/translator/OutputGLSL.cpp
+-    src/compiler/translator/OutputGLSL.h
+-    src/compiler/translator/OutputGLSLBase.cpp
+-    src/compiler/translator/OutputGLSLBase.h
+-    src/compiler/translator/TranslatorGLSL.cpp
+-    src/compiler/translator/TranslatorGLSL.h
+-    src/compiler/translator/VersionGLSL.cpp
+-    src/compiler/translator/VersionGLSL.h
+-    src/compiler/translator/emulated_builtin_functions_hlsl_autogen.cpp
+-    src/compiler/translator/tree_ops/AddDefaultReturnStatements.cpp
+-    src/compiler/translator/tree_ops/AddDefaultReturnStatements.h
+-    src/compiler/translator/tree_ops/ArrayReturnValueToOutParameter.cpp
+-    src/compiler/translator/tree_ops/ArrayReturnValueToOutParameter.h
+-    src/compiler/translator/tree_ops/RemoveSwitchFallThrough.cpp
+-    src/compiler/translator/tree_ops/RemoveSwitchFallThrough.h
+-    src/compiler/translator/tree_ops/RewriteElseBlocks.cpp
+-    src/compiler/translator/tree_ops/RewriteElseBlocks.h
+-    src/compiler/translator/tree_ops/SeparateArrayConstructorStatements.cpp
+-    src/compiler/translator/tree_ops/SeparateArrayConstructorStatements.h
+-    src/compiler/translator/tree_ops/SeparateArrayInitialization.cpp
+-    src/compiler/translator/tree_ops/SeparateArrayInitialization.h
+-    src/compiler/translator/tree_ops/SeparateExpressionsReturningArrays.cpp
+-    src/compiler/translator/tree_ops/SeparateExpressionsReturningArrays.h
+-    src/compiler/translator/tree_ops/UnfoldShortCircuitToIf.cpp
+-    src/compiler/translator/tree_ops/UnfoldShortCircuitToIf.h
+-    src/compiler/translator/tree_ops/WrapSwitchStatementsInBlocks.cpp
+-    src/compiler/translator/tree_ops/WrapSwitchStatementsInBlocks.h
+-    src/compiler/translator/OutputVulkanGLSL.cpp
+-    src/compiler/translator/OutputVulkanGLSL.h
+-    src/compiler/translator/TranslatorVulkan.cpp
+-    src/compiler/translator/TranslatorVulkan.h
+-    src/compiler/translator/ImmutableString_autogen.cpp
+-    src/compiler/translator/SymbolTable_autogen.cpp
+-    src/compiler/preprocessor/DiagnosticsBase.cpp
+-    src/compiler/preprocessor/DiagnosticsBase.h
+-    src/compiler/preprocessor/DirectiveHandlerBase.cpp
+-    src/compiler/preprocessor/DirectiveHandlerBase.h
+-    src/compiler/preprocessor/DirectiveParser.cpp
+-    src/compiler/preprocessor/DirectiveParser.h
+-    src/compiler/preprocessor/ExpressionParser.h
+-    src/compiler/preprocessor/Input.cpp
+-    src/compiler/preprocessor/Input.h
+-    src/compiler/preprocessor/Lexer.cpp
+-    src/compiler/preprocessor/Lexer.h
+-    src/compiler/preprocessor/Macro.cpp
+-    src/compiler/preprocessor/Macro.h
+-    src/compiler/preprocessor/MacroExpander.cpp
+-    src/compiler/preprocessor/MacroExpander.h
+-    src/compiler/preprocessor/Preprocessor.cpp
+-    src/compiler/preprocessor/Preprocessor.h
+-    src/compiler/preprocessor/SourceLocation.h
+-    src/compiler/preprocessor/Token.cpp
+-    src/compiler/preprocessor/Token.h
+-    src/compiler/preprocessor/Tokenizer.h
+-    src/compiler/preprocessor/numeric_lex.h
+-    src/compiler/preprocessor/preprocessor_lex_autogen.cpp
+-    src/compiler/preprocessor/preprocessor_tab_autogen.cpp
+-    src/libShaderTranslator/libShaderTranslator.cpp)
+-target_include_directories(
+-    angle_shader_translator
+-    PRIVATE
+-    include/
+-    include/GLSLANG
+-    src/
+-    src/compiler
+-    src/compiler/translator
+-    src/compiler/translator/tree_ops
+-    src/compiler/translator/tree_util
+-    src/compiler/preprocessor
+-    src/third_party/compiler
+-    PUBLIC
+-    src/libShaderTranslator)
+-target_compile_definitions(
+-    angle_shader_translator
+-    PRIVATE
+-    ANGLE_ENABLE_GLSL=1
+-    ANGLE_ENABLE_ESSL=1)
+-target_link_libraries(
+-    angle_shader_translator
+-    PRIVATE
+-    angle_common)
++cmake_minimum_required(VERSION 3.16)
++project(emulator_nvidia_shader_support LANGUAGES C CXX)
++set(CMAKE_CXX_STANDARD 17)
++set(CMAKE_POSITION_INDEPENDENT_CODE ON)
++set(CMAKE_CXX_VISIBILITY_PRESET hidden)
++set(CMAKE_C_VISIBILITY_PRESET hidden)
++set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
++add_library(shadertranslator SHARED
++  src/common/Float16ToFloat32.cpp
++  src/common/MemoryBuffer.cpp
++  src/common/PackedEGLEnums_autogen.cpp
++  src/common/PackedEnums.cpp
++  src/common/PackedGLEnums_autogen.cpp
++  src/common/PoolAlloc.cpp
++  src/common/aligned_memory.cpp
++  src/common/android_util.cpp
++  src/common/angleutils.cpp
++  src/common/debug.cpp
++  src/common/entry_points_enum_autogen.cpp
++  src/common/event_tracer.cpp
++  src/common/mathutil.cpp
++  src/common/matrix_utils.cpp
++  src/common/string_utils.cpp
++  src/common/system_utils.cpp
++  src/common/system_utils_linux.cpp
++  src/common/system_utils_posix.cpp
++  src/common/third_party/base/anglebase/sha1.cc
++  src/common/third_party/smhasher/src/PMurHash.cpp
++  src/common/third_party/xxhash/xxhash.c
++  src/common/tls.cpp
++  src/common/uniform_type_info_autogen.cpp
++  src/common/utilities.cpp
++  src/compiler/preprocessor/DiagnosticsBase.cpp
++  src/compiler/preprocessor/DirectiveHandlerBase.cpp
++  src/compiler/preprocessor/DirectiveParser.cpp
++  src/compiler/preprocessor/Input.cpp
++  src/compiler/preprocessor/Lexer.cpp
++  src/compiler/preprocessor/Macro.cpp
++  src/compiler/preprocessor/MacroExpander.cpp
++  src/compiler/preprocessor/Preprocessor.cpp
++  src/compiler/preprocessor/Token.cpp
++  src/compiler/preprocessor/preprocessor_lex_autogen.cpp
++  src/compiler/preprocessor/preprocessor_tab_autogen.cpp
++  src/compiler/translator/BuiltInFunctionEmulator.cpp
++  src/compiler/translator/BuiltInFunctionEmulatorGLSL.cpp
++  src/compiler/translator/BuiltinsWorkaroundGLSL.cpp
++  src/compiler/translator/CallDAG.cpp
++  src/compiler/translator/CodeGen.cpp
++  src/compiler/translator/CollectVariables.cpp
++  src/compiler/translator/Compiler.cpp
++  src/compiler/translator/ConstantUnion.cpp
++  src/compiler/translator/Declarator.cpp
++  src/compiler/translator/Diagnostics.cpp
++  src/compiler/translator/DirectiveHandler.cpp
++  src/compiler/translator/ExtensionBehavior.cpp
++  src/compiler/translator/ExtensionGLSL.cpp
++  src/compiler/translator/FlagStd140Structs.cpp
++  src/compiler/translator/FunctionLookup.cpp
++  src/compiler/translator/HashNames.cpp
++  src/compiler/translator/ImmutableStringBuilder.cpp
++  src/compiler/translator/ImmutableString_ESSL_autogen.cpp
++  src/compiler/translator/InfoSink.cpp
++  src/compiler/translator/Initialize.cpp
++  src/compiler/translator/InitializeDll.cpp
++  src/compiler/translator/IntermNode.cpp
++  src/compiler/translator/IsASTDepthBelowLimit.cpp
++  src/compiler/translator/Operator.cpp
++  src/compiler/translator/OutputESSL.cpp
++  src/compiler/translator/OutputGLSL.cpp
++  src/compiler/translator/OutputGLSLBase.cpp
++  src/compiler/translator/OutputTree.cpp
++  src/compiler/translator/ParseContext.cpp
++  src/compiler/translator/PoolAlloc.cpp
++  src/compiler/translator/QualifierTypes.cpp
++  src/compiler/translator/ShaderLang.cpp
++  src/compiler/translator/ShaderVars.cpp
++  src/compiler/translator/Symbol.cpp
++  src/compiler/translator/SymbolTable.cpp
++  src/compiler/translator/SymbolTable_ESSL_autogen.cpp
++  src/compiler/translator/SymbolUniqueId.cpp
++  src/compiler/translator/TranslatorESSL.cpp
++  src/compiler/translator/TranslatorGLSL.cpp
++  src/compiler/translator/Types.cpp
++  src/compiler/translator/ValidateAST.cpp
++  src/compiler/translator/ValidateBarrierFunctionCall.cpp
++  src/compiler/translator/ValidateClipCullDistance.cpp
++  src/compiler/translator/ValidateGlobalInitializer.cpp
++  src/compiler/translator/ValidateLimitations.cpp
++  src/compiler/translator/ValidateMaxParameters.cpp
++  src/compiler/translator/ValidateOutputs.cpp
++  src/compiler/translator/ValidateSwitch.cpp
++  src/compiler/translator/ValidateTypeSizeLimitations.cpp
++  src/compiler/translator/ValidateVaryingLocations.cpp
++  src/compiler/translator/VariablePacker.cpp
++  src/compiler/translator/VersionGLSL.cpp
++  src/compiler/translator/blocklayout.cpp
++  src/compiler/translator/glslang_lex_autogen.cpp
++  src/compiler/translator/glslang_tab_autogen.cpp
++  src/compiler/translator/tree_ops/ClampIndirectIndices.cpp
++  src/compiler/translator/tree_ops/ClampPointSize.cpp
++  src/compiler/translator/tree_ops/ConvertUnsupportedConstructorsToFunctionCalls.cpp
++  src/compiler/translator/tree_ops/DeclareAndInitBuiltinsForInstancedMultiview.cpp
++  src/compiler/translator/tree_ops/DeferGlobalInitializers.cpp
++  src/compiler/translator/tree_ops/EmulateGLFragColorBroadcast.cpp
++  src/compiler/translator/tree_ops/EmulateMultiDrawShaderBuiltins.cpp
++  src/compiler/translator/tree_ops/FoldExpressions.cpp
++  src/compiler/translator/tree_ops/ForcePrecisionQualifier.cpp
++  src/compiler/translator/tree_ops/InitializeVariables.cpp
++  src/compiler/translator/tree_ops/MonomorphizeUnsupportedFunctions.cpp
++  src/compiler/translator/tree_ops/NameNamelessUniformBuffers.cpp
++  src/compiler/translator/tree_ops/PruneEmptyCases.cpp
++  src/compiler/translator/tree_ops/PruneNoOps.cpp
++  src/compiler/translator/tree_ops/RecordConstantPrecision.cpp
++  src/compiler/translator/tree_ops/RemoveArrayLengthMethod.cpp
++  src/compiler/translator/tree_ops/RemoveAtomicCounterBuiltins.cpp
++  src/compiler/translator/tree_ops/RemoveDynamicIndexing.cpp
++  src/compiler/translator/tree_ops/RemoveInactiveInterfaceVariables.cpp
++  src/compiler/translator/tree_ops/RemoveInvariantDeclaration.cpp
++  src/compiler/translator/tree_ops/RemoveUnreferencedVariables.cpp
++  src/compiler/translator/tree_ops/RewriteArrayOfArrayOfOpaqueUniforms.cpp
++  src/compiler/translator/tree_ops/RewriteAtomicCounters.cpp
++  src/compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.cpp
++  src/compiler/translator/tree_ops/RewriteDfdy.cpp
++  src/compiler/translator/tree_ops/RewriteStructSamplers.cpp
++  src/compiler/translator/tree_ops/RewriteTexelFetchOffset.cpp
++  src/compiler/translator/tree_ops/ScalarizeVecAndMatConstructorArgs.cpp
++  src/compiler/translator/tree_ops/SeparateDeclarations.cpp
++  src/compiler/translator/tree_ops/SeparateStructFromUniformDeclarations.cpp
++  src/compiler/translator/tree_ops/SimplifyLoopConditions.cpp
++  src/compiler/translator/tree_ops/SplitSequenceOperator.cpp
++  src/compiler/translator/tree_ops/gl/ClampFragDepth.cpp
++  src/compiler/translator/tree_ops/gl/RegenerateStructNames.cpp
++  src/compiler/translator/tree_ops/gl/RewriteRepeatedAssignToSwizzled.cpp
++  src/compiler/translator/tree_ops/gl/UseInterfaceBlockFields.cpp
++  src/compiler/translator/tree_util/DriverUniform.cpp
++  src/compiler/translator/tree_util/FindFunction.cpp
++  src/compiler/translator/tree_util/FindMain.cpp
++  src/compiler/translator/tree_util/FindPreciseNodes.cpp
++  src/compiler/translator/tree_util/FindSymbolNode.cpp
++  src/compiler/translator/tree_util/IntermNodePatternMatcher.cpp
++  src/compiler/translator/tree_util/IntermNode_util.cpp
++  src/compiler/translator/tree_util/IntermRebuild.cpp
++  src/compiler/translator/tree_util/IntermTraverse.cpp
++  src/compiler/translator/tree_util/ReplaceArrayOfMatrixVarying.cpp
++  src/compiler/translator/tree_util/ReplaceClipCullDistanceVariable.cpp
++  src/compiler/translator/tree_util/ReplaceShadowingVariables.cpp
++  src/compiler/translator/tree_util/ReplaceVariable.cpp
++  src/compiler/translator/tree_util/RewriteSampleMaskVariable.cpp
++  src/compiler/translator/tree_util/RunAtTheBeginningOfShader.cpp
++  src/compiler/translator/tree_util/RunAtTheEndOfShader.cpp
++  src/compiler/translator/tree_util/SpecializationConstant.cpp
++  src/compiler/translator/util.cpp
++  src/libShaderTranslator/libShaderTranslator.cpp
++)
++target_include_directories(shadertranslator PRIVATE include src src/common/third_party/base)
++target_compile_definitions(shadertranslator PRIVATE ANGLE_ENABLE_GLSL ANGLE_ENABLE_ESSL AEMU_TRANSLATOR LIBANGLE_IMPLEMENTATION)
++target_link_libraries(shadertranslator PRIVATE dl pthread)
++target_link_options(shadertranslator PRIVATE -Wl,--no-undefined)
+--- a/include/GLSLANG/ShaderVars.h
++++ b/include/GLSLANG/ShaderVars.h
+@@ -14,6 +14,7 @@
+ #include <array>
+ #include <string>
+ #include <vector>
++#include <cstdint>
+ 
+ // This type is defined here to simplify ANGLE's integration with glslang for SPIRv.
+ using ShCompileOptions = uint64_t;
+--- a/src/libShaderTranslator/ShaderTranslator.h
++++ b/src/libShaderTranslator/ShaderTranslator.h
+@@ -1,6 +1,4 @@
+ #pragma once
+-
+-#include <array>
+ 
+ #if defined(_WIN32)
+ #        define ANGLE_EXPORT __declspec(dllexport)
+@@ -363,43 +361,27 @@
+     int EXT_draw_buffers;
+     int EXT_frag_depth;
+     int EXT_shader_texture_lod;
++    int WEBGL_debug_shader_precision;
+     int EXT_shader_framebuffer_fetch;
+-    int EXT_shader_framebuffer_fetch_non_coherent;
+     int NV_shader_framebuffer_fetch;
+     int NV_shader_noperspective_interpolation;
+     int ARM_shader_framebuffer_fetch;
+     int OVR_multiview;
+     int OVR_multiview2;
+     int EXT_multisampled_render_to_texture;
+-    int EXT_multisampled_render_to_texture2;
+     int EXT_YUV_target;
+     int EXT_geometry_shader;
+-    int OES_geometry_shader;
+-    int OES_shader_io_blocks;
+-    int EXT_shader_io_blocks;
+     int EXT_gpu_shader5;
+     int EXT_shader_non_constant_global_initializers;
+     int OES_texture_storage_multisample_2d_array;
+     int OES_texture_3D;
+     int ANGLE_texture_multisample;
+     int ANGLE_multi_draw;
+-    // TODO(angleproject:3402) remove after chromium side removal to pass compilation
+     int ANGLE_base_vertex_base_instance;
+     int WEBGL_video_texture;
+     int APPLE_clip_distance;
+     int OES_texture_cube_map_array;
+     int EXT_texture_cube_map_array;
+-    int EXT_shadow_samplers;
+-    int OES_shader_multisample_interpolation;
+-    int OES_shader_image_atomic;
+-    int EXT_tessellation_shader;
+-    int OES_texture_buffer;
+-    int EXT_texture_buffer;
+-    int OES_sample_variables;
+-    int EXT_clip_cull_distance;
+-    int EXT_primitive_bounding_box;
+-    int ANGLE_base_vertex_base_instance_shader_builtin;
+-    int ANDROID_extension_pack_es31a;
+ 
+     // Set to 1 to enable replacing GL_EXT_draw_buffers #extension directives
+     // with GL_NV_draw_buffers in ESSL output. This flag can be used to emulate
+@@ -434,13 +416,17 @@
+     // Default is NULL.
+     ST_HashFunction64 HashFunction;
+ 
+-    // The maximum complexity an expression can be when SH_LIMIT_EXPRESSION_COMPLEXITY is turned on.
++    // Selects a strategy to use when implementing array index clamping.
++    // Default is ST_CLAMP_WITH_CLAMP_INTRINSIC.
++    ST_ArrayIndexClampingStrategy ArrayIndexClampingStrategy;
++
++    // The maximum complexity an expression can be when ST_LIMIT_EXPRESSION_COMPLEXITY is turned on.
+     int MaxExpressionComplexity;
+ 
+     // The maximum depth a call stack can be.
+     int MaxCallStackDepth;
+ 
+-    // The maximum number of parameters a function can have when SH_LIMIT_EXPRESSION_COMPLEXITY is
++    // The maximum number of parameters a function can have when ST_LIMIT_EXPRESSION_COMPLEXITY is
+     // turned on.
+     int MaxFunctionParameters;
+ 
+@@ -453,10 +439,6 @@
+     // maximum number of available image units
+     int MaxImageUnits;
+ 
+-    // OES_sample_variables constant
+-    // maximum number of available samples
+-    int MaxSamples;
+-
+     // maximum number of image uniforms in a vertex shader
+     int MaxVertexImageUniforms;
+ 
+@@ -476,9 +458,9 @@
+     int MaxCombinedShaderOutputResources;
+ 
+     // maximum number of groups in each dimension
+-    std::array<int, 3> MaxComputeWorkGroupCount;
++    int MaxComputeWorkGroupCount[3];
+     // maximum number of threads per work group in each dimension
+-    std::array<int, 3> MaxComputeWorkGroupSize;
++    int MaxComputeWorkGroupSize[3];
+ 
+     // maximum number of total uniform components
+     int MaxComputeUniformComponents;
+@@ -539,44 +521,11 @@
+     int MaxGeometryShaderInvocations;
+     int MaxGeometryImageUniforms;
+ 
+-    // EXT_tessellation_shader constants
+-    int MaxTessControlInputComponents;
+-    int MaxTessControlOutputComponents;
+-    int MaxTessControlTextureImageUnits;
+-    int MaxTessControlUniformComponents;
+-    int MaxTessControlTotalOutputComponents;
+-    int MaxTessControlImageUniforms;
+-    int MaxTessControlAtomicCounters;
+-    int MaxTessControlAtomicCounterBuffers;
+-
+-    int MaxTessPatchComponents;
+-    int MaxPatchVertices;
+-    int MaxTessGenLevel;
+-
+-    int MaxTessEvaluationInputComponents;
+-    int MaxTessEvaluationOutputComponents;
+-    int MaxTessEvaluationTextureImageUnits;
+-    int MaxTessEvaluationUniformComponents;
+-    int MaxTessEvaluationImageUniforms;
+-    int MaxTessEvaluationAtomicCounters;
+-    int MaxTessEvaluationAtomicCounterBuffers;
+-
+     // Subpixel bits used in rasterization.
+     int SubPixelBits;
+ 
+     // APPLE_clip_distance/EXT_clip_cull_distance constant
+     int MaxClipDistances;
+-    int MaxCullDistances;
+-    int MaxCombinedClipAndCullDistances;
+-
+-    // Direct-to-metal backend constants:
+-
+-    // Binding index for driver uniforms:
+-    int DriverUniformsBindingIndex;
+-    // Binding index for default uniforms:
+-    int DefaultUniformsBindingIndex;
+-    // Binding index for UBO's argument buffer
+-    int UBOArgumentBufferBindingIndex;
+ };
+ 
+ // Varying interpolation qualifier, see section 4.3.9 of the ESSL 3.00.4 spec
+--- a/src/libShaderTranslator/libShaderTranslator.cpp
++++ b/src/libShaderTranslator/libShaderTranslator.cpp
+@@ -250,6 +250,194 @@
+ 
+ extern "C" {
+ 
++// Adapter from the frozen emulator35.6.3 prebuilt C ABI to current matched source fields.
++// Never reinterpret resource layouts: the newer structure is larger and would corrupt caller storage.
++static ShBuiltInResources resourcesToAngle(const ST_BuiltInResources& oldResources) {
++    ShBuiltInResources angleResources;
++    sh::InitBuiltInResources(&angleResources);
++    angleResources.ANGLE_base_vertex_base_instance = oldResources.ANGLE_base_vertex_base_instance;
++    angleResources.ANGLE_multi_draw = oldResources.ANGLE_multi_draw;
++    angleResources.ANGLE_texture_multisample = oldResources.ANGLE_texture_multisample;
++    angleResources.APPLE_clip_distance = oldResources.APPLE_clip_distance;
++    angleResources.ARB_texture_rectangle = oldResources.ARB_texture_rectangle;
++    angleResources.ARM_shader_framebuffer_fetch = oldResources.ARM_shader_framebuffer_fetch;
++    angleResources.EXT_YUV_target = oldResources.EXT_YUV_target;
++    angleResources.EXT_blend_func_extended = oldResources.EXT_blend_func_extended;
++    angleResources.EXT_draw_buffers = oldResources.EXT_draw_buffers;
++    angleResources.EXT_frag_depth = oldResources.EXT_frag_depth;
++    angleResources.EXT_geometry_shader = oldResources.EXT_geometry_shader;
++    angleResources.EXT_gpu_shader5 = oldResources.EXT_gpu_shader5;
++    angleResources.EXT_multisampled_render_to_texture = oldResources.EXT_multisampled_render_to_texture;
++    angleResources.EXT_shader_framebuffer_fetch = oldResources.EXT_shader_framebuffer_fetch;
++    angleResources.EXT_shader_non_constant_global_initializers = oldResources.EXT_shader_non_constant_global_initializers;
++    angleResources.EXT_shader_texture_lod = oldResources.EXT_shader_texture_lod;
++    angleResources.EXT_texture_cube_map_array = oldResources.EXT_texture_cube_map_array;
++    angleResources.FragmentPrecisionHigh = oldResources.FragmentPrecisionHigh;
++    angleResources.HashFunction = oldResources.HashFunction;
++    angleResources.MaxAtomicCounterBindings = oldResources.MaxAtomicCounterBindings;
++    angleResources.MaxAtomicCounterBufferSize = oldResources.MaxAtomicCounterBufferSize;
++    angleResources.MaxCallStackDepth = oldResources.MaxCallStackDepth;
++    angleResources.MaxClipDistances = oldResources.MaxClipDistances;
++    angleResources.MaxCombinedAtomicCounterBuffers = oldResources.MaxCombinedAtomicCounterBuffers;
++    angleResources.MaxCombinedAtomicCounters = oldResources.MaxCombinedAtomicCounters;
++    angleResources.MaxCombinedImageUniforms = oldResources.MaxCombinedImageUniforms;
++    angleResources.MaxCombinedShaderOutputResources = oldResources.MaxCombinedShaderOutputResources;
++    angleResources.MaxCombinedTextureImageUnits = oldResources.MaxCombinedTextureImageUnits;
++    angleResources.MaxComputeAtomicCounterBuffers = oldResources.MaxComputeAtomicCounterBuffers;
++    angleResources.MaxComputeAtomicCounters = oldResources.MaxComputeAtomicCounters;
++    angleResources.MaxComputeImageUniforms = oldResources.MaxComputeImageUniforms;
++    angleResources.MaxComputeTextureImageUnits = oldResources.MaxComputeTextureImageUnits;
++    angleResources.MaxComputeUniformComponents = oldResources.MaxComputeUniformComponents;
++    for (int i=0;i<3;++i) angleResources.MaxComputeWorkGroupCount[i] = oldResources.MaxComputeWorkGroupCount[i];
++    for (int i=0;i<3;++i) angleResources.MaxComputeWorkGroupSize[i] = oldResources.MaxComputeWorkGroupSize[i];
++    angleResources.MaxDrawBuffers = oldResources.MaxDrawBuffers;
++    angleResources.MaxDualSourceDrawBuffers = oldResources.MaxDualSourceDrawBuffers;
++    angleResources.MaxExpressionComplexity = oldResources.MaxExpressionComplexity;
++    angleResources.MaxFragmentAtomicCounterBuffers = oldResources.MaxFragmentAtomicCounterBuffers;
++    angleResources.MaxFragmentAtomicCounters = oldResources.MaxFragmentAtomicCounters;
++    angleResources.MaxFragmentImageUniforms = oldResources.MaxFragmentImageUniforms;
++    angleResources.MaxFragmentInputVectors = oldResources.MaxFragmentInputVectors;
++    angleResources.MaxFragmentUniformVectors = oldResources.MaxFragmentUniformVectors;
++    angleResources.MaxFunctionParameters = oldResources.MaxFunctionParameters;
++    angleResources.MaxGeometryAtomicCounterBuffers = oldResources.MaxGeometryAtomicCounterBuffers;
++    angleResources.MaxGeometryAtomicCounters = oldResources.MaxGeometryAtomicCounters;
++    angleResources.MaxGeometryImageUniforms = oldResources.MaxGeometryImageUniforms;
++    angleResources.MaxGeometryInputComponents = oldResources.MaxGeometryInputComponents;
++    angleResources.MaxGeometryOutputComponents = oldResources.MaxGeometryOutputComponents;
++    angleResources.MaxGeometryOutputVertices = oldResources.MaxGeometryOutputVertices;
++    angleResources.MaxGeometryShaderInvocations = oldResources.MaxGeometryShaderInvocations;
++    angleResources.MaxGeometryShaderStorageBlocks = oldResources.MaxGeometryShaderStorageBlocks;
++    angleResources.MaxGeometryTextureImageUnits = oldResources.MaxGeometryTextureImageUnits;
++    angleResources.MaxGeometryTotalOutputComponents = oldResources.MaxGeometryTotalOutputComponents;
++    angleResources.MaxGeometryUniformBlocks = oldResources.MaxGeometryUniformBlocks;
++    angleResources.MaxGeometryUniformComponents = oldResources.MaxGeometryUniformComponents;
++    angleResources.MaxImageUnits = oldResources.MaxImageUnits;
++    angleResources.MaxProgramTexelOffset = oldResources.MaxProgramTexelOffset;
++    angleResources.MaxProgramTextureGatherOffset = oldResources.MaxProgramTextureGatherOffset;
++    angleResources.MaxShaderStorageBufferBindings = oldResources.MaxShaderStorageBufferBindings;
++    angleResources.MaxTextureImageUnits = oldResources.MaxTextureImageUnits;
++    angleResources.MaxUniformBufferBindings = oldResources.MaxUniformBufferBindings;
++    angleResources.MaxUniformLocations = oldResources.MaxUniformLocations;
++    angleResources.MaxVaryingVectors = oldResources.MaxVaryingVectors;
++    angleResources.MaxVertexAtomicCounterBuffers = oldResources.MaxVertexAtomicCounterBuffers;
++    angleResources.MaxVertexAtomicCounters = oldResources.MaxVertexAtomicCounters;
++    angleResources.MaxVertexAttribs = oldResources.MaxVertexAttribs;
++    angleResources.MaxVertexImageUniforms = oldResources.MaxVertexImageUniforms;
++    angleResources.MaxVertexOutputVectors = oldResources.MaxVertexOutputVectors;
++    angleResources.MaxVertexTextureImageUnits = oldResources.MaxVertexTextureImageUnits;
++    angleResources.MaxVertexUniformVectors = oldResources.MaxVertexUniformVectors;
++    angleResources.MaxViewsOVR = oldResources.MaxViewsOVR;
++    angleResources.MinProgramTexelOffset = oldResources.MinProgramTexelOffset;
++    angleResources.MinProgramTextureGatherOffset = oldResources.MinProgramTextureGatherOffset;
++    angleResources.NV_EGL_stream_consumer_external = oldResources.NV_EGL_stream_consumer_external;
++    angleResources.NV_draw_buffers = oldResources.NV_draw_buffers;
++    angleResources.NV_shader_framebuffer_fetch = oldResources.NV_shader_framebuffer_fetch;
++    angleResources.NV_shader_noperspective_interpolation = oldResources.NV_shader_noperspective_interpolation;
++    angleResources.OES_EGL_image_external = oldResources.OES_EGL_image_external;
++    angleResources.OES_EGL_image_external_essl3 = oldResources.OES_EGL_image_external_essl3;
++    angleResources.OES_standard_derivatives = oldResources.OES_standard_derivatives;
++    angleResources.OES_texture_3D = oldResources.OES_texture_3D;
++    angleResources.OES_texture_cube_map_array = oldResources.OES_texture_cube_map_array;
++    angleResources.OES_texture_storage_multisample_2d_array = oldResources.OES_texture_storage_multisample_2d_array;
++    angleResources.OVR_multiview = oldResources.OVR_multiview;
++    angleResources.OVR_multiview2 = oldResources.OVR_multiview2;
++    angleResources.SubPixelBits = oldResources.SubPixelBits;
++    angleResources.WEBGL_video_texture = oldResources.WEBGL_video_texture;
++    return angleResources;
++}
++static void resourcesToLegacy(const ShBuiltInResources& angleResources, ST_BuiltInResources& oldResources) {
++    memset(&oldResources,0,sizeof(oldResources));
++    oldResources.ANGLE_base_vertex_base_instance = angleResources.ANGLE_base_vertex_base_instance;
++    oldResources.ANGLE_multi_draw = angleResources.ANGLE_multi_draw;
++    oldResources.ANGLE_texture_multisample = angleResources.ANGLE_texture_multisample;
++    oldResources.APPLE_clip_distance = angleResources.APPLE_clip_distance;
++    oldResources.ARB_texture_rectangle = angleResources.ARB_texture_rectangle;
++    oldResources.ARM_shader_framebuffer_fetch = angleResources.ARM_shader_framebuffer_fetch;
++    oldResources.EXT_YUV_target = angleResources.EXT_YUV_target;
++    oldResources.EXT_blend_func_extended = angleResources.EXT_blend_func_extended;
++    oldResources.EXT_draw_buffers = angleResources.EXT_draw_buffers;
++    oldResources.EXT_frag_depth = angleResources.EXT_frag_depth;
++    oldResources.EXT_geometry_shader = angleResources.EXT_geometry_shader;
++    oldResources.EXT_gpu_shader5 = angleResources.EXT_gpu_shader5;
++    oldResources.EXT_multisampled_render_to_texture = angleResources.EXT_multisampled_render_to_texture;
++    oldResources.EXT_shader_framebuffer_fetch = angleResources.EXT_shader_framebuffer_fetch;
++    oldResources.EXT_shader_non_constant_global_initializers = angleResources.EXT_shader_non_constant_global_initializers;
++    oldResources.EXT_shader_texture_lod = angleResources.EXT_shader_texture_lod;
++    oldResources.EXT_texture_cube_map_array = angleResources.EXT_texture_cube_map_array;
++    oldResources.FragmentPrecisionHigh = angleResources.FragmentPrecisionHigh;
++    oldResources.HashFunction = angleResources.HashFunction;
++    oldResources.MaxAtomicCounterBindings = angleResources.MaxAtomicCounterBindings;
++    oldResources.MaxAtomicCounterBufferSize = angleResources.MaxAtomicCounterBufferSize;
++    oldResources.MaxCallStackDepth = angleResources.MaxCallStackDepth;
++    oldResources.MaxClipDistances = angleResources.MaxClipDistances;
++    oldResources.MaxCombinedAtomicCounterBuffers = angleResources.MaxCombinedAtomicCounterBuffers;
++    oldResources.MaxCombinedAtomicCounters = angleResources.MaxCombinedAtomicCounters;
++    oldResources.MaxCombinedImageUniforms = angleResources.MaxCombinedImageUniforms;
++    oldResources.MaxCombinedShaderOutputResources = angleResources.MaxCombinedShaderOutputResources;
++    oldResources.MaxCombinedTextureImageUnits = angleResources.MaxCombinedTextureImageUnits;
++    oldResources.MaxComputeAtomicCounterBuffers = angleResources.MaxComputeAtomicCounterBuffers;
++    oldResources.MaxComputeAtomicCounters = angleResources.MaxComputeAtomicCounters;
++    oldResources.MaxComputeImageUniforms = angleResources.MaxComputeImageUniforms;
++    oldResources.MaxComputeTextureImageUnits = angleResources.MaxComputeTextureImageUnits;
++    oldResources.MaxComputeUniformComponents = angleResources.MaxComputeUniformComponents;
++    for (int i=0;i<3;++i) oldResources.MaxComputeWorkGroupCount[i] = angleResources.MaxComputeWorkGroupCount[i];
++    for (int i=0;i<3;++i) oldResources.MaxComputeWorkGroupSize[i] = angleResources.MaxComputeWorkGroupSize[i];
++    oldResources.MaxDrawBuffers = angleResources.MaxDrawBuffers;
++    oldResources.MaxDualSourceDrawBuffers = angleResources.MaxDualSourceDrawBuffers;
++    oldResources.MaxExpressionComplexity = angleResources.MaxExpressionComplexity;
++    oldResources.MaxFragmentAtomicCounterBuffers = angleResources.MaxFragmentAtomicCounterBuffers;
++    oldResources.MaxFragmentAtomicCounters = angleResources.MaxFragmentAtomicCounters;
++    oldResources.MaxFragmentImageUniforms = angleResources.MaxFragmentImageUniforms;
++    oldResources.MaxFragmentInputVectors = angleResources.MaxFragmentInputVectors;
++    oldResources.MaxFragmentUniformVectors = angleResources.MaxFragmentUniformVectors;
++    oldResources.MaxFunctionParameters = angleResources.MaxFunctionParameters;
++    oldResources.MaxGeometryAtomicCounterBuffers = angleResources.MaxGeometryAtomicCounterBuffers;
++    oldResources.MaxGeometryAtomicCounters = angleResources.MaxGeometryAtomicCounters;
++    oldResources.MaxGeometryImageUniforms = angleResources.MaxGeometryImageUniforms;
++    oldResources.MaxGeometryInputComponents = angleResources.MaxGeometryInputComponents;
++    oldResources.MaxGeometryOutputComponents = angleResources.MaxGeometryOutputComponents;
++    oldResources.MaxGeometryOutputVertices = angleResources.MaxGeometryOutputVertices;
++    oldResources.MaxGeometryShaderInvocations = angleResources.MaxGeometryShaderInvocations;
++    oldResources.MaxGeometryShaderStorageBlocks = angleResources.MaxGeometryShaderStorageBlocks;
++    oldResources.MaxGeometryTextureImageUnits = angleResources.MaxGeometryTextureImageUnits;
++    oldResources.MaxGeometryTotalOutputComponents = angleResources.MaxGeometryTotalOutputComponents;
++    oldResources.MaxGeometryUniformBlocks = angleResources.MaxGeometryUniformBlocks;
++    oldResources.MaxGeometryUniformComponents = angleResources.MaxGeometryUniformComponents;
++    oldResources.MaxImageUnits = angleResources.MaxImageUnits;
++    oldResources.MaxProgramTexelOffset = angleResources.MaxProgramTexelOffset;
++    oldResources.MaxProgramTextureGatherOffset = angleResources.MaxProgramTextureGatherOffset;
++    oldResources.MaxShaderStorageBufferBindings = angleResources.MaxShaderStorageBufferBindings;
++    oldResources.MaxTextureImageUnits = angleResources.MaxTextureImageUnits;
++    oldResources.MaxUniformBufferBindings = angleResources.MaxUniformBufferBindings;
++    oldResources.MaxUniformLocations = angleResources.MaxUniformLocations;
++    oldResources.MaxVaryingVectors = angleResources.MaxVaryingVectors;
++    oldResources.MaxVertexAtomicCounterBuffers = angleResources.MaxVertexAtomicCounterBuffers;
++    oldResources.MaxVertexAtomicCounters = angleResources.MaxVertexAtomicCounters;
++    oldResources.MaxVertexAttribs = angleResources.MaxVertexAttribs;
++    oldResources.MaxVertexImageUniforms = angleResources.MaxVertexImageUniforms;
++    oldResources.MaxVertexOutputVectors = angleResources.MaxVertexOutputVectors;
++    oldResources.MaxVertexTextureImageUnits = angleResources.MaxVertexTextureImageUnits;
++    oldResources.MaxVertexUniformVectors = angleResources.MaxVertexUniformVectors;
++    oldResources.MaxViewsOVR = angleResources.MaxViewsOVR;
++    oldResources.MinProgramTexelOffset = angleResources.MinProgramTexelOffset;
++    oldResources.MinProgramTextureGatherOffset = angleResources.MinProgramTextureGatherOffset;
++    oldResources.NV_EGL_stream_consumer_external = angleResources.NV_EGL_stream_consumer_external;
++    oldResources.NV_draw_buffers = angleResources.NV_draw_buffers;
++    oldResources.NV_shader_framebuffer_fetch = angleResources.NV_shader_framebuffer_fetch;
++    oldResources.NV_shader_noperspective_interpolation = angleResources.NV_shader_noperspective_interpolation;
++    oldResources.OES_EGL_image_external = angleResources.OES_EGL_image_external;
++    oldResources.OES_EGL_image_external_essl3 = angleResources.OES_EGL_image_external_essl3;
++    oldResources.OES_standard_derivatives = angleResources.OES_standard_derivatives;
++    oldResources.OES_texture_3D = angleResources.OES_texture_3D;
++    oldResources.OES_texture_cube_map_array = angleResources.OES_texture_cube_map_array;
++    oldResources.OES_texture_storage_multisample_2d_array = angleResources.OES_texture_storage_multisample_2d_array;
++    oldResources.OVR_multiview = angleResources.OVR_multiview;
++    oldResources.OVR_multiview2 = angleResources.OVR_multiview2;
++    oldResources.SubPixelBits = angleResources.SubPixelBits;
++    oldResources.WEBGL_video_texture = angleResources.WEBGL_video_texture;
++    oldResources.ArrayIndexClampingStrategy = ST_CLAMP_WITH_CLAMP_INTRINSIC;
++}
++
+ ANGLE_EXPORT void STInitialize() {
+     sh::Initialize();
+ }
+@@ -260,9 +448,9 @@
+ 
+ ANGLE_EXPORT ST_BuiltInResources*
+ STGenerateResources(ST_BuiltInResources *pResources) {
+-    static_assert(sizeof(ST_BuiltInResources) == sizeof(ShBuiltInResources),
+-        "mismatch in ST_BuiltInResources versus ShBuiltInResources");
+-    sh::InitBuiltInResources(reinterpret_cast<ShBuiltInResources*>(pResources));
++    ShBuiltInResources defaults;
++    sh::InitBuiltInResources(&defaults);
++    resourcesToLegacy(defaults,*pResources);
+     return pResources;
+ }
+ 
+@@ -277,15 +465,35 @@
+     ST_ShaderOutput output = pInfo->output;
+     const ST_BuiltInResources* resources = pInfo->pResources;
+     const char* shaderString = pInfo->pShaderString;
+-    ST_CompileOptions compileOptions = pInfo->compileOptions;
+-
++    // Frozen base caller uses OBJECT_CODE|VARIABLES. Never forward the legacy bitfield.
++    const ST_CompileOptions supported = ST_OBJECT_CODE | ST_VARIABLES | ST_INITIALIZE_UNINITIALIZED_LOCALS;
++    if (pInfo->compileOptions & ~supported) {
++        ST_ShaderCompileResult* rejected = static_cast<ST_ShaderCompileResult*>(calloc(1, sizeof(ST_ShaderCompileResult)));
++        rejected->outputHandle = pInfo->inputHandle;
++        rejected->originalSource = strdup(shaderString);
++        rejected->translatedSource = strdup("");
++        rejected->infoLog = strdup("Unsupported legacy shader compile option; supported: OBJECT_CODE, VARIABLES, INITIALIZE_UNINITIALIZED_LOCALS");
++        rejected->nameHashingMap = static_cast<ST_NameHashingMap*>(calloc(1, sizeof(ST_NameHashingMap)));
++        rejected->compileStatus = false;
++        *ppResult = rejected;
++        return;
++    }
++    ShCompileOptions compileOptions = 0;
++    if (pInfo->compileOptions & ST_OBJECT_CODE) compileOptions |= SH_OBJECT_CODE;
++    if (pInfo->compileOptions & ST_VARIABLES) compileOptions |= SH_VARIABLES;
++    if (pInfo->compileOptions & ST_INITIALIZE_UNINITIALIZED_LOCALS) compileOptions |= SH_INITIALIZE_UNINITIALIZED_LOCALS;
++
++    ShBuiltInResources translatedResources = resourcesToAngle(*resources);
++    ShShaderSpec translatedSpec = static_cast<ShShaderSpec>(spec);
++    if (spec == ST_GL_CORE_SPEC) translatedSpec = SH_GL_CORE_SPEC;
++    if (spec == ST_GL_COMPATIBILITY_SPEC) translatedSpec = SH_GL_COMPATIBILITY_SPEC;
+     if (!handle) {
+         handle =
+             sh::ConstructCompiler(
+                     type,
+-                    static_cast<ShShaderSpec>(spec),
++                    translatedSpec,
+                     static_cast<ShShaderOutput>(output),
+-                    reinterpret_cast<const ShBuiltInResources*>(resources));
++                    &translatedResources);
+     }
+ 
+     (void)createNameHashingMap;
+@@ -296,7 +504,7 @@
+         sh::Compile(
+             static_cast<ShHandle>(handle),
+             &shaderString, 1,
+-            static_cast<ST_CompileOptions>(compileOptions));
++            compileOptions);
+ 
+     ST_ShaderCompileResult* res =
+         (ST_ShaderCompileResult*)(malloc(sizeof(ST_ShaderCompileResult)));

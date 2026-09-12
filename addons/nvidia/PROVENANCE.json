@@ -1,0 +1,37 @@
+{
+  "angle_source_repository": "https://android.googlesource.com/platform/external/angle",
+  "angle_commit": "901e32aa9923b05c3a2af846f8a28fc79c93d0be",
+  "legacy_header_source": "prebuilts/android-emulator-build/common/ANGLE/linux-aarch64/include/ShaderTranslator.h from frozen base source checkout",
+  "source_selection": "GN explicit common/preprocessor/ESSL frontend/GLSL+ESSL output source lists; not stale root CMakeLists",
+  "patch": "patches/angle-legacy-emulator-abi.patch",
+  "compiler": "GCC13.3.0 C++17 release O3 hidden visibility PIC",
+  "base_launcher_sha256": "2baee124da343882d48c24024c03ce32e04f338e91a4f1564b9fb1b34046d83e",
+  "base_headless_sha256": "a840768428b0a7d28fa306146baacbfd7a50ec5543320a57cc6bd6b2cfc0792a",
+  "nvidia_dependency": "existing user-installed NVIDIA driver; no proprietary files redistributed",
+  "tested_driver": "580.173.02",
+  "full_emulator_rebuild": false,
+  "legacy_header_sha256": "979138ea0b60d23ee604b065743ebd9a2a32fbe76bee4e68081e3c73975b673a",
+  "addon_library_sha256": "5d798f97574236634e9059430beb4352c65a8c3b4a75a581eb0c8d9d6bc3d995",
+  "compiler_version": "GNU C++13.3.0",
+  "driver_upgrade_performed": false,
+  "base_archive_sha256": "aaa426635e9b760567931e98f2de260f6323d46855f54067eb1401061f80c265",
+  "approved_base_pairs": [
+    {
+      "label": "published-v0.2",
+      "launcher": "615f87a5c524acfe6209d462e71e4c9423b3c7375fe15196163c4dac5a049be3",
+      "headless": "42d52307362822cd1cfdf59b3f872660a4bc86b6a743cfc1000cf4ec69d3ff81"
+    },
+    {
+      "label": "measured-development",
+      "launcher": "2baee124da343882d48c24024c03ce32e04f338e91a4f1564b9fb1b34046d83e",
+      "headless": "a840768428b0a7d28fa306146baacbfd7a50ec5543320a57cc6bd6b2cfc0792a"
+    }
+  ],
+  "published_base_compatibility_smoke": "PASS: extracted verified archive, GPU boot/proof/neutral smoke/clean exit0; actual headless hash42d523\u2026",
+  "measured_support_library_sha256": "5d798f97574236634e9059430beb4352c65a8c3b4a75a581eb0c8d9d6bc3d995",
+  "public_normalized_support_sha256": "5d798f97574236634e9059430beb4352c65a8c3b4a75a581eb0c8d9d6bc3d995",
+  "normalization": "fixed-width diagnostic strings only in .rodata; all other bytes identical including executable/relocation sections; original build-id retained",
+  "previous_measured_library_sha256": "c5ddf56751c4ab490035f9eed0677a7bef7eb2c128f2752b5d7825682f54dcbf",
+  "semantic_successor": "explicit three-option mapping and rejection; not text-equivalent to previous library; separate new GPU run required",
+  "new_full_gpu_benchmark": "2026-09-12 19:24-19:29 Lisbon, actual publishedbase, v3.1 workload90samples each, allcorrectness/cleanexit"
+}

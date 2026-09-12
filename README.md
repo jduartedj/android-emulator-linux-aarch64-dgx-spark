@@ -87,6 +87,10 @@ With that AVD ready and KVM accessible:
 
 Use host-compatible ADB in another shell for [boot checks and shutdown](DIY-COMPILATION.md#11-boot-and-validate). The validated Google platform-tools were **x86-64 under a pre-existing compatibility layer**, not native ARM64 tools bundled here.
 
+## Optional NVIDIA GPU extra
+
+The base download and default SwiftShader path above are unchanged. A separate, [experimental addon v0.1.0](https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/tag/nvidia-opengl-addon-v0.1.0) provides opt-in NVIDIA OpenGL support, tested on DGX Spark with the existing NVIDIA 580.173.02 driver—**no driver upgrade was required**. See the [GPU benchmark results and limitations](docs/GPU-BENCHMARKS.md) and [addon installation, verification and rollback guide](addons/nvidia/INSTALL.md). Use separate GPU and software-rendered AVDs; the addon is not an in-place AVD migration guarantee.
+
 ## Compatibility and limitations
 
 | Area | Validated scope / limitation |

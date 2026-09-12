@@ -1,0 +1,34 @@
+{
+  "policy": "2-4 full batches; CPU1 median drift<=10%, last15 CV<=10%; CPU4 median drift<=20%; all retained unscored",
+  "batches": [
+    {
+      "batch": 90,
+      "median_ns": {
+        "cpu1": 2869752.0,
+        "cpu4": 3227592.0
+      },
+      "last15_cv": {
+        "cpu1": 0.0018949411702252792,
+        "cpu4": 0.31963111036838454
+      },
+      "relative_drift_vs_previous": null,
+      "converged": false
+    },
+    {
+      "batch": 91,
+      "median_ns": {
+        "cpu1": 2868272.0,
+        "cpu4": 3171488.0
+      },
+      "last15_cv": {
+        "cpu1": 0.0018563333261356954,
+        "cpu4": 0.3114717446504195
+      },
+      "relative_drift_vs_previous": {
+        "cpu1": 0.0005157240068131008,
+        "cpu4": 0.017382618373078085
+      },
+      "converged": true
+    }
+  ]
+}

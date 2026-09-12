@@ -1,0 +1,5 @@
+# Semantic-correction successor validation
+
+Newpubliclibrary5d798f…: explicit3legacyoptionmapping,61unsupportedbitsreject. Initializationredagainstpriorlibrary/greenagainstsuccessor;384-bytecanary,vertex+fragment,nestedcopy/destroyPASS. ActualpublishedbaseGPUproof/smoke+5cleancyclesPASS. FullnewGPUv3.1benchmark90samples/metric,5boots,allcorrectnessand6shutdownsexit0;no capturedscoredfatal events. See [benchmark document](../../docs/GPU-BENCHMARKS.md) for datednewtable andhistoricalcontroltimegap.
+
+Wrappergrammar18offlinecases+6realwrappernegativeformsPASS; renderer/accel/feature/equals/pass-throughoverrideformsrejected. Published/developmentexactmatchedpairsretained. SeparateGPU/softwareAVDsmandatory; sameuserdata migration remainsunvalidated. Source/librarychangedandhasnewhash; historicalc5dd…timingsnotrelabeled.
