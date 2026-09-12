@@ -1,83 +1,49 @@
-# Corresponding-source r2 reassembly
+# Reduced patched source: verify, extract and build
 
-Use the current **source r2 + supplement 2** assets from the same
-[v0.1.0-unofficial release](https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/tag/v0.1.0-unofficial).
-Download all **20 parts**, supplement 2, and `SHA256SUMS-r2` into a
-new directory. Older source parts/supplement/checksum files are superseded.
+The source is already patched and includes the selected Linux ARM64 build inputs, corresponding library sources, licenses and frozen provenance. Historical releases remain unchanged. GitHub's automatic source ZIP is only the publication repository, not this source tree.
 
-Run these commands in **Bash** from that download directory:
+Download these exact files from [v0.2.0-unofficial](https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/tag/v0.2.0-unofficial):
+
+- [Source part 00](https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/download/v0.2.0-unofficial/android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3-patched-source.tar.zst.part-00)
+- [Source part 01](https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/download/v0.2.0-unofficial/android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3-patched-source.tar.zst.part-01)
+- [SHA256SUMS](https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/download/v0.2.0-unofficial/SHA256SUMS)
+- [ASSET-MANIFEST.json](https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/download/v0.2.0-unofficial/ASSET-MANIFEST.json) (part lengths/digests)
+
+Verify both parts before concatenation, then verify the aggregate. The commands fail on missing files, missing/duplicate checksum entries, malformed hashes or corruption. Run in a directory containing the downloaded files.
 
 ```bash
 set -euo pipefail
-SOURCE=android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3-source-r2.tar.zst
-SUPPLEMENT=android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3-corresponding-source-supplement-2.tar.zst
-PART_COUNT=20
-awk -v source="$SOURCE" -v supplement="$SUPPLEMENT" '
-  index($2, source ".part-") == 1 || $2 == supplement { print }
-' SHA256SUMS-r2 > source-inputs.sha256
-test "$(wc -l < source-inputs.sha256)" -eq "$((PART_COUNT + 1))"
-sha256sum -c source-inputs.sha256
-for index in $(seq 0 "$((PART_COUNT - 1))"); do
-  printf -v part '%s.part-%02d' "$SOURCE" "$index"
-  cat "$part"
-done > "$SOURCE"
-awk -v source="$SOURCE" '$2 == source { print }' SHA256SUMS-r2 > source-aggregate.sha256
-test "$(wc -l < source-aggregate.sha256)" -eq 1
-sha256sum -c source-aggregate.sha256
-zstd -t "$SOURCE"
-mkdir source source-supplement
-tar --zstd -xf "$SOURCE" -C source
-tar --zstd -xf "$SUPPLEMENT" -C source-supplement
-cd source/external/qemu
-GIT_CEILING_DIRECTORIES="$(cd .. && pwd)" git apply \
-  ../../../source-supplement/patches/kvm-kick-arm64-shutdown-safe-sigipi.patch
-python3 tests/test-kvm-kick-guard.py
+verify_part() {
+  local name="$1"
+  test -f "$name"
+  awk -v name="$name" '
+    $2 == name {
+      n++; line=$0
+      if (NF != 2 || length($1) != 64 || $1 !~ /^[[:xdigit:]]+$/) bad=1
+    }
+    END { if (n != 1 || bad) exit 1; print line }
+  ' SHA256SUMS > "$name.sha256"
+  sha256sum -c "$name.sha256"
+}
+
+verify_part android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3-patched-source.tar.zst.part-00
+verify_part android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3-patched-source.tar.zst.part-01
+cat android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3-patched-source.tar.zst.part-00 \
+    android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3-patched-source.tar.zst.part-01 > android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3-patched-source.tar.zst
+printf '%s  %s\n' 441c99e8a140f4d388bc20629d651d22803de416c69da7150ff4b065e6bf8131 android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3-patched-source.tar.zst | sha256sum -c -
+mkdir source
+tar --zstd -xf android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3-patched-source.tar.zst -C source
 ```
 
-Expected source aggregate: **10,186,159,362 bytes**, SHA-256
-`a23b34f58d401434c387e15ddab2081043b0b4cd75bd56751225d3deae5c69fc`.
+Canonical archive: **2,647,263,684 bytes**. SHA-256: `441c99e8a140f4d388bc20629d651d22803de416c69da7150ff4b065e6bf8131`. Part digests and lengths are in [ASSET-MANIFEST.json](https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/download/v0.2.0-unofficial/ASSET-MANIFEST.json) and [SHA256SUMS](https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/download/v0.2.0-unofficial/SHA256SUMS). The aggregate is retained locally even when only its safe-size parts are uploaded; there is no full-fat source alternative.
 
-The base already contains the portability/build patch; **do not apply it twice**.
-Supplement 2 adds the canonical final KVM patch (which also creates its static
-regression), the complete 66-project pinned manifest, corrected build/reassembly
-instructions, exact fixture-exclusion/normalization records and host-tool setup.
-The failed legacy patch is historical negative evidence only: do not apply it.
-The Git ceiling prevents accidentally discovering an unrelated enclosing Git
-checkout and silently skipping patch paths.
+After documented host prerequisites (`source/SOURCE-PROVENANCE/HOST-TOOLS.md`), build with the single offline entrypoint:
 
-## Build the extracted source
+```bash
+export QEMU_LD_PREFIX=/absolute/path/to/private/x86-library-root
+JOBS=8 ./source/build-offline.sh /absolute/path/to/new-build-output
+```
 
-Follow the native dependencies and [host-tool setup](HOST-TOOLS.md), keeping
-`QEMU_LD_PREFIX` exported. From the patched `source/external/qemu` directory, use
-the exact `android/rebuild.sh` command in [DIY guide §7](DIY-COMPILATION.md#7-configure-and-build),
-with dedicated absolute output/dist directories. For this already extracted tree,
-set `SRC="$(cd ../.. && pwd)"` while in `source/external/qemu`, rather than
-using the fresh-checkout example `SRC="$WORK/src"` in the host-tool guide. Set
-`WORK` to a separate absolute build-output directory. No Git object cache is needed
-for this source build; shallow/Git-description warnings are documented.
+Use a new output directory outside source. Do not reapply patches, repo-sync or add excluded source as a fallback. The entrypoint does no source download; the verified build used network-disabled isolation, a fresh extraction, empty output and disabled object caches. It completed configure, compile, link, install and distribution. Test execution was disabled, not reported as passed. Native output still uses pinned x86 Python/CMake/Qt host tools during the build.
 
-The archived `SOURCE-PROVENANCE/reproduce-build.sh` is preserved historical
-provenance, not a standalone entry point for the extracted tree. For a new
-upstream checkout instead, use the current publication repository's
-`scripts/build.sh` and `manifests/manifest-build-pinned.xml`.
-
-## What changed in r2
-
-The prior source aggregate was 9,439,929,305 bytes, SHA-256
-`d5a383db5b38ade07dcdc5aedaad7cf3456addb5d414ab13ae5e56e4de1de614`.
-Source r2 is explicitly a **no-tests corresponding-source offering**, not an
-identical upstream tree:
-
-- 22 direct upstream APK fixtures removed;
-- an unused Python test wheel containing one APK removed;
-- an unused test ZIP containing Android system-image fixtures removed;
-- one unused Android APK member removed from each of two Qt source bundles;
-  every other member's contents are preserved, while archive compression changes;
-- precise exclusion/normalization provenance added under `SOURCE-PROVENANCE/`.
-
-The required source/build inputs, host-tool prebuilts, source licenses/notices,
-portability changes and canonical KVM patch remain available. Exact path,
-upstream-revision and SHA-256 records are in `manifests/` and supplement 2.
-Upstream test-fixture omission is conservative; it is not a claim that upstream
-hosting was unlawful. The binary archive, its SBOM and runtime evidence are
-unchanged. See [COMPLIANCE.md](COMPLIANCE.md) and [AUDIT-STATUS.md](AUDIT-STATUS.md).
+See SOURCE-CORRESPONDENCE.md, corrected notices/SBOM and full build evidence for scope and third-party source associations. No fresh Android benchmark, GPU feature or replacement runtime is implied.

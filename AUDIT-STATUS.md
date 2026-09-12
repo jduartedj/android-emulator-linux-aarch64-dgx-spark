@@ -1,5 +1,7 @@
 # Publication repair and verification — 2026-09-11
 
+> **Current packaging release:** [v0.2.0-unofficial](https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/tag/v0.2.0-unofficial) provides reduced already-patched source, a fully validated offline build and corrected attribution. Follow [current source reassembly](SOURCE-REASSEMBLY.md). Source-r2/supplement references below describe historical workflows; the fresh-checkout guide remains available. Runtime stays 35.6.3.
+
 **Use source r2 + supplement 2 and `SHA256SUMS-r2`.** The initial publication
 findings are resolved for this corrected offering, with the explicit scope and
 limits below. The emulator binary and historical runtime evidence are unchanged.

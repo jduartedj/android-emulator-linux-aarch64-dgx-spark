@@ -1,0 +1,54 @@
+{
+  "status": "FULL_BUILD_PASS_PARENT_REVIEW_ACCEPTED",
+  "full_build": "PASS",
+  "full_build_exit": 0,
+  "build_start_utc": "2026-09-12T16:11:35Z",
+  "build_end_utc": "2026-09-12T16:27:19Z",
+  "full_selected_configure_compile_link_install_distribution": true,
+  "tests_executed": false,
+  "runtime_tests": "NOT_RUN_NO_NEW_RUNTIME_SUBSTITUTED",
+  "archive_bytes": 2647263684,
+  "archive_sha256": "441c99e8a140f4d388bc20629d651d22803de416c69da7150ff4b065e6bf8131",
+  "logical_source_file_bytes": 8089084026,
+  "unique_hardlink_file_bytes": 6286944639,
+  "compressed_reduction_percent": 74.01116956921217,
+  "logical_reduction_percent": 74.74257433139961,
+  "archive_members": 164727,
+  "source_files_and_hardlinks": 142988,
+  "license_notice_paths": 1336,
+  "unchanged_input_bytes_and_modes": true,
+  "deterministic_replay_match": true,
+  "network": "none",
+  "jobs": 8,
+  "compiler_object_cache": "disabled",
+  "original_excluded_source_mounted": false,
+  "original_runtime_sha256": "aaa426635e9b760567931e98f2de260f6323d46855f54067eb1401061f80c265",
+  "runtime_bytes": 94213418,
+  "native_built_elfs": [
+    {
+      "path": "emulator",
+      "description": "ELF 64-bit LSB pie executable, ARM aarch64, version 1 (GNU/Linux), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=41112eefd1bb4ccc9db0ca1318803abdaccfb65e, for GNU/Linux 3.7.0, stripped",
+      "sha256": "caa91e672ac121948465d32140914da462dc4115b0fa3bb3098428b5c101cf26"
+    },
+    {
+      "path": "qemu-img",
+      "description": "ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=9a318f5e19d2d5e9c2eee7c974136a38b9dca067, for GNU/Linux 3.7.0, stripped",
+      "sha256": "26d9219431b924625ef4b980255225f60b91165916900f15190999c1674917f1"
+    },
+    {
+      "path": "qemu/linux-aarch64/qemu-system-aarch64",
+      "description": "ELF 64-bit LSB pie executable, ARM aarch64, version 1 (GNU/Linux), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=00ce289cb4abc6530083d0b1f5f0043e437a8f4e, for GNU/Linux 3.7.0, stripped",
+      "sha256": "1f4a90f413c254ccc6b56c70927af5f101dbd9abe6c3278d2ccf2ef08d4256af"
+    },
+    {
+      "path": "qemu/linux-aarch64/qemu-system-aarch64-headless",
+      "description": "ELF 64-bit LSB pie executable, ARM aarch64, version 1 (GNU/Linux), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=a124b67a36f3e766f2dd6c5e5b6b458889e27161, for GNU/Linux 3.7.0, stripped",
+      "sha256": "095598721a85d9de2f911dd348ffb9291dcd93866f111e87fd4eabb588a873e5"
+    }
+  ],
+  "source_license_coverage": "SOURCE-CORRESPONDENCE.md and SOURCE-MAP.json; parent review required, not legal certification",
+  "warnings": "Historical generic lib.so strip warnings may occur despite successful install; retained in complete build log",
+  "publication_base_commit": "831b6995135b09b95804146115d3bb4cbc8cab27",
+  "public_changes": false,
+  "record_scope": "Immutable facts from pre-publication validation completed 2026-09-12T16:27:19Z; public_changes:false describes that validation interval, not perpetual release status"
+}

@@ -142,3 +142,10 @@ Ninja/ccache settings in the DIY guide. The current supported statement is a
 DGX Spark/Ubuntu ARM64 host-build recipe with verified compatibility tooling and
 historical full-build evidence—not a newly repeated, bit-identical clean-room
 build on every Ubuntu ARM64 installation.
+
+
+## v0.2.0 reduced-source validation record
+
+The historical smoke-test descriptions above remain accurate for the September 11 repair. The reduced-source packaging candidate adds a separate complete build validation: the final source archive is freshly extracted and its offline entrypoint runs configure, compile, link, install and distribution with networking disabled, empty outputs and no original-source or compiler-object-cache fallback. The final result and exact image/prerequisite mounts are recorded in `BUILD-AND-REVIEW-RESULT.json` and the accompanying build-compliance evidence; archive creation or configure alone must not be treated as that result.
+
+This uses the existing native GCC/G++ and Ninja prerequisites plus pinned x86 Python/CMake/Qt generators with the private compatibility root. No global package installation, binfmt adjustment or security-policy change was performed. The runtime archive remains unchanged, and no new Android or GPU benchmark is claimed. For the already-patched reduced source, use [SOURCE-REASSEMBLY.md](SOURCE-REASSEMBLY.md), not the fresh-checkout script that retrieves a complete upstream workspace.

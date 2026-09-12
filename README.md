@@ -10,7 +10,7 @@ The ready-to-run emulator is a **single download**; source archives are optional
 | --- | --- |
 | Run Android | [Download the emulator][binary] and [checksums][checksums], then follow the installation steps below |
 | Build it myself | [DIY compilation](DIY-COMPILATION.md) and [host-tool prerequisites](HOST-TOOLS.md) |
-| Inspect the source | [Source r2 + supplement 2 and reassembly](SOURCE-REASSEMBLY.md), [provenance](COMPLIANCE.md), and [release assets][release] |
+| Inspect the source | [Reduced patched source and reassembly](SOURCE-REASSEMBLY.md), [provenance](COMPLIANCE.md), and [release assets][release] |
 
 ## Install
 
@@ -36,17 +36,17 @@ Download into a fresh directory; verify **only the binary**, not absent source p
 ```bash
 DOWNLOAD_DIR=$(mktemp -d "$HOME/emulator-download.XXXXXX")
 cd "$DOWNLOAD_DIR"
-RELEASE=https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/download/v0.1.0-unofficial
+RELEASE=https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/download/v0.2.0-unofficial
 ARCHIVE=android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3.tar.zst
 curl -fL --proto '=https' --proto-redir '=https' -o "$ARCHIVE" "$RELEASE/$ARCHIVE"
-curl -fL --proto '=https' --proto-redir '=https' -o SHA256SUMS-r2 "$RELEASE/SHA256SUMS-r2"
+curl -fL --proto '=https' --proto-redir '=https' -o SHA256SUMS "$RELEASE/SHA256SUMS"
 awk -v name="$ARCHIVE" '
   $2 == name {
     n++; line=$0
     if (NF != 2 || length($1) != 64 || $1 !~ /^[[:xdigit:]]+$/) bad=1
   }
   END { if (n != 1 || bad) exit 1; print line }
-' SHA256SUMS-r2 > binary.sha256
+' SHA256SUMS > binary.sha256
 sha256sum -c binary.sha256
 ```
 
@@ -102,7 +102,7 @@ Use host-compatible ADB in another shell for [boot checks and shutdown](DIY-COMP
 
 [DIY-COMPILATION.md](DIY-COMPILATION.md) is the canonical fresh-checkout recipe: dependencies, capacity planning, patches and validation. [scripts/build.sh](scripts/build.sh) automates checkout/build **after prerequisites**, not host-tool provisioning. No clean-room or bit-identical rebuild is claimed.
 
-For archived source, follow [SOURCE-REASSEMBLY.md](SOURCE-REASSEMBLY.md) → [HOST-TOOLS.md](HOST-TOOLS.md) → the linked build command. The base contains the portability patch; supplement 2 adds the final shutdown-safe KVM patch. Do not double-apply patches or use the historical failed patch.
+For archived source, follow [SOURCE-REASSEMBLY.md](SOURCE-REASSEMBLY.md) → [HOST-TOOLS.md](HOST-TOOLS.md) → the linked build command. The reduced source is already patched, including the final shutdown-safe KVM fix. Use its offline build entrypoint; do not double-apply patches or use the historical failed patch.
 
 ## Engineering and historical validation
 
@@ -120,7 +120,7 @@ Start with the [troubleshooting guide](DIY-COMPILATION.md#13-troubleshooting-tab
 
 ## Source archive FAQ
 
-Source assets are split to fit [GitHub’s under-2-GiB per-file limit][github-limits]; 500 MiB is a packaging choice for smaller retries, not better compression. The broad source/build snapshot is not a minimal ARM64-only tree. Use [source r2 + supplement 2](SOURCE-REASSEMBLY.md): GitHub’s automatic source ZIP contains only this publication repository at the older tag, not the complete build tree.
+The reduced patched source is split only as needed to fit [GitHub’s under-2-GiB per-file limit][github-limits]. Follow [source reassembly](SOURCE-REASSEMBLY.md). GitHub’s automatic source ZIP contains only this publication repository, not the build tree. Historical releases remain available.
 
 ## Licensing and provenance
 
@@ -128,7 +128,7 @@ Emulator/QEMU is GPLv2; bundled components retain their licenses. See [LICENSE](
 
 No Google system images, proprietary Google SDK payloads, AVD userdata, credentials or private applications are included. Obtain images/tools separately under their terms. Open QEMU firmware sources/notices remain included. Android/Google and NVIDIA/DGX Spark trademarks belong to their respective owners.
 
-[binary]: https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/download/v0.1.0-unofficial/android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3.tar.zst
-[checksums]: https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/download/v0.1.0-unofficial/SHA256SUMS-r2
-[release]: https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/tag/v0.1.0-unofficial
+[binary]: https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/download/v0.2.0-unofficial/android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3.tar.zst
+[checksums]: https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/download/v0.2.0-unofficial/SHA256SUMS
+[release]: https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/tag/v0.2.0-unofficial
 [github-limits]: https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases

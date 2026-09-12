@@ -1,0 +1,629 @@
+{
+  "emulator_projects_manifest": "source/SOURCE-PROVENANCE/manifest-build-pinned.xml",
+  "qt_superproject_input": {
+    "name": "qt-superproject",
+    "url": "https://android.googlesource.com/platform/external/qt5/+archive/c4ae34cce9a2e8031eecd7c7d58440ea0f91d1c7.tar.gz",
+    "sha256": "074735166ca11ff8b891e42a499ef989a9176045d7efc83977eaab66be69c071",
+    "bytes": 455646,
+    "status": "downloaded"
+  },
+  "patchelf_source_input": {
+    "name": "patchelf-0.12.tar.gz",
+    "url": "https://codeload.github.com/NixOS/patchelf/tar.gz/refs/tags/0.12",
+    "bytes": 103075,
+    "sha256": "3dca33fb862213b3541350e1da262249959595903f559eae0fbc68966e9c3f56",
+    "status": "downloaded_candidate_version_not_yet_exact_binary_binding"
+  },
+  "qt_module_inputs": [
+    {
+      "name": "qtbase",
+      "revision": "372eaedc5b8c771c46acc4c96e91bbade4ca3624",
+      "url": "https://codeload.github.com/qt/qtbase/tar.gz/372eaedc5b8c771c46acc4c96e91bbade4ca3624",
+      "sha256": "a5398b865bc94fdae0647ad5fc116ed9d1bc7fad2bd1d9f3d8b6581c61b8a76e",
+      "bytes": 61329294,
+      "status": "downloaded"
+    },
+    {
+      "name": "qtsvg",
+      "revision": "220cd8c6261552f0fcf47061c64f862adae29b55",
+      "url": "https://codeload.github.com/qt/qtsvg/tar.gz/220cd8c6261552f0fcf47061c64f862adae29b55",
+      "sha256": "7bafcd3928d0d80ca097e446ff763eca8f7776a74930eff18147750f59da7cd1",
+      "bytes": 1940907,
+      "status": "downloaded"
+    },
+    {
+      "name": "qtimageformats",
+      "revision": "4f89d7ef7d4f30c1907915435b432d957b62b7ff",
+      "url": "https://codeload.github.com/qt/qtimageformats/tar.gz/4f89d7ef7d4f30c1907915435b432d957b62b7ff",
+      "sha256": "e2618735105b98ab701346a486a60aedff52fae2b2460c22fe6bac8432e96c51",
+      "bytes": 2529657,
+      "status": "downloaded"
+    }
+  ],
+  "gcc14_source_inputs": [
+    {
+      "name": "gcc-14_14.2.0.orig.tar.gz",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-14/gcc-14_14.2.0.orig.tar.gz",
+      "bytes": 97158172,
+      "sha256": "768c314c11eeab56ccebb91eb42ec4a41122fa94f0d83400126401942622197b",
+      "verified_against": "official HTTPS .dsc SHA256"
+    },
+    {
+      "name": "gcc-14_14.2.0-4ubuntu2~24.04.1.debian.tar.xz",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-14/gcc-14_14.2.0-4ubuntu2~24.04.1.debian.tar.xz",
+      "bytes": 1950432,
+      "sha256": "cfece214c2fb790ef5f3baffb9a53e40618e7ae12d053610b251e94d77d08ade",
+      "verified_against": "official HTTPS .dsc SHA256"
+    }
+  ],
+  "legacy_gcc_source_inputs": [
+    {
+      "name": "gcc-10-cross_6ubuntu3.tar.xz",
+      "url": "https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/gcc-10-cross/6ubuntu3/gcc-10-cross_6ubuntu3.tar.xz",
+      "source_project": "gcc-10-cross",
+      "source_version": "6ubuntu3",
+      "bytes": 47112,
+      "sha256": "333e84c9554e6a8c5a8e12682f4258d337cee25f426b3244576e9be035b517ac",
+      "status": "verified_against_official_dsc"
+    },
+    {
+      "name": "gcc-10_10.2.0.orig.tar.gz",
+      "url": "https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/gcc-10/10.2.0-5ubuntu1~20.04/gcc-10_10.2.0.orig.tar.gz",
+      "source_project": "gcc-10",
+      "source_version": "10.2.0-5ubuntu1~20.04",
+      "bytes": 94773960,
+      "sha256": "8c932c6527c2d53eebea682092591b701a79901d9f308697f2cf8d443578ac40",
+      "status": "verified_against_official_dsc"
+    },
+    {
+      "name": "gcc-10_10.2.0-5ubuntu1~20.04.debian.tar.xz",
+      "url": "https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/gcc-10/10.2.0-5ubuntu1~20.04/gcc-10_10.2.0-5ubuntu1~20.04.debian.tar.xz",
+      "source_project": "gcc-10",
+      "source_version": "10.2.0-5ubuntu1~20.04",
+      "bytes": 2024876,
+      "sha256": "21071d618bad25b47459b5b888c2a44d5afc0926e0aa848f8dbfb1ac3d1ccdba",
+      "status": "verified_against_official_dsc"
+    },
+    {
+      "name": "gcc-9-cross_21ubuntu4.tar.xz",
+      "url": "https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/gcc-9-cross/21ubuntu4/gcc-9-cross_21ubuntu4.tar.xz",
+      "source_project": "gcc-9-cross",
+      "source_version": "21ubuntu4",
+      "bytes": 42536,
+      "sha256": "d7ae44b6e9d972dea58755bed94d5a4a25c13090e2ee37761bb566cb7b81c5a8",
+      "status": "verified_against_official_dsc"
+    },
+    {
+      "name": "gcc-9_9.3.0.orig.tar.gz",
+      "url": "https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/gcc-9/9.3.0-17ubuntu1~20.04/gcc-9_9.3.0.orig.tar.gz",
+      "source_project": "gcc-9",
+      "source_version": "9.3.0-17ubuntu1~20.04",
+      "bytes": 90490748,
+      "sha256": "e12a3369d34f49dd18f341dc3d101cc643129663a7b44312fddba595374e718f",
+      "status": "verified_against_official_dsc"
+    },
+    {
+      "name": "gcc-9_9.3.0-17ubuntu1~20.04.debian.tar.xz",
+      "url": "https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/gcc-9/9.3.0-17ubuntu1~20.04/gcc-9_9.3.0-17ubuntu1~20.04.debian.tar.xz",
+      "source_project": "gcc-9",
+      "source_version": "9.3.0-17ubuntu1~20.04",
+      "bytes": 763792,
+      "sha256": "2928ce9cc3b1812d9390554e352f591d05784919e47ea6806b793d4740022bb5",
+      "status": "verified_against_official_dsc"
+    }
+  ],
+  "glibc_source_inputs": [
+    {
+      "name": "glibc_2.31.orig.tar.xz",
+      "url": "https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/glibc/2.31-0ubuntu7/glibc_2.31.orig.tar.xz",
+      "bytes": 17317924,
+      "sha256": "2b22c7b04a36747d6c74796a73193a6f8856bfd1efc551b5db96baefa053fe5e",
+      "status": "verified_against_official_dsc"
+    },
+    {
+      "name": "glibc_2.31-0ubuntu7.debian.tar.xz",
+      "url": "https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/glibc/2.31-0ubuntu7/glibc_2.31-0ubuntu7.debian.tar.xz",
+      "bytes": 841412,
+      "sha256": "f5fc10522d2fc71679c5a466496e27b5f52e3bf9f5851a050a4e5e8e4294daf5",
+      "status": "verified_against_official_dsc"
+    }
+  ],
+  "glibc_cross_source_input": {
+    "name": "cross-toolchain-base_43ubuntu3.tar.xz",
+    "url": "https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/cross-toolchain-base/43ubuntu3/cross-toolchain-base_43ubuntu3.tar.xz",
+    "bytes": 43544,
+    "sha256": "3e766088007730ba184eeec8b2708af374790d609c3a3f83eb4de8c25e246df0"
+  },
+  "legacy_exact_package_binding": {
+    "regular_members": 53,
+    "matched": 52,
+    "unmatched": [
+      {
+        "member": "lib/libtcmalloc_minimal.so.4",
+        "sha256": "04d5a54513e07133c0d257ca388c672e8178e81766ff670da8d4610ec2b9da66",
+        "bytes": 1390376,
+        "matching_package_files": []
+      }
+    ],
+    "files": [
+      {
+        "member": "lib/libresolv.a",
+        "sha256": "4452facb9f6a1f2dbd5c728245bd3e0df3b82f31b385827dad9f62651103e7ba",
+        "bytes": 116730,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/libresolv.a"
+        ]
+      },
+      {
+        "member": "lib/libutil-2.31.so",
+        "sha256": "7ef2db58d6591522b9a8318a356873d9014288ed518a60bc03eb897e9010fae7",
+        "bytes": 14640,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/libutil-2.31.so"
+        ]
+      },
+      {
+        "member": "lib/libdl-2.31.so",
+        "sha256": "9b4f17948ddeddce46eba28a052f03b2b7db7b2f108a9b89c41b371b85fe550e",
+        "bytes": 14528,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/libdl-2.31.so"
+        ]
+      },
+      {
+        "member": "lib/libnss_dns-2.31.so",
+        "sha256": "e35074d61f353227c633023ac79b9bf4211f5a0abf36149f810fcfffc902c99e",
+        "bytes": 22776,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/libnss_dns-2.31.so"
+        ]
+      },
+      {
+        "member": "lib/libpthread-2.31.so",
+        "sha256": "b1d68ffad2ad29f1dad2ad5f44bf47a9c5c731ac5146af29a5a96650089bde68",
+        "bytes": 154504,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/libpthread-2.31.so"
+        ]
+      },
+      {
+        "member": "lib/libm-2.31.so",
+        "sha256": "0eb7d92939e98e12cb6893e721f939616086d1d314fa60fc758cefc4acc9354f",
+        "bytes": 632960,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/libm-2.31.so"
+        ]
+      },
+      {
+        "member": "lib/libanl-2.31.so",
+        "sha256": "2929a525ffbfc1cab87bd0247e3693330774022d15796d5a728444f3a08b978e",
+        "bytes": 14808,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/libanl-2.31.so"
+        ]
+      },
+      {
+        "member": "lib/libpcprofile.so",
+        "sha256": "6903a182b655e62ab1ead2a3e845d75b6f865ad33d82b9e8ff746a9480676030",
+        "bytes": 6160,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/libpcprofile.so"
+        ]
+      },
+      {
+        "member": "lib/libtcmalloc_minimal.so.4",
+        "sha256": "04d5a54513e07133c0d257ca388c672e8178e81766ff670da8d4610ec2b9da66",
+        "bytes": 1390376,
+        "matching_package_files": []
+      },
+      {
+        "member": "lib/crt1.o",
+        "sha256": "65b48d1f38c68289f55e60302b84ef3564298bf834bbdeb9abf7d755a9aa9f19",
+        "bytes": 1872,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/crt1.o"
+        ]
+      },
+      {
+        "member": "lib/gcrt1.o",
+        "sha256": "9e5a90235a47f26f7f8b9bb026f1b810373727570a77d70f1df9ebde8d5a6bca",
+        "bytes": 2664,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/gcrt1.o"
+        ]
+      },
+      {
+        "member": "lib/libanl.a",
+        "sha256": "97eb870a97b4d7610c3abe07f37b712c7a226be76d85ac3812bd58ff199398dc",
+        "bytes": 21476,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/libanl.a"
+        ]
+      },
+      {
+        "member": "lib/libubsan.so.1.0.0",
+        "sha256": "5c801175973a4ac5e489433c833fb5c48b5c9a2bf2dbfee1b057e33311be4ecc",
+        "bytes": 345368,
+        "matching_package_files": [
+          "libubsan1-arm64-cross/usr/aarch64-linux-gnu/lib/libubsan.so.1.0.0"
+        ]
+      },
+      {
+        "member": "lib/liblsan.so.0.0.0",
+        "sha256": "02e5d71f8e16626c982f43096fac00b6d02a8d45c212b4e0f7fbc8269181895c",
+        "bytes": 373800,
+        "matching_package_files": [
+          "liblsan0-arm64-cross/usr/aarch64-linux-gnu/lib/liblsan.so.0.0.0"
+        ]
+      },
+      {
+        "member": "lib/libpthread.a",
+        "sha256": "b0b4b8f19b277dc74bef00563427b558bf9599a860b9745e3720b95acad46a41",
+        "bytes": 6394842,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/libpthread.a"
+        ]
+      },
+      {
+        "member": "lib/librpcsvc.a",
+        "sha256": "bb5520513fb4371fd0052d1a481e435ecff529a78fd31fedfce5e91d1b762fec",
+        "bytes": 55926,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/librpcsvc.a"
+        ]
+      },
+      {
+        "member": "lib/libatomic.so.1.2.0",
+        "sha256": "2b7d713cc917e41fb351e0713f2cfa2964d6035f7b67fb378c79075a1123c8c4",
+        "bytes": 38736,
+        "matching_package_files": [
+          "libatomic1-arm64-cross/usr/aarch64-linux-gnu/lib/libatomic.so.1.2.0"
+        ]
+      },
+      {
+        "member": "lib/libgcc_s.so.1",
+        "sha256": "0f58f26bf29d19f7b3631f370732679b2a07a9735b2e9c093c25751f0d110d41",
+        "bytes": 84168,
+        "matching_package_files": [
+          "libgcc-s1-arm64-cross/usr/aarch64-linux-gnu/lib/libgcc_s.so.1"
+        ]
+      },
+      {
+        "member": "lib/libnsl.a",
+        "sha256": "1503edf8b26a8a8efaf8de8e6c9edb3813e9bc67e3d32b1386ddcc8e154c72a9",
+        "bytes": 197732,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/libnsl.a"
+        ]
+      },
+      {
+        "member": "lib/libtsan.so.0.0.0",
+        "sha256": "947138f1222e0011ce42708f2f3336b60161850c795b88e7cb9ba243a348e558",
+        "bytes": 1123704,
+        "matching_package_files": [
+          "libtsan0-arm64-cross/usr/aarch64-linux-gnu/lib/libtsan.so.0.0.0"
+        ]
+      },
+      {
+        "member": "lib/libresolv-2.31.so",
+        "sha256": "136e4414dd4f0b020b7d0f4b4ff016a661ee991244830c77d5e2d547bc1d943a",
+        "bytes": 80584,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/libresolv-2.31.so"
+        ]
+      },
+      {
+        "member": "lib/crti.o",
+        "sha256": "5e999dd076731ecfd30d1cc572e64c81343d3a878a90af4652cc4f649a56c797",
+        "bytes": 1440,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/crti.o"
+        ]
+      },
+      {
+        "member": "lib/libutil.a",
+        "sha256": "7931abc2b7aadc71d0f73029ce980d7e1dc9a5e6e6232a0493d030b6de11307c",
+        "bytes": 15264,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/libutil.a"
+        ]
+      },
+      {
+        "member": "lib/libtsan_preinit.o",
+        "sha256": "a13ff7a3be8f8bcce9a8d259dca2dcf7f7b9a50a8782322970234a37052c849d",
+        "bytes": 3848,
+        "matching_package_files": [
+          "libtsan0-arm64-cross/usr/aarch64-linux-gnu/lib/libtsan_preinit.o"
+        ]
+      },
+      {
+        "member": "lib/libmemusage.so",
+        "sha256": "0d1d00bd8355345f500cb9d269869eb6e3ab620a0c4084fdad8c96ca194c26d5",
+        "bytes": 18656,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/libmemusage.so"
+        ]
+      },
+      {
+        "member": "lib/librt-2.31.so",
+        "sha256": "67a6a4bf73188ea869bf37c36bb2d076a091b7c2e610d9504e2b97b6431853ab",
+        "bytes": 31544,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/librt-2.31.so"
+        ]
+      },
+      {
+        "member": "lib/libstdc++.so.6.0.28",
+        "sha256": "13bee2ae3111be53fec4ba2897b3ce9176b2c37d6e0d502d2f611a1639150aa8",
+        "bytes": 1899304,
+        "matching_package_files": [
+          "libstdc-legacy-cross/usr/aarch64-linux-gnu/lib/libstdc++.so.6.0.28"
+        ]
+      },
+      {
+        "member": "lib/libc.a",
+        "sha256": "66b9fca8ec76fcf018c88056796ffc78a1a335fe92b9ac8275e033de9f59274d",
+        "bytes": 4576436,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/libc.a"
+        ]
+      },
+      {
+        "member": "lib/libnss_files-2.31.so",
+        "sha256": "6c70d287571dc6f680af0353e672bfb17af23ba170815cac6c83de3e8c92d3f6",
+        "bytes": 51616,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/libnss_files-2.31.so"
+        ]
+      },
+      {
+        "member": "lib/Scrt1.o",
+        "sha256": "675ad19366cdfa1a9fed8e499d44a10608d886ac4c9610f9b7558319627e33fd",
+        "bytes": 1704,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/Scrt1.o"
+        ]
+      },
+      {
+        "member": "lib/libc_nonshared.a",
+        "sha256": "77c6bc3f4a0367c4c0c28539af2e51cdc9d84a7c977501a2fcc726c3798f144d",
+        "bytes": 22972,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/libc_nonshared.a"
+        ]
+      },
+      {
+        "member": "lib/crtn.o",
+        "sha256": "4d3f1d1f9707d07815dbf691d6b0a16d2567dce2d95c1e841fe0a6f34b437ad2",
+        "bytes": 1016,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/crtn.o"
+        ]
+      },
+      {
+        "member": "lib/libmcheck.a",
+        "sha256": "f31c52f2e90b09496928e9bc22c988f43c5e1cedc17734c9e9d6bfa80c7127c0",
+        "bytes": 1552,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/libmcheck.a"
+        ]
+      },
+      {
+        "member": "lib/libBrokenLocale.a",
+        "sha256": "db94de939ad4096c51b1c21f4397fa082886c92ec70fadca639a316e50df069e",
+        "bytes": 1974,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/libBrokenLocale.a"
+        ]
+      },
+      {
+        "member": "lib/libSegFault.so",
+        "sha256": "1153890499b60227e9d3022ecf98e0f36e63f838c32741f49e3a0198e765aecd",
+        "bytes": 10368,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/libSegFault.so"
+        ]
+      },
+      {
+        "member": "lib/libm.a",
+        "sha256": "dcd2d86cdf651b61d9c0af9d93f2f9ef9586fafe6db90873128edcb1b3d0fb82",
+        "bytes": 1597456,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/libm.a"
+        ]
+      },
+      {
+        "member": "lib/librt.a",
+        "sha256": "79f5a9b8c923b975bbebdc49742ce6cb3329f27ca8b11249ec5a484291129588",
+        "bytes": 78690,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/librt.a"
+        ]
+      },
+      {
+        "member": "lib/libnsl-2.31.so",
+        "sha256": "85c3ab49527ae0b2149befbf5b7686305be58d63b0ec06c4aa12a2d8ceb4e20a",
+        "bytes": 93056,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/libnsl-2.31.so"
+        ]
+      },
+      {
+        "member": "lib/libg.a",
+        "sha256": "b6c1aa737fa0feedeecf10ce48daf1a83e215140b0c25631207dfb79fdef7967",
+        "bytes": 1242,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/libg.a"
+        ]
+      },
+      {
+        "member": "lib/libitm.so.1.0.0",
+        "sha256": "162fcd257edeb1233a406ae0d5e60a89bdcea1e601765236529de40445f05c1b",
+        "bytes": 96560,
+        "matching_package_files": [
+          "libitm1-arm64-cross/usr/aarch64-linux-gnu/lib/libitm.so.1.0.0"
+        ]
+      },
+      {
+        "member": "lib/libasan.so.5.0.0",
+        "sha256": "2ea9db80c92e63c623f9d7c6fa8a4ba08821cfc101917719d820d20845936ec4",
+        "bytes": 1537624,
+        "matching_package_files": [
+          "libasan5-arm64-cross/usr/aarch64-linux-gnu/lib/libasan.so.5.0.0"
+        ]
+      },
+      {
+        "member": "lib/libdl.a",
+        "sha256": "2033697d08cd797f5ed89570ff92c57199760a1d6ac84d229256d035ee4edac3",
+        "bytes": 13930,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/libdl.a"
+        ]
+      },
+      {
+        "member": "lib/libBrokenLocale-2.31.so",
+        "sha256": "6039a0b14a4adbcb2fecced59b982ed574ba40558d3a924180761cc312771b9c",
+        "bytes": 6216,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/libBrokenLocale-2.31.so"
+        ]
+      },
+      {
+        "member": "lib/libnss_nis-2.31.so",
+        "sha256": "7466ea915fc26ec6b709f8e9f9130071c198574d5f0ef036225c34cde0feafdf",
+        "bytes": 47520,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/libnss_nis-2.31.so"
+        ]
+      },
+      {
+        "member": "lib/libgomp.so.1.0.0",
+        "sha256": "fbd0019d3f71c45b40c77f9d61bc318792f6ce614071038e08da91aeaf17c082",
+        "bytes": 253328,
+        "matching_package_files": [
+          "libgomp1-arm64-cross/usr/aarch64-linux-gnu/lib/libgomp.so.1.0.0"
+        ]
+      },
+      {
+        "member": "lib/libthread_db-1.0.so",
+        "sha256": "040ac9fca22eafc400bc162c8e97dcd76bfdabfb2703caa9bd845260a225003d",
+        "bytes": 35552,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/libthread_db-1.0.so"
+        ]
+      },
+      {
+        "member": "lib/libnss_compat-2.31.so",
+        "sha256": "90c0280db01b091095f06250524873924baafa6d94852318c6c05aeb8ec0c838",
+        "bytes": 35512,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/libnss_compat-2.31.so"
+        ]
+      },
+      {
+        "member": "lib/libc-2.31.so",
+        "sha256": "19ef4db64dc916e6043395d1a00d87cccaa76faf4c3c32d8f393d96c54569d0a",
+        "bytes": 1438648,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/libc-2.31.so"
+        ]
+      },
+      {
+        "member": "lib/libnss_nisplus-2.31.so",
+        "sha256": "9b1610398ebdeecda74d70068a66e13973dc1d9106c8dd64ee2f561bb613461d",
+        "bytes": 55680,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/libnss_nisplus-2.31.so"
+        ]
+      },
+      {
+        "member": "lib/libnss_hesiod-2.31.so",
+        "sha256": "fd3976a45a0ea6a9c7008f39cf00a51aac4886a09dda02c1a024f9c96c5d4593",
+        "bytes": 18712,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/libnss_hesiod-2.31.so"
+        ]
+      },
+      {
+        "member": "lib/ld-2.31.so",
+        "sha256": "bca025ff77994476697652f85175c984ce20c980eadf1619854082ae74be719b",
+        "bytes": 145208,
+        "matching_package_files": [
+          "libc6-arm64-cross/usr/aarch64-linux-gnu/lib/ld-2.31.so"
+        ]
+      },
+      {
+        "member": "lib/Mcrt1.o",
+        "sha256": "bc52e0f8c6f190d1528939ba574e802689d94d748b446ac7de0f1b824306e480",
+        "bytes": 496,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/Mcrt1.o"
+        ]
+      },
+      {
+        "member": "lib/libc.so",
+        "sha256": "bfe4b59f23237778a88c4a67c13a67a8f1f343ac5c17be6b512829a6ecd0fedd",
+        "bytes": 317,
+        "matching_package_files": [
+          "libc6-dev-arm64-cross/usr/aarch64-linux-gnu/lib/libc.so"
+        ]
+      }
+    ]
+  },
+  "qt_header_binding_summary": {
+    "matching": 1224,
+    "generated_or_compat_headers": 49,
+    "proof": "qt-source-header-binding.json"
+  },
+  "ffmpeg_actual_configuration": {
+    "input": "source-final/prebuilts/android-emulator-build/common/ffmpeg/linux-aarch64/lib/libavcodec.a",
+    "recorded_feature_flags": [
+      [
+        "--disable-xlib",
+        "--enable-pic",
+        "--enable-cross-compile",
+        "--arch=aarch64",
+        "--target-os=linux",
+        "--enable-libx264",
+        "--enable-static",
+        "--disable-doc",
+        "--disable-programs",
+        "--enable-gpl",
+        "--disable-asm",
+        "--disable-yasm",
+        "--disable-avdevice",
+        "--disable-filters",
+        "--enable-avresample",
+        "--enable-libvpx",
+        "--disable-muxers",
+        "--enable-muxer=gif",
+        "--enable-muxer=webm",
+        "--enable-muxer=webm_chunk_muxer",
+        "--enable-muxer=webm_dash_manifest_muxer",
+        "--disable-demuxers",
+        "--enable-demuxer=webm",
+        "--enable-demuxer=matroska",
+        "--enable-demuxer=webm_chunk_muxer",
+        "--enable-demuxer=mov",
+        "--enable-demuxer=webm_dash_manifest_muxer",
+        "--disable-protocols",
+        "--enable-protocol=file",
+        "--disable-encoders",
+        "--enable-encoder=gif",
+        "--enable-encoder=libvpx_vp9",
+        "--enable-encoder=vorbis",
+        "--disable-decoders",
+        "--enable-decoder=gif",
+        "--enable-decoder=libvpx_vp9",
+        "--enable-decoder=vorbis",
+        "--enable-decoder=hevc",
+        "--enable-decoder=h264"
+      ]
+    ],
+    "license_strings": [],
+    "gpl_enabled": true,
+    "libx264_enabled": true,
+    "scope": "Static-library embedded configuration/license strings; build prefixes not logged"
+  },
+  "limitations": "No bit-identical third-party rebuild or independent legal certification claimed; exact source/header/package associations and documented modifications are provided."
+}

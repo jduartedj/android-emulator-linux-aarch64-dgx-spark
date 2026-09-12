@@ -1,9 +1,3 @@
-Packaging release v0.2.0 source/attribution correction notice
-
-The following historical generated notices are retained without removing upstream attribution. Consult CORRECTIONS.md and the full supplied license texts alongside them. In particular: GNU libstdc++ is GPL-3.0-or-later WITH GCC-exception-3.1, not the old Apache/LLVM attribution; the selected FFmpeg 4.4.2 build is GPL-enabled. Exact legacy GNU cross-runtime sources and packaging are supplied with the reduced source offering. No runtime bytes were modified to apply these source/notice corrections.
-
---- Historical upstream generated notices follow ---
-
 ===========================================================
 Notices for file(s):
 ./emulator-check

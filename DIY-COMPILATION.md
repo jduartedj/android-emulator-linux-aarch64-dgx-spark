@@ -1,5 +1,7 @@
 # DIY compilation on Ubuntu 24.04 ARM64
 
+> **Current packaging release:** [v0.2.0-unofficial](https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/tag/v0.2.0-unofficial) provides reduced already-patched source, a fully validated offline build and corrected attribution. Follow [current source reassembly](SOURCE-REASSEMBLY.md). Source-r2/supplement references below describe historical workflows; the fresh-checkout guide remains available. Runtime stays 35.6.3.
+
 This is the canonical, end-to-end build guide for the unofficial Linux AArch64 Android Emulator in this repository. The recipe is based on retained full-build provenance from NVIDIA DGX Spark and a separate isolated Ubuntu ARM64 host-tool smoke. Native AArch64 emulator output is built with native GCC/Ninja plus upstream x86-64 Python/CMake through QEMU user-mode. See [HOST-TOOLS.md](HOST-TOOLS.md) for the verified prerequisite and explicit limits; no new full clean-room build is claimed. Read [COMPLIANCE.md](COMPLIANCE.md) before redistributing anything.
 
 ## 1. Capacity and prerequisites
