@@ -1,173 +1,134 @@
-# Android Emulator for Linux ARM64 on NVIDIA DGX Spark (unofficial)
+# Android Emulator for Linux ARM64
 
-> **Native AArch64 emulator built and validated on NVIDIA DGX Spark.** This is an unofficial, source-built Android Emulator distribution for Linux `aarch64`. It is not an official Google, Android, or NVIDIA product and no endorsement is implied.
+A **native AArch64 Android Emulator with KVM**, validated on NVIDIA DGX Spark / Ubuntu 24.04. Unofficial **35.6.3** build—not the latest emulator or an endorsed Google/NVIDIA product.
 
-**Publication repair (2026-09-11):** use the corrected **source r2 + supplement 2** offering and `SHA256SUMS-r2`. The unnecessary upstream APK/system-image fixtures were removed; native emulator output versus x86-64 host-tool compatibility is now explicit. See [AUDIT-STATUS.md](AUDIT-STATUS.md) for verification and limits.
+**[Download][binary] · [Install](#install) · [Build](#build-from-source) · [Limitations](#compatibility-and-limitations) · [Troubleshooting](DIY-COMPILATION.md#13-troubleshooting-table)**
 
-The first release builds Android Emulator 35.6.3 from Google's official `emu-master-dev` manifest and runs an Android 16 / API 36 ARM64 Google APIs image with KVM on NVIDIA DGX Spark.
+The ready-to-run emulator is a **single download**; source archives are optional for rebuilding or auditing. Android system images and SDK tools are obtained separately.
 
-**Build it yourself:** [DIY-COMPILATION.md](DIY-COMPILATION.md) is the canonical Ubuntu 24.04 ARM64 host-build guide, including exact dependencies, commands, patches, every verified failure, packaging, compliance, and validation.
+| I want to… | Start here |
+| --- | --- |
+| Run Android | [Download the emulator][binary] and [checksums][checksums], then follow the installation steps below |
+| Build it myself | [DIY compilation](DIY-COMPILATION.md) and [host-tool prerequisites](HOST-TOOLS.md) |
+| Inspect the source | [Source r2 + supplement 2 and reassembly](SOURCE-REASSEMBLY.md), [provenance](COMPLIANCE.md), and [release assets][release] |
 
-## Pinned build recipe (host prerequisites required)
+## Install
+
+### 1. Check the host
+
+Requires Linux `aarch64`, KVM, Bash, curl, CA certificates, GNU tar, zstd, coreutils, awk, `file` and `ldd`. Android boot additionally requires compatible **Java, SDK command-line tools and host-compatible ADB**, supplied separately; see [runtime prerequisites](DIY-COMPILATION.md#10-install-api-36-and-create-the-avd).
+
+Run blocks in order in the **same Bash shell**. Stop if a check fails:
 
 ```bash
-export WORK="$HOME/emulator-build"
-export PUBLICATION=/path/to/android-emulator-linux-aarch64-dgx-spark
-test -f "$PUBLICATION/manifests/manifest-build-pinned.xml"
-mkdir -p "$WORK/src" && cd "$WORK/src"
-repo init -u https://android.googlesource.com/platform/manifest \
-  -b 1a75ee5c54d3b3161516ae27b6769a70e0ffcfca --depth=1 --partial-clone \
-  --clone-filter=blob:limit=10M --no-clone-bundle
-cp "$PUBLICATION/manifests/manifest-build-pinned.xml" .repo/manifests/pinned.xml
-repo init -m pinned.xml --depth=1 --partial-clone \
-  --clone-filter=blob:limit=10M --no-clone-bundle
-repo sync -c -j8 --no-clone-bundle --no-tags --optimized-fetch --prune
-cd external/qemu
-git apply "$PUBLICATION/patches/linux-aarch64-build-fixes.patch"
-git apply "$PUBLICATION/patches/kvm-kick-arm64-shutdown-safe-sigipi.patch"
-python3 tests/test-kvm-kick-guard.py
-./android/rebuild.sh --target linux_aarch64 --config release \
-  --ccache /usr/bin/ccache --feature minbuild --feature no-qtwebengine \
-  --cmake_option CMAKE_MAKE_PROGRAM=/usr/bin/ninja \
-  --out "$WORK/build/objs" --dist "$WORK/build/dist" \
-  --task-disable CTest --task-disable AccelerationCheck \
-  --task-disable EmugenTest --task-disable GenEntriesTest \
-  --task-disable CoverageReport --task-disable PackageSamples \
-  --task-disable ZipIntegrationTests --task-disable IntegrationTest
+set -euo pipefail
+test "$(uname -m)" = aarch64
+for tool in curl tar zstd sha256sum awk file ldd; do command -v "$tool"; done
+test -r /dev/kvm && test -w /dev/kvm
 ```
 
-Install the prerequisites and review capacity, KVM, manifest pinning, SDK registration, image installation, and verification steps in the [full DIY guide](DIY-COMPILATION.md) before running this excerpt.
+KVM denied? Inspect the device/group, arrange membership in the existing `kvm` group, then log out/in. Preserve normal permissions: [KVM setup](DIY-COMPILATION.md#4-kvm-without-weakening-device-permissions).
 
-## DIY compilation
+### 2. Download and verify before extracting
 
-You can build this emulator yourself on Ubuntu Linux ARM64, including NVIDIA DGX Spark. **Follow [`DIY-COMPILATION.md`](DIY-COMPILATION.md)** for the complete verified steps, capacity planning, KVM setup, encountered errors and fixes, caveats, validation, and reproducible release packaging.
-
-## Why this matters
-
-Official Linux SDK emulator packages are ordinarily distributed for x86-64 hosts. On an ARM64 DGX Spark, an ARM64 emulator host executable plus an ARM64 system image allows ARM64-on-ARM64 virtualization through KVM rather than host CPU translation. The validated process holds `/dev/kvm` through membership in the existing `kvm` group; this project does not recommend weakening `/dev/kvm` permissions.
-
-## Validated DGX Spark environment
-
-- NVIDIA DGX Spark with NVIDIA GB10 GPU; driver 580.173.02; CUDA 13.0 reported by `nvidia-smi`
-- 20 ARM64 CPU cores: 10 Cortex-X925 and 10 Cortex-A725
-- 121 GiB RAM
-- Ubuntu 24.04.4 LTS, Linux `6.17.0-1032-nvidia`, `aarch64`
-- Emulator 35.6.3.0, source revision `ae9d18d2b6261179fbd57fffec720a04f7bfb053`
-- Manifest revision `1a75ee5c54d3b3161516ae27b6769a70e0ffcfca`
-
-## Validation evidence
-
-An isolated API 36 AVD booted with the native AArch64 headless QEMU executable and KVM (`/dev/kvm` open by the QEMU process), with:
-
-- ADB online and `sys.boot_completed=1`
-- Android 16, API 36, ABI `arm64-v8a`
-- fingerprint `google/sdk_gphone64_arm64/emu64a:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys`
-- 1080×2340 at 440 dpi
-- SELinux enforcing; writable isolated 8 GiB userdata
-- no third-party packages in the clean inventory
-- Perfetto v49.0 available in the guest
-- a 10-second trace containing `track_event`, `android.surfaceflinger.frame`, and `android.surfaceflinger.frametimeline`
-- native official Perfetto Trace Processor v58.2: 268 actual and 244 expected FrameTimeline rows, with no nonzero error or data-loss stats
-- a 10-minute ADB stability probe (see `validation/`)
-
-No application or benchmark APK is included in the **binary archive**. The clean-AVD validation did not install third-party packages. Source revision r2 removes the previously overlooked upstream application fixtures; exact exclusions are documented in [AUDIT-STATUS.md](AUDIT-STATUS.md).
-
-## Install the emulator
-
-Extract the release archive into an Android SDK root so the resulting directory is `$ANDROID_SDK_ROOT/emulator`:
+Download into a fresh directory; verify **only the binary**, not absent source parts:
 
 ```bash
-mkdir -p "$HOME/android-sdk"
-tar --zstd -xf android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3.tar.zst -C "$HOME/android-sdk"
-export ANDROID_SDK_ROOT="$HOME/android-sdk"
+DOWNLOAD_DIR=$(mktemp -d "$HOME/emulator-download.XXXXXX")
+cd "$DOWNLOAD_DIR"
+RELEASE=https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/download/v0.1.0-unofficial
+ARCHIVE=android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3.tar.zst
+curl -fL --proto '=https' --proto-redir '=https' -o "$ARCHIVE" "$RELEASE/$ARCHIVE"
+curl -fL --proto '=https' --proto-redir '=https' -o SHA256SUMS-r2 "$RELEASE/SHA256SUMS-r2"
+awk -v name="$ARCHIVE" '
+  $2 == name {
+    n++; line=$0
+    if (NF != 2 || length($1) != 64 || $1 !~ /^[[:xdigit:]]+$/) bad=1
+  }
+  END { if (n != 1 || bad) exit 1; print line }
+' SHA256SUMS-r2 > binary.sha256
+sha256sum -c binary.sha256
 ```
 
-Verify it:
+Expected binary SHA-256: `aaa426635e9b760567931e98f2de260f6323d46855f54067eb1401061f80c265`. Checksums detect corruption; they are not an independent signature of the publisher.
+
+### 3. Extract into a new SDK root and check the package
+
+This creates a fresh SDK root. Keep it for image/tool setup below. **Back up your emulator first** if using an existing SDK instead.
 
 ```bash
-./scripts/verify-release.sh "$ANDROID_SDK_ROOT/emulator"
+ANDROID_SDK_ROOT=$(mktemp -d "$HOME/android-sdk-arm64.XXXXXX")
+export ANDROID_SDK_ROOT
+tar --zstd -xf "$ARCHIVE" -C "$ANDROID_SDK_ROOT"
+printf 'SDK root: %s\n' "$ANDROID_SDK_ROOT"
+export PATH="$ANDROID_SDK_ROOT/emulator:$PATH"
+curl -fL --proto '=https' --proto-redir '=https' -o verify-release.sh \
+  https://raw.githubusercontent.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/6d3b62404b0b8e9c67e1dcded9f709cb3eca7753/scripts/verify-release.sh
 ```
 
-## Install Android 16 separately
-
-Google system images, Google APIs, Play services, proprietary SDK payloads, AVD userdata, and credentials are deliberately excluded. Open QEMU firmware sources/notices are retained in the corresponding source. Obtain them separately from Google under Google's terms. Before these runtime
-steps, supply command-line tools, Java, and host-compatible ADB as described in
-[DIY guide §10](DIY-COMPILATION.md#10-install-api-36-and-create-the-avd):
+Inspect the downloaded [script](scripts/verify-release.sh), then run it. **No Git clone needed.** It checks executable hashes, architecture/version and headless libraries—not boot:
 
 ```bash
-"$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" \
-  'system-images;android-36;google_apis;arm64-v8a'
+bash "$DOWNLOAD_DIR/verify-release.sh" "$ANDROID_SDK_ROOT/emulator"
 ```
 
-This project validated revision 7 of the non-Play-Store Google APIs image. Do not redistribute that system image as part of this project.
+### 4. Create an Android ARM64 AVD and boot
 
-Create an isolated phone AVD:
+Follow [SDK/image/AVD setup](DIY-COMPILATION.md#10-install-api-36-and-create-the-avd) in the **same SDK root**: install command-line tools under `cmdline-tools/latest`, supply Java/ADB, accept Google’s terms, and create `DgxSparkApi36Arm64` using `system-images;android-36;google_apis;arm64-v8a`. Use a new AVD name if it exists. See [package registration](DIY-COMPILATION.md#91-sdk-manager-had-no-linux-arm64-emulator-package) if required. Validation used image revision 7; current downloads may differ.
 
-```bash
-printf 'no\n' | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/avdmanager" create avd \
-  --name DgxSparkApi36Arm64 \
-  --package 'system-images;android-36;google_apis;arm64-v8a' \
-  --device pixel_5
-```
-
-## KVM and boot
-
-Preserve normal device permissions and add only the intended user to the existing group:
+With that AVD ready and KVM accessible:
 
 ```bash
-sudo usermod -aG kvm "$USER"
-sg kvm -c 'test -r /dev/kvm -a -w /dev/kvm'
-```
-
-Boot in a fresh group context:
-
-```bash
-sg kvm -c '"$ANDROID_SDK_ROOT/emulator/emulator" @DgxSparkApi36Arm64 \
+"$ANDROID_SDK_ROOT/emulator/emulator" @DgxSparkApi36Arm64 \
   -no-window -no-audio -no-snapshot -no-boot-anim \
   -gpu swiftshader_indirect -feature -Vulkan \
-  -feature -BluetoothEmulation -feature -Uwb -accel on -no-metrics'
+  -feature -BluetoothEmulation -feature -Uwb -accel on -no-metrics
 ```
 
-The Vulkan, BluetoothEmulation, and Uwb feature overrides reflect the validated minimal/headless configuration. OpenGL ES uses bundled SwiftShader. The current build may log a harmless missing `libStubXlib.so` preload warning in headless mode.
+Use host-compatible ADB in another shell for [boot checks and shutdown](DIY-COMPILATION.md#11-boot-and-validate). The validated Google platform-tools were **x86-64 under a pre-existing compatibility layer**, not native ARM64 tools bundled here.
 
-## Reproduce the build
+## Compatibility and limitations
 
-Follow [DIY-COMPILATION.md](DIY-COMPILATION.md), or run `scripts/build.sh` for its automated equivalent. It initializes Google's official manifest, checks out the recorded revisions, applies the portability/build patch and canonical shutdown-safe KVM patch, runs the static KVM regression, and invokes the release `linux_aarch64` build. The current same-release corresponding source is source r2 plus supplement 2; see [SOURCE-REASSEMBLY.md](SOURCE-REASSEMBLY.md). Host-tool compatibility setup is in [HOST-TOOLS.md](HOST-TOOLS.md).
+| Area | Validated scope / limitation |
+| --- | --- |
+| Host and guest | DGX Spark, Ubuntu 24.04.4, Linux `6.17.0-1032-nvidia`; native AArch64 emulator/QEMU, Android 16 / API 36 `arm64-v8a`, KVM. Other hosts unvalidated. |
+| Version | 35.6.3.0; no current upstream feature/security parity claimed. |
+| Graphics and UI | Headless, **CPU SwiftShader OpenGL ES 3.0**, not NVIDIA GPU rendering. GUI QEMU included; full GUI unvalidated. |
+| Reduced features | `minbuild`, no Qt WebEngine, Rust-dependent functionality omitted; Vulkan, Bluetooth and UWB disabled for the validated path. Audio and snapshots were not exercised. |
+| Build tools | Pinned **x86-64 Python/CMake** need QEMU user-mode, binfmt and compatible libraries despite native output: [HOST-TOOLS.md](HOST-TOOLS.md). |
+| Known warning | Optional `libStubXlib.so` warning harmless in tested headless mode: [troubleshooting](DIY-COMPILATION.md#13-troubleshooting-table). |
 
-## Compilation issues we encountered
+## Build from source
 
-This was not a warning-free upstream build. The full symptoms, log excerpts, diagnosis, exact patches, verification, and troubleshooting table are in [DIY-COMPILATION.md §9](DIY-COMPILATION.md#9-compilation-issues-we-encountered). In order, the verified issues were:
+[DIY-COMPILATION.md](DIY-COMPILATION.md) is the canonical fresh-checkout recipe: dependencies, capacity planning, patches and validation. [scripts/build.sh](scripts/build.sh) automates checkout/build **after prerequisites**, not host-tool provisioning. No clean-room or bit-identical rebuild is claimed.
 
-1. SDK Manager exposed ARM64 system images but no native Linux ARM64 host emulator package.
-2. The bundled Chromium/depot-tools Ninja launcher rejected `aarch64`; system Ninja and `CMAKE_MAKE_PROGRAM=/usr/bin/ninja` were required, plus a nested-build launcher dispatch.
-3. The official helper expected `/usr/aarch64-linux-gnu/lib/libstdc++.so.6`, while Ubuntu 24.04 used `/usr/lib/aarch64-linux-gnu/libstdc++.so.6`.
-4. The shallow/tagless checkout produced nonfatal `git describe` warnings; immutable commits and emitted version metadata were recorded instead.
-5. `minbuild` disabled Rust with a reduced-functionality warning; only the independently validated bounded feature set is claimed.
-6. Native GCC found a missing direct `<thread>` include in `Snapshotter.cpp`.
-7. The first ARM64 runtime segfaulted during virtio reset; GDB isolated a stale `current_cpu` path and the patch explicitly selects little-endian virtio for this ARM64-only minbuild.
-8. Install emitted `aarch64-linux-gnu-strip ... lib.so: No such file` warnings despite exit 0; package, dependency, boot, KVM, ADB, Perfetto, and stability checks bounded the nonfatal conclusion.
-9. Headless mode logs a missing optional `libStubXlib.so`; Vulkan and local Netsim Bluetooth/UWB were disabled, and SwiftShader OpenGL ES 3.0 was validated.
-10. ADB transport naming differed between `127.0.0.1:5555` and `emulator-5554`; cleanup explicitly removes stale TCP transports.
-11. Source, build, system image, ccache, and corresponding-source packaging required careful disk budgeting.
-12. KVM group changes required `sg kvm` or a new login; `/dev/kvm` was never opened globally.
-13. Clean shutdown could crash in `kvm_cpu_kick()` after a successful run. Minidump symbolization showed a stale `cpu->kvm_run` access: a null guard failed after a 30-minute hold, and forcing legacy SIGIPI alone failed because the release build removed the assertion while `kvm_ipi_signal()` still called `kvm_cpu_kick()`. The canonical patch forces AArch64 to the existing `KVM_SET_SIGNAL_MASK`/SIGIPI path and guards the handler with `current_cpu && kvm_immediate_exit`. It rebuilt successfully, passed the static regression, 20/20 lifecycle cycles, 10/10 one-minute probes, clean FrameTimeline/error statistics, `adb emu kill`, guest `reboot -p`, and zero new minidumps. The rejected patch is explicitly historical and must not be applied; rollback is an atomic directory swap to the retained pre-fix package.
+For archived source, follow [SOURCE-REASSEMBLY.md](SOURCE-REASSEMBLY.md) → [HOST-TOOLS.md](HOST-TOOLS.md) → the linked build command. The base contains the portability patch; supplement 2 adds the final shutdown-safe KVM patch. Do not double-apply patches or use the historical failed patch.
 
-The retained result was a native AArch64 emulator that booted API 36 with KVM, produced real FrameTimeline tables, passed the shutdown-safe KVM regression, completed 20/20 lifecycle cycles and a 10-minute ADB/KVM hold, then exited cleanly under both `adb emu kill` and guest `reboot -p` with no new minidump. Failed experimental commands are not presented as the tested recipe.
+## Engineering and historical validation
 
-## Limitations
+The [engineering notes](DIY-COMPILATION.md#9-compilation-issues-we-encountered) explain native Ninja dispatch, library-path/C++ fixes, ARM64 virtio reset and shutdown-safe KVM signaling, including rejected fixes.
 
-- This is a source build of an older emulator revision (35.6.3) because Google's public `aosp-emu-master-dev` CI grid exposed no downloadable ARM64 emulator ZIP at validation time.
-- Vulkan was disabled for the validated run because the minbuild distribution does not bundle the Vulkan loader; SwiftShader OpenGL ES 3.0 was used.
-- Bluetooth and UWB emulation were disabled because the minbuild configuration has no local Netsim service.
-- The official Google Linux platform-tools package in the test SDK was x86-64 and ran through the host compatibility layer; the emulator and QEMU themselves were verified native AArch64.
-- Application benchmarking is not represented here because no benchmark APK was supplied during emulator validation.
+- API 36 booted with KVM; ADB and guest boot completion were verified.
+- The final KVM fix passed **20/20 lifecycle cycles and 10/10 one-minute probes**, with clean emulator/guest shutdown and no new minidumps.
+- FrameTimeline captures had no nonzero error/data-loss statistics. See [retained validation](validation/kvm-kick-shutdown-safe-sigipi-validation.txt).
 
-## Licensing and compliance
+These are historical checks, not fresh benchmarks, application performance results, or proof that the full upstream test suite passed.
 
-Android Emulator/QEMU is distributed under GPLv2, with bundled components under their respective licenses. The binary archive includes upstream `NOTICE.txt`, `NOTICE.csv`, and license material. This repository includes the exact patch, revision manifest, component/notice inventory, complete corresponding source release assets, and a redacted build/GDB log archive. See `LICENSES/`, `NOTICE/`, and `COMPLIANCE.md`.
+## Help and contributions
 
-These are source-backed license facts and operational compliance materials, not legal advice.
+Start with the [troubleshooting guide](DIY-COMPILATION.md#13-troubleshooting-table). For fixes or additional host validation, see [CONTRIBUTING.md](CONTRIBUTING.md); include your host, emulator version, exact flags and redacted logs. Report security concerns as described in [SECURITY.md](SECURITY.md).
 
-## Trademarks and affiliation
+## Source archive FAQ
 
-NVIDIA and DGX Spark are trademarks of NVIDIA Corporation. Android and Google are trademarks of Google LLC. All other marks belong to their owners. No logos are used. This project is unaffiliated with and not endorsed by Google or NVIDIA.
+Source assets are split to fit [GitHub’s under-2-GiB per-file limit][github-limits]; 500 MiB is a packaging choice for smaller retries, not better compression. The broad source/build snapshot is not a minimal ARM64-only tree. Use [source r2 + supplement 2](SOURCE-REASSEMBLY.md): GitHub’s automatic source ZIP contains only this publication repository at the older tag, not the complete build tree.
+
+## Licensing and provenance
+
+Emulator/QEMU is GPLv2; bundled components retain their licenses. See [LICENSE](LICENSE), [LICENSES/](LICENSES/), [NOTICE/](NOTICE/), [COMPLIANCE.md](COMPLIANCE.md), the [pinned manifest](manifests/manifest-build-pinned.xml) and [publication history](AUDIT-STATUS.md). Preserve notices/source obligations. These materials are not legal advice or compliance certification.
+
+No Google system images, proprietary Google SDK payloads, AVD userdata, credentials or private applications are included. Obtain images/tools separately under their terms. Open QEMU firmware sources/notices remain included. Android/Google and NVIDIA/DGX Spark trademarks belong to their respective owners.
+
+[binary]: https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/download/v0.1.0-unofficial/android-emulator-linux-aarch64-dgx-spark-unofficial-35.6.3.tar.zst
+[checksums]: https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/download/v0.1.0-unofficial/SHA256SUMS-r2
+[release]: https://github.com/jduartedj/android-emulator-linux-aarch64-dgx-spark/releases/tag/v0.1.0-unofficial
+[github-limits]: https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases
